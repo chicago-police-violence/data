@@ -1,7 +1,7 @@
 import sys
 import os.path
 import utils
-from p046957 import get_accused
+from parse_p046957 import get_accused
 
 basename = os.path.basename(sys.argv[1])
 
