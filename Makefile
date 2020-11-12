@@ -1,14 +1,20 @@
 PYTHON := python3
 RAW := raw
+
+.PHONY: all
+all: parse
+
+#### Parsing ####
+
 PARSED := parsed
-OUTPUT := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
+PARSED_FILES := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
 	P0-46360_stars.csv 16-1105.csv P4-41436.csv P0-52262.csv P0-58155.csv \
 	18-060-425_main.csv 18-060-425_accused.csv P0-46957_main.csv \
 	P0-46957_investigators.csv P0-46957_accused.csv
-OUTPUT := $(addprefix ${PARSED}/, ${OUTPUT})
+PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 
-.PHONY: all
-all: ${OUTPUT}
+.PHONY: parse
+parse: ${PARSED_FILES}
 
 .INTERMEDIATE: ${RAW}/18-060-425/case_info_export.csv ${RAW}/18-060-425/accused_export.csv
 ${RAW}/18-060-425/%.csv: ${RAW}/18-060-425/%.xlsx

@@ -48,10 +48,7 @@ def parse_date(date):
     day, month, year = date.split("-")
     day = int(day)
     month = months.index(month) + 1
-    if int(year) < 19:
-        year = int(year) + 2000
-    else:
-        year = int(year) + 1900
+    year = int(year) + (2000 if int(year) < 19 else 1900)
     return datetime.date(year, month, day)
 
 
