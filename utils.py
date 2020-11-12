@@ -5,6 +5,22 @@ from itertools import islice
 import datetime
 
 
+def convert_race(s):
+    race_dict = {
+        "S": "WHITE HISPANIC",
+        "BLK": "BLACK",
+        "WHI": "WHITE",
+        "API": "ASIAN/PACIFIC ISLANDER",
+        "WBH": "BLACK HISPANIC",
+        "WWH": "WHITE HISPANIC",
+        "I": "AMER IND/ALASKAN NATIVE",
+        "U": "UNKNOWN",
+        "": "UNKNOWN",
+        None: "UNKNOWN",
+    }
+    return race_dict[s]
+
+
 def parse_cell(cell):
     if cell.ctype == 0:
         return None

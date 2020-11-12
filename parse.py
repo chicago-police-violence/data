@@ -136,7 +136,10 @@ elif basename == "P4-41436.csv":
         "resignation_date",
         "star",
     ]
-    rules = [(["appointment_date", "resignation_date"], utils.parse_date)]
+    rules = [
+        (["appointment_date", "resignation_date"], utils.parse_date),
+        (["race"], utils.convert_race),
+    ]
 elif basename == "P0-52262.csv":
     rows = utils.xlsx_read(sys.argv[2], "Sheet2")
     fields = [
@@ -246,7 +249,7 @@ elif basename == "18-060-425_accused.csv":
         "iad_ops",
         "cr_required",
     ]
-    rules = []
+    rules = [(["race"], utils.convert_race)]
 elif basename == "P0-46957_accused.csv":
     rows = get_accused(sys.argv[2])
     fields = [
@@ -268,6 +271,7 @@ elif basename == "P0-46957_accused.csv":
     rules = [
         (["appointment_date"], utils.get_date),
         (["complaint_no", "birthyear", "star"], utils.to_int),
+        (["race"], utils.convert_race),
     ]
 
 utils.process(rows, sys.argv[1], fields, rules)
