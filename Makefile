@@ -4,7 +4,7 @@ PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 SRC := src
 
 .PHONY: all
-all: parse
+all: link
 
 #### Parsing ####
 
@@ -43,6 +43,19 @@ ${PARSED}/%.csv: | ${PARSED}
 ${PARSED}:
 	mkdir -p $@
 
+#### Linking ####
+
+LINKED := linked
+
+.PHONY: link
+link: ${LINKED}/profiles.csv
+
+${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv | ${LINKED}
+	${PYTHON} ${SRC}/merge_roster.py $^
+
+${LINKED}:
+	mkdir -p $@
+
 .PHONY: clean
 clean:
-	rm -rf ${PARSED}
+	rm -rf ${PARSED} ${LINKED}
