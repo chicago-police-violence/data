@@ -1,5 +1,7 @@
-PYTHON := python3
 RAW := raw
+LOG_LEVEL := info
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
+SRC := src
 
 .PHONY: all
 all: parse
@@ -21,7 +23,7 @@ ${RAW}/18-060-425/%.csv: ${RAW}/18-060-425/%.xlsx
 	xlsx2csv -n "Export Worksheet" $< $@
 
 ${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 | ${PARSED}
-	${PYTHON} parse_p046957.py $@ $<
+	${PYTHON} ${SRC}/parse_p046957.py $@ $<
 
 ${PARSED}/P0-46957_accused.csv: ${RAW}/P0-46957
 ${PARSED}/P0-46360_main.csv: ${RAW}/P0-46360/10655-FOIA-P046360-TRRdata.xlsx
@@ -36,7 +38,7 @@ ${PARSED}/18-060-425_main.csv: ${RAW}/18-060-425/case_info_export.csv
 ${PARSED}/18-060-425_accused.csv: ${RAW}/18-060-425/accused_export.csv
 
 ${PARSED}/%.csv: | ${PARSED}
-	${PYTHON} parse.py $@ $<
+	${PYTHON} ${SRC}/parse.py $@ $<
 
 ${PARSED}:
 	mkdir -p $@

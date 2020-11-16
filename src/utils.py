@@ -3,6 +3,13 @@ from openpyxl import load_workbook
 import xlrd
 from itertools import islice
 import datetime
+import os
+import logging
+
+logging.basicConfig(
+    format="%(levelname)s:%(message)s",
+    level=getattr(logging, os.environ.get("LOG_LEVEL", "INFO").upper()),
+)
 
 
 def convert_race(s):
@@ -14,9 +21,9 @@ def convert_race(s):
         "WBH": "BLACK HISPANIC",
         "WWH": "WHITE HISPANIC",
         "I": "AMER IND/ALASKAN NATIVE",
-        "U": "UNKNOWN",
-        "": "UNKNOWN",
-        None: "UNKNOWN",
+        "U": "",
+        "": "",
+        None: "",
     }
     return race_dict[s]
 
