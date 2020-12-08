@@ -1,10 +1,14 @@
 RAW := raw
-LOG_LEVEL := info
+LOG_LEVEL := debug
 PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 SRC := src
 
 .PHONY: all
 all: link
+
+.PHONY: black
+black:
+	black .
 
 #### Parsing ####
 

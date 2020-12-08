@@ -1,13 +1,8 @@
-from utils import csv_read
+from utils import csv_read, flatten_stars
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
 from itertools import chain
-
-
-def flatten_stars(officer):
-    officer["stars"] = [officer["star" + str(i)] for i in range(1, 11)]
-    return officer
 
 
 def comp_age(officer1, officer2):
@@ -63,6 +58,7 @@ def f3(officer, m):
 
 
 f3.key = ["first_name", "last_name", "appointment_date"]
+# f3.debug = True
 
 
 def f4(officer, m):
@@ -76,10 +72,12 @@ def f4(officer, m):
 
 
 f4.key = ["first_name", "appointment_date"]
-f4.debug = True
+# f4.debug = True
+
 
 if __name__ == "__main__":
     import sys
+
     m = Matcher()
     for officer in csv_read(sys.argv[1]):
         if officer["last_name"] not in ["", "Officer", "OFFICER"]:
@@ -103,29 +101,26 @@ if __name__ == "__main__":
         "unit_no",
         "unit_description",
         "resignation_date",
-        "star1",
-        "star2",
-        "star3",
-        "star4",
-        "star5",
-        "star6",
-        "star7",
-        "star8",
-        "star9",
-        "star10",
-        "star11",
     ]
+    fieldnames += ["star" + str(i) for i in range(1, 12)]
     fieldnames += ["star", "sworn", "unid_id", "unit_detail", "uid", "source"]
-    with open("linked/profiles.csv", "w") as fh:
-        writer = DictWriter(fh, fieldnames=fieldnames, extrasaction='ignore')
-        writer.writeheader()
+
+    def get_officers():
         for officer in chain(m, m.removed()):
             officer["source"] = "P0-58155"
-            writer.writerow(officer)
+            yield officer
         for officer in linked:
             officer["source"] = "P4-41436"
-            writer.writerow(officer)
+            yield officer
         for officer in unlinked:
             officer["source"] = "P4-41436"
             officer["uid"] = uuid4()
+            yield officer
+
+    with open("linked/profiles.csv", "w") as fh:
+        writer = DictWriter(fh, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for officer in sorted(
+            get_officers(), key=lambda l: (l["last_name"], l["first_name"], l["uid"])
+        ):
             writer.writerow(officer)

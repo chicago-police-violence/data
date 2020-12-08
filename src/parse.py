@@ -50,7 +50,10 @@ if basename == "P0-46360_main.csv":
         "subject_injured",
         "subject_alleged_injury",
     ]
-    rules = [(["date"], utils.get_date), (["time"], utils.parse_miltime)]
+    rules = [
+        (["date", "appointment_date"], utils.get_date),
+        (["time"], utils.parse_miltime),
+    ]
 elif basename == "P0-46360_discharges.csv":
     rows = utils.xlsx_read(sys.argv[2], "WeaponDischarges")
     fields = [
@@ -106,17 +109,7 @@ elif basename == "16-1105.csv":
         "unit_no",
         "start_date",
         "end_date",
-        "star1",
-        "star2",
-        "star3",
-        "star4",
-        "star5",
-        "star6",
-        "star7",
-        "star8",
-        "star9",
-        "star10",
-    ]
+    ] + ["star" + str(i) for i in range(1, 11)]
     rules = [(["appointment_date", "start_date", "end_date"], utils.get_date)]
 elif basename == "P4-41436.csv":
     rows = utils.xlsx_read(sys.argv[2], "Export Worksheet")
@@ -172,18 +165,8 @@ elif basename == "P0-58155.csv":
         "unit_no",
         "unit_description",
         "resignation_date",
-        "star1",
-        "star2",
-        "star3",
-        "star4",
-        "star5",
-        "star6",
-        "star7",
-        "star8",
-        "star9",
-        "star10",
-        "star11",
-    ]
+    ] + ["star" + str(i) for i in range(1, 12)]
+
     rules = [(["appointment_date", "resignation_date"], utils.get_date)]
 elif basename == "18-060-425_main.csv":
     rows = utils.csv_read(sys.argv[2], use_dict=False, skip=1)

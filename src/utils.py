@@ -12,6 +12,11 @@ logging.basicConfig(
 )
 
 
+def flatten_stars(officer):
+    officer["stars"] = tuple(officer["star" + str(i)] for i in range(1, 11))
+    return officer
+
+
 def convert_race(s):
     race_dict = {
         "S": "WHITE HISPANIC",
