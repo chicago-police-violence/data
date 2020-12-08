@@ -114,6 +114,8 @@ def xls_read(file_name, sheet_name, skip=1):
 
 
 def process(rows, output_file, field_names, rules):
+    # wrapper around csv.DictWriter which cleans each dictionary according to
+    # some rules before writing it
     with open(output_file, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
