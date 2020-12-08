@@ -89,12 +89,6 @@ def get_date(datetime):
     return None if datetime is None else datetime.date()
 
 
-def sanitize(d, rules):
-    for keys, function in rules:
-        for key in keys:
-            d[key] = function(d[key])
-
-
 def csv_read(filename, use_dict=True, skip=0):
     fh = open(filename)
     reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
@@ -111,6 +105,12 @@ def xls_read(file_name, sheet_name, skip=1):
     rows = wb.sheet_by_name(sheet_name).get_rows()
     for row in islice(rows, skip, None):
         yield list(map(parse_cell, row))
+
+
+def sanitize(d, rules):
+    for keys, function in rules:
+        for key in keys:
+            d[key] = function(d[key])
 
 
 def process(rows, output_file, field_names, rules):

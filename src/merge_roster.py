@@ -3,6 +3,7 @@ from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
 from itertools import chain
+from datasets import datasets
 
 
 def comp_age(officer1, officer2):
@@ -86,24 +87,9 @@ if __name__ == "__main__":
     officers = filter(lambda o: o["last_name"], csv_read(sys.argv[2]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
-    fieldnames = [
-        "last_name",
-        "first_name",
-        "middle_initial",
-        "gender",
-        "race",
-        "birthyear",
-        "age",
-        "status",
-        "appointment_date",
-        "position_no",
-        "position_description",
-        "unit_no",
-        "unit_description",
-        "resignation_date",
-    ]
-    fieldnames += ["star" + str(i) for i in range(1, 12)]
-    fieldnames += ["star", "sworn", "unid_id", "unit_detail", "uid", "source"]
+    fieldnames = datasets["P0-58155"]["fields"]
+    fieldnames += list(set(datasets["P4-41436"]["fields"]) - set(fieldnames))
+    fieldnames += ["source", "uid"]
 
     def get_officers():
         for officer in chain(m, m.removed()):
