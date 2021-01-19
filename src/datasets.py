@@ -277,6 +277,14 @@ datasets = {
             "final_finding",
             "final_discipline",
         ],
+        "id_fields": [
+            "name",
+            "birthyear",
+            "gender",
+            "race",
+            "appointment_date",
+            "star",
+        ],
         "rules": [
             (["appointment_date"], utils.get_date),
             (["complaint_no", "birthyear", "star"], utils.to_int),

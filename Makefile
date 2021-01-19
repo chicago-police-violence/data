@@ -50,9 +50,11 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := linked
+LINKED_FILES := profiles.csv history.csv P0-46957_accused.csv P0-46957_main.csv
+LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: link
-link: ${LINKED}/profiles.csv ${LINKED}/history.csv
+link: ${LINKED_FILES}
 
 ${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv | ${LINKED}
 	${PYTHON} ${SRC}/merge_roster.py $^ $@
@@ -60,6 +62,11 @@ ${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv | ${LINKED
 ${LINKED}/history.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/profiles.csv | ${LINKED}
 	${PYTHON} ${SRC}/merge_history.py $^ $@
 
+${LINKED}/P0-46957_accused.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/profiles.csv | ${LINKED}
+	${PYTHON} ${SRC}/link_p046957.py $^ $@
+
+${LINKED}/P0-46957_main.csv: ${PARSED}/P0-46957_main.csv | ${LINKED}
+	cp $< $@
 
 ${LINKED}:
 	mkdir -p $@

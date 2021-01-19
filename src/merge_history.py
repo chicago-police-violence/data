@@ -91,14 +91,16 @@ if __name__ == "__main__":
     fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
+    profiles = list(m.unify(linked, unlinked))
+
     with open(argv[3], "w") as pf:
         pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         pw.writeheader()
-        for profile in m.unify(linked, unlinked):
+        for profile in profiles:
             pw.writerow(profile)
 
     history = defaultdict(list)
-    for profile in m.unify(linked, unlinked):
+    for profile in profiles:
         if "history" in profile:
             history[profile["uid"]].append(profile)
 
