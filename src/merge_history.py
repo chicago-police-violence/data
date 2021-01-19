@@ -1,10 +1,11 @@
 from utils import csv_read
-from matcher import Matcher
+from set_matcher import Matcher
 from collections import defaultdict
 from uuid import uuid4
 from itertools import chain
 from datetime import date
 from csv import DictWriter
+from datasets import datasets
 
 
 def before(old, new):
@@ -40,16 +41,15 @@ def flatten_history(changes, id_attributes):
 
 def f1(officer, m):
     if officer["appointment_date"] >= "2016-02-29":
-        officer["uid"] = uuid4()
-        return
+        return uuid4()
     for o in (officers := m[officer]) :
         if comp_age(officer, o) and before(o, officer):
-            return o
+            return o["uid"]
     else:
         if officer["history"] == sorted(
             (e for o in officers for e in o["history"]), key=lambda e: e[1]
         ):
-            return [({**officer, "history": o["history"]}, o) for o in officers]
+            return [({**officer, "history": o["history"]}, o["uid"]) for o in officers]
 
 
 f1.key = ["last_name", "first_name", "gender", "appointment_date"]
@@ -58,7 +58,7 @@ f1.key = ["last_name", "first_name", "gender", "appointment_date"]
 def f2(officer, m):
     for o in (officers := m[officer]) :
         if comp_age(officer, o) and before(o, officer):
-            return o
+            return o["uid"]
 
 
 f2.key = ["first_name", "gender", "race", "appointment_date"]
@@ -67,67 +67,53 @@ f3.key = ["last_name", "gender", "race", "appointment_date"]
 
 
 if __name__ == "__main__":
-    key = ["last_name", "first_name", "gender", "race", "appointment_date", "age"] + [
-        f"star{i}" for i in range(1, 11)
-    ]
-    officers = flatten_history(csv_read("parsed/16-1105.csv"), key)
+    from sys import argv
+    import os.path
+
+    s1, _ = os.path.splitext(os.path.basename(argv[1]))
+    s2, _ = os.path.splitext(os.path.basename(argv[2]))
+
+    officers = flatten_history(csv_read(argv[1]), datasets[s1]["id_fields"])
     m = Matcher(officers)
 
-    nkey = [
-        "last_name",
-        "first_name",
-        "gender",
-        "race",
-        "appointment_date",
-        "middle_initial",
-        "birthyear",
-    ]
-    officers = flatten_history(csv_read("parsed/P0-52262.csv"), nkey)
+    officers = flatten_history(csv_read(argv[2]), datasets[s2]["id_fields"])
     linked, unlinked = m.match(officers, [f1, f2, f3])
 
     officers = defaultdict(list)
-    history = dict()
-    for o in chain(m, m.removed(), linked):
-        officers[o["uid"]].append(o)
-        del o["uid"]
-    for o in unlinked:
-        o["uid"] = uuid4()
+    for o in m.unify(linked, unlinked, s1, s2):
         officers[o["uid"]].append(o)
         del o["uid"]
 
     from link_history import link
 
-    m, linked, unlinked = link(officers.values())
-    fieldnames = [
-        "last_name",
-        "first_name",
-        "middle_initial",
-        "gender",
-        "race",
-        "birthyear",
-        "age",
-        "status",
-        "appointment_date",
-        "position_no",
-        "position_description",
-        "unit_no",
-        "unit_description",
-        "resignation_date",
-    ]
-    fieldnames += ["star" + str(i) for i in range(1, 12)]
-    fieldnames += ["star", "sworn", "unid_id", "unit_detail", "uid", "source"]
+    m, linked, unlinked = link(officers.values(), argv[3])
+    fields = datasets["P0-58155"]["fields"]
+    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
+    fields += ["source", "uid"]
 
-    with open("linked/profiles.csv", "w") as pf, open("linked/history.csv", "w") as hf:
-        pw = DictWriter(pf, fieldnames=fieldnames, extrasaction="ignore")
-        hw = DictWriter(
-            hf, fieldnames=["uid", "start_date", "end_date"], extrasaction="ignore"
-        )
+    with open(argv[3], "w") as pf:
+        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         pw.writeheader()
+        for profile in m.unify(linked, unlinked):
+            pw.writerow(profile)
+
+    history = defaultdict(list)
+    for profile in m.unify(linked, unlinked):
+        if "history" in profile:
+            history[profile["uid"]].append(profile)
+
+    with open(argv[4], "w") as  hf:
+        fields = ["uid", "unit_no", "start_date", "end_date"]
+        hw = DictWriter(hf, fieldnames=fields, extrasaction="ignore")
         hw.writeheader()
-        for l in unlinked:
-            uid = uuid4()
-            for u in l:
-                u["uid"] = uid
-        for o in chain(linked, unlinked, m._dict.values(), m.removed()):
-            for u in o:
-                pw.writerow(u)
+        for profiles in history.values():
+            p = None
+            if len(profiles) == 1:
+                p = profiles[0]
+            elif len(profiles) == 2:
+                for pr in profiles:
+                    if pr["source"] == "P0-52262":
+                        p = pr
+                        break
+            for e in p["history"]:
+                hw.writerow(dict(zip(fields, [p["uid"]] + list(e))))

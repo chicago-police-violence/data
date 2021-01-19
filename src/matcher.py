@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import chain
 from uuid import uuid4
 import logging
 
@@ -6,8 +7,9 @@ import logging
 class Matcher:
     def __init__(self, items=[], key_attributes=["uid"]):
         self._index = defaultdict(list)
+        self._dict = defaultdict(list)
         self._key_attr = key_attributes
-        self._removed = []
+        self._matched = []
         for item in items:
             self.add(item)
 
@@ -20,57 +22,65 @@ class Matcher:
     def add(self, item):
         if "uid" not in item:
             item["uid"] = uuid4()
-        self._index[self.key(item)].append(item)
+        self._dict[item["uid"]].append(item)
 
     def key(self, elem):
         return tuple(elem[k] for k in self._key_attr)
 
-    def __delitem__(self, officer):
-        key = self.key(officer)
-        officers = self._index[key]
-        officers.remove(officer)
-        self._removed.append(officer)
-        if len(officers) == 0:
-            del self._index[key]
+    def __delitem__(self, uid):
+        for elem in self._dict[uid]:
+            elems = self[elem]
+            elems.remove(elem)
+            if len(elems) == 0:
+                del self._index[self.key(elem)]
+        del self._dict[uid]
 
     def index(self, key_attributes):
-        old = self._index
         self._key_attr = key_attributes
         self._index = defaultdict(list)
-        for item_list in old.values():
+        for item_list in self._dict.values():
             for item in item_list:
-                self.add(item)
+                self._index[self.key(item)].append(item)
 
     def __iter__(self):
-        return (item for item_list in self._index.values() for item in item_list)
+        return iter(self._dict.values())
 
     def __len__(self):
-        return sum(len(item_list) for item_list in self._index.values())
+        return len(self._dict)
 
-    def removed(self):
-        return iter(self._removed)
+    def matched(self):
+        return iter(self._matched)
 
     def matching_pass(self, f, linked, unlinked, remove):
         if hasattr(f, "key"):
             self.index(f.key)
         next_unlinked = list()
         for item in unlinked:
-            matching_item = f(item, self)
-            if type(matching_item) is list:
-                for (new, matched) in matching_item:
-                    new["uid"] = matched["uid"]
+            match = f(item, self)
+            if type(match) is list:
+                for (new, matched) in match:
+                    new["uid"] = matched
                     linked.append(new)
                     if remove:
+                        self._matched.append(self._dict[matched])
                         del self[matched]
                 continue
-            if matching_item is not None:
-                item["uid"] = matching_item["uid"]
+            if match is not None:
+                if type(item) is list:
+                    for u in item:
+                        u["uid"] = match
+                elif type(item) is dict:
+                    item["uid"] = match
+                else:
+                    continue
                 if getattr(f, "debug", False):
-                    logging.debug(item)
-                    logging.debug(matching_item)
+                    logging.debug((self._dict[match], item))
                 if remove:
-                    del self[matching_item]
-            if "uid" in item:
+                    self._matched.append(self._dict[match])
+                    del self[match]
+            if (type(item) is list and all("uid" in u for u in item)) or (
+                type(item) is dict and "uid" in item
+            ):
                 linked.append(item)
             else:
                 next_unlinked.append(item)
@@ -85,3 +95,25 @@ class Matcher:
             assert len(linked) + len(unlinked) >= total
             logging.info(f"Matched: {len(linked)}, Unmatched: {len(unlinked)}")
         return linked, unlinked
+
+    def unify(self, linked, unlinked, matcher_source=None, matchee_source=None):
+        for elems in chain(self, self.matched()):
+            for elem in elems:
+                if matcher_source is not None:
+                    elem["source"] = matcher_source
+                yield elem
+        for elem in linked:
+            if type(elem) is dict:
+                elem = [elem]
+            for e in elem:
+                if matchee_source is not None:
+                    e["source"] = matchee_source
+                yield e
+        for elem in unlinked:
+            if type(elem) is dict:
+                elem = [elem]
+            for e in elem:
+                if matchee_source is not None:
+                    e["source"] = matchee_source
+                e["uid"] = uuid4()
+                yield e

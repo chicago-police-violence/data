@@ -112,6 +112,15 @@ datasets = {
             "end_date",
         ]
         + ["star" + str(i) for i in range(1, 11)],
+        "id_fields": [
+            "last_name",
+            "first_name",
+            "gender",
+            "race",
+            "age",
+            "appointment_date",
+        ]
+        + ["star" + str(i) for i in range(1, 11)],
         "rules": [(["appointment_date", "start_date", "end_date"], utils.get_date)],
     },
     "P4-41436": {
@@ -150,6 +159,15 @@ datasets = {
             "unit_no",
             "start_date",
             "end_date",
+        ],
+        "id_fields": [
+            "last_name",
+            "first_name",
+            "gender",
+            "race",
+            "appointment_date",
+            "middle_initial",
+            "birthyear",
         ],
         "rules": [(["appointment_date", "start_date", "end_date"], utils.get_date)],
     },

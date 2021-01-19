@@ -52,10 +52,14 @@ ${PARSED}:
 LINKED := linked
 
 .PHONY: link
-link: ${LINKED}/profiles.csv
+link: ${LINKED}/profiles.csv ${LINKED}/history.csv
 
 ${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv | ${LINKED}
-	${PYTHON} ${SRC}/merge_roster.py $^
+	${PYTHON} ${SRC}/merge_roster.py $^ $@
+
+${LINKED}/history.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/profiles.csv | ${LINKED}
+	${PYTHON} ${SRC}/merge_history.py $^ $@
+
 
 ${LINKED}:
 	mkdir -p $@
