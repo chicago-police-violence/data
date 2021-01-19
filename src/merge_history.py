@@ -1,5 +1,5 @@
 from utils import csv_read
-from set_matcher import Matcher
+from matcher import Matcher
 from collections import defaultdict
 from uuid import uuid4
 from itertools import chain
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         if "history" in profile:
             history[profile["uid"]].append(profile)
 
-    with open(argv[4], "w") as  hf:
+    with open(argv[4], "w") as hf:
         fields = ["uid", "unit_no", "start_date", "end_date"]
         hw = DictWriter(hf, fieldnames=fields, extrasaction="ignore")
         hw.writeheader()

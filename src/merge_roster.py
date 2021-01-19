@@ -1,6 +1,6 @@
 from utils import csv_read, flatten_stars
 from uuid import uuid4
-from set_matcher import Matcher
+from matcher import Matcher
 from csv import DictWriter
 from datasets import datasets
 import os.path

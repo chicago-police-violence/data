@@ -112,8 +112,9 @@ class Matcher:
         for elem in unlinked:
             if type(elem) is dict:
                 elem = [elem]
+            uid = uuid4()
             for e in elem:
                 if matchee_source is not None:
                     e["source"] = matchee_source
-                e["uid"] = uuid4()
+                e["uid"] = uid
                 yield e
