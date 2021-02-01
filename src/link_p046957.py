@@ -26,7 +26,7 @@ def f2(officer, m):
 
 f3 = lambda o, m: f1(o, m)
 f3.key = ["last_name", "gender", "birthyear", "appointment_date"]
-#f3.debug = True
+# f3.debug = True
 
 f4 = lambda o, m: f1(o, m)
 f4.key = ["first_name", "gender", "birthyear", "appointment_date"]
