@@ -47,6 +47,13 @@ datasets = {
             "subject_injured",
             "subject_alleged_injury",
         ],
+        "id_fields": [
+            "last_name",
+            "first_name",
+            "gender",
+            "race",
+            "appointment_date",
+        ],
         "rules": [
             (["date", "appointment_date"], utils.get_date),
             (["time"], utils.parse_miltime),
