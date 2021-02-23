@@ -28,22 +28,14 @@ if __name__ == "__main__":
     root, _ = os.path.splitext(os.path.basename(argv[1]))
     id_fields = datasets[root]["id_fields"] + ["star"]
 
-    stars = dict()
-    for row in csv_read(argv[2]):
-        stars[row["trr_id"]] = row["star"]
-
+    stars = {row["trr_id"]: row["star"] for row in csv_read(argv[2])}
     d = defaultdict(list)
     for row in csv_read(argv[1]):
-        if row["number_of_weapons_discharged"] in ["", 0]:
-            continue
-        row["star"] = stars[row["trr_id"]]
-        key = tuple(row[f] for f in id_fields)
-        d[key].append(row)
-
-    officers, trrs = [], []
-    for key in d:
-        officers.append(dict(zip(id_fields, key)))
-        trrs.append(d[key])
+        if row["number_of_weapons_discharged"] not in ["", 0]:
+            row["star"] = stars[row["trr_id"]]
+            key = tuple(row[f] for f in id_fields)
+            d[key].append(row)
+    officers = [dict(zip(id_fields, key), rows=rows) for key, rows in d.items()]
 
     m = Matcher(flatten_stars(profile) for profile in csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2])
@@ -64,8 +56,8 @@ if __name__ == "__main__":
         fields += ["uid"]
         w = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
-        for i, officer in enumerate(officers):
-            for row in trrs[i]:
+        for officer in officers:
+            for row in officer["rows"]:
                 row["uid"] = officer["uid"]
                 rowdict = {k: row[k] for k in fields}
                 w.writerow(rowdict)
