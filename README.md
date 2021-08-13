@@ -79,7 +79,10 @@ Fill in details for each of these: field names and their meanings
 
 In more detail, the `make` command will result in two primary data processing steps.
 First, in the **parsing** step, the raw Excel files are converted to `.csv` files and field
-names are uniformized across files. Then in the **linking** step, 
+names are uniformized across files. Then in the **linking** step, records of officers
+across the different data files are linked by cleaning and matching their attributes,
+removing erroneous entries, etc. The linking step produces the final clean data files
+listed above.
 
 ## Parsing
 
