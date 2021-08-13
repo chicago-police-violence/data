@@ -15,6 +15,7 @@ can be found in the file `datasets.csv`.
 # Requirements
 
 ### Code
+This code requires **Python 3.8+** (it will not work on earlier versions).
 You will require [xlrd](https://github.com/python-excel/xlrd) and
 [openpyxl](https://openpyxl.readthedocs.io/en/stable/) to read `.xls` and
 `.xlsx` files, respectively. Optionally, if you are planning to contribute changes
