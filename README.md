@@ -28,10 +28,12 @@ pip install -r requirements.txt
 ```
 in the repository root folder.
 
-### Documentation
+### Documentation (optional)
 
-If you want to compile the documentation `docs/main.tex`, you can either compile it yourself
-with your favourite LaTeX compiler (e.g. `pdflatex`), or you can run
+We have included a `.pdf` of the documentation in `docs/main.pdf`.
+But if you want to compile the documentation yourself from the source file `docs/main.tex`, you can 
+either compile it however you normally would with your favourite LaTeX compiler 
+(e.g. with `pdflatex` and `bibtex`), or you can run
 ```
 make
 ```
