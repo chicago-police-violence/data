@@ -1,4 +1,6 @@
-# Overview
+<img src="https://cdn.theatlantic.com/thumbor/9jB6mGx0eREfH3l82uNckcwrUFI=/0x62:2343x1380/1952x1098/media/img/mt/2018/03/AP_429077000333/original.jpg" width="700" class="center"/>
+
+# The CPD2K Data Set
 
 This repository contains data related to the Chicago Police department (CPD) as
 well as code to process it. The data was obtained following a series of
