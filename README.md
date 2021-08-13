@@ -49,7 +49,7 @@ with unique IDs that enable linkage among the records. In particular, the follow
 
 ### `roster.csv`
 
-Fill in details
+Fill in details for each of these: field names and their meanings
 
 ### `profiles.csv`
 
