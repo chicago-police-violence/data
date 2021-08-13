@@ -62,7 +62,7 @@ Fill in details for each of these: field names and their meanings
 
 ### `P0-46957_main.csv`
 
-# Parsing and Linking
+# How the data are processed
 
 In more detail, the `make` command will result in two primary data processing steps.
 First, in the **parsing** step, the raw Excel files are converted to `.csv` files and field
