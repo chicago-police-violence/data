@@ -47,6 +47,20 @@ with unique IDs that enable linkage among the records. In particular, the follow
 - `linked/P0-46957_accused.csv`: (TBD)
 - `linked/P0-46957_main.csv`: (TBD)
 
+### `roster.csv`
+
+Fill in details
+
+### `profiles.csv`
+
+### `history.csv`
+
+### `P0-46360_main.csv`
+
+### `P0-46957_accused.csv`
+
+### `P0-46957_main.csv`
+
 # Parsing and Linking
 
 In more detail, the `make` command will result in two primary data processing steps.
