@@ -31,7 +31,7 @@ in the repository root folder.
 ### Documentation
 
 If you want to compile the documentation `docs/main.tex`, you can either compile it yourself
-with `pdflatex`, or you can run
+with your favourite LaTeX compiler (e.g. `pdflatex`), or you can run
 ```
 make
 ```
