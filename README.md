@@ -1,12 +1,13 @@
 <img src="https://cdn.theatlantic.com/thumbor/9jB6mGx0eREfH3l82uNckcwrUFI=/0x62:2343x1380/1952x1098/media/img/mt/2018/03/AP_429077000333/original.jpg" width="700" class="center"/>
 
-# The CPD35K Data
+# The CPD Data Set
 
-This repository contains data related to the activities of roughly 35,000 police officers 
-in the Chicago Police department (CPD) as
-well as code to process it. The data was obtained following a series of
+This repository contains data related to the activities of 35,000 police officers
+in the Chicago Police department (CPD), including 11,000 tactical response reports
+from 2004-2016 and 110,000 civilian and administrative complaints from 2000-2018.
+The data was obtained following a series of
 requests covered by the Freedom of Information Act (FOIA) and coordinated by
-the Invisible Institute.
+the [Invisible Institute](https://invisible.institute/).
 
 Details about the FOIA requests and which information about the CPD they cover
 can be found in the file `datasets.csv`.
