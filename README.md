@@ -80,21 +80,22 @@ Fill in details for each of these: field names and their meanings
 In more detail, the `make` command will result in two primary data processing steps.
 First, in the **parsing** step, the raw Excel files are converted to `.csv` files and field
 names are uniformized across files. Then in the **linking** step, records of officers
-across the different data files are linked by cleaning and matching their attributes,
+appearing in the different data files are linked by cleaning and matching their attributes,
 removing erroneous entries, etc. The linking step produces the final clean data files
 listed above.
 
 ## Parsing
 
 In the first stage, the raw Excel files are parsed and converted to `.csv`
-files for easier later processing. This stage can be ran with
+files for easier later processing. This stage can be run individually by running
 
 ```
 make parse
 ```
 
-which will create and populate the `parsed` folder.
+in the repository root folder. This will create and populate the `parsed` folder.
 
+*todo: discuss the code and its structure here*
 
 Virtually no decision is made at this stage regarding cleaning or interpreting
 the data beyond uniformizing field names across datasets. Hence, even if you
@@ -107,3 +108,5 @@ working directly with the original data.
 ```
 make link
 ```
+
+*todo: discuss the code and its structure here*
