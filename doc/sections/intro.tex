@@ -1,0 +1,111 @@
+\section{Introduction}
+
+There has been some ML work done on individual correlates that are associated
+with (and potentially predictive of) police misconduct. Scholars have looked at
+the association between misconduct and an individual officer's race, gender,
+years on the force, prior instances of misconduct, stages of officer career,
+assigned unit. But research suggests that violence emerges not just at the
+individual level but also at the population level from the interaction of
+individuals in groups—think of gangs. 
+
+ 
+We offer a dataset that allows ML to investigate the influence of police social
+networks on police misconduct. The dataset allows ML to explore features of
+police social networks that might be associated with and potentially predictive
+of adverse police encounters with civilians or other misconduct. These network
+correlates can include the architecture and structures of social networks in
+departments and smaller subunits within a department—for example, the number of
+connections each officer has, the strength of those connections, the bridge
+positions that some officers have across subunits. More innovatively, ML can be
+used in the way it is often used to study disease dynamics: ML can find the
+patterns of behavior (clustering, outbreaks, spreading, geographic hotspots) on
+a network that might be associated with violence. 
+
+ 
+We show how to use complaint datasets from a police department in a major city
+to investigate the influence of social networks on police misconduct and
+violence. 
+
+
+The original data was obtained following a series of requests covered by the
+Freedom of Information Act (FOIA) to the Chicago Police Department (CPD) and
+the Civilian Office of Police Accountability (COPA). The information which was
+requested pertained to CPD's personnel and its activities.
+
+\textbf{TODO:} ideally say a bit more about the history of these FOIA requests.
+Apparently they were initiated by individual journalists and lawyers and were
+later coordinated by the Invisible Institute which ultimately became the
+central location were (almost) all the data is currently available.
+
+\begin{table}[h]
+	\begin{center}
+\begin{tabular}{@{}llll@{}}
+	\toprule
+	request \#&received&requested&description\\
+\midrule
+	\texttt{P0-58155}&2017-04-17& &Officer roster\\
+	\texttt{P4-41436}&2018-03-21& &Officer roster\\
+		\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
+		\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
+	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
+	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
+	\texttt{P0-46360}& & &Tactical Response Reports\\
+\bottomrule
+\end{tabular}
+\caption{Summary of the FOIA requests to the CPD and COPA contained in our repository.}
+\label{table:summary}
+\end{center}
+\end{table}
+
+Each FOIA request is identified by a request number, \cref{table:summary} gives
+an overview of all the requests made to the CPD and COPA that are present in
+our repository. This information is also available in the file
+\texttt{dataset.csv} in the root folder of the repository. The original
+data—that is the files received after each FOIA request—are present in the
+\texttt{raw/} folder of the repository, with one subfolder for each request,
+identified by the request number. When available, each subfolder also contains
+the formal request letter as well as the reply letter from the CPD or COPA,
+which are useful in understanding what data was included in each dataset.
+Some additional comments about the data:
+\begin{itemize}
+	\item \emph{Officer roster:} lists all officers (past or present) employed
+		by the CPD along with attributes such as year of birth, age, race,
+		gender, appointment date, resignation date, etc.
+	\item \emph{Unit assignment:} the CPD is organized into (500 or so?) units.
+		Each officer can be assigned to one or multiple units and these
+		assignments can change over time. The unit assignment datasets contain
+		one record for each officer and each unit they were assigned to, with
+		the start date and end date of this assignment.
+	\item \emph{Complaints:} formal complaints filed by citizens against police
+		officers. Complaints are identified by a complaint number, and there is
+		one record for each complaint and each officer listed on the complaint,
+		indicating the allegation made against them, result of the
+		investigation of the allegation (with possible sanction), etc.
+	\item \emph{Tactical Response Reports:} these are forms that officers are
+		required to file after each incident for which the officer's response
+		involved use of force.
+\end{itemize}
+
+Let us already mention an inherent difficulty in making use of this data, which
+will be discussed in \cref{sec:linking}: there is no number/identifier which
+uniquely identifies officers across datasets. Such an identifier probably
+exists internally in the CPD, but was never included in the data released to
+the public. One would be tempted to believe that the \emph{badge number} (also
+sometimes referred to as \emph{star number} of an officer is such an
+identifier, but unfortunately, it changes over the course of an officer's
+career in the CPD, and a given badge number can be reassigned to different
+officers when they are no longer in use.
+
+\paragraph{Technical choices.} Code is written in Python, use of \texttt{Make}
+to coordinate the various processing steps and easily reproduce them.
+\textbf{TODO:} say a bit more about the requirements of the environment, or
+maybe simply refer to the README?
+
+
+\subsection{Related Work}
+
+Police records datasets
+
+Gang violence data?
+
+

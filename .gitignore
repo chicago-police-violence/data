@@ -7,3 +7,5 @@ linked/
 *.log
 *.out
 *.pdf
+*.swp
+*.swo
