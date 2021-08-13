@@ -53,7 +53,13 @@ make
 ```
 in the repository root folder. This will result in the creation of a single cleaned and linked
 set of data where all records (officers, complaints, and tactical response reports) are associated
-with unique IDs that enable linkage among the records. In particular, the following files are generated:
+with unique IDs that enable linkage among the records. 
+
+
+# Data description
+
+Once you have completed the above build step, the repository will contain
+the cleaned and linked data. In particular, the following files will have been generated:
 - `linked/roster.csv`: A merged and linked roster of all unique officers in the data
 - `linked/profiles.csv`: A roster of all officers, including duplicate entries when an officer appears in multiple source files
 - `linked/history.csv`: A history of unit membership of each officer
