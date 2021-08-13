@@ -14,10 +14,11 @@ can be found in the file `datasets.csv`.
 
 # Requirements
 
+### Code
 You will require [xlrd](https://github.com/python-excel/xlrd) and
 [openpyxl](https://openpyxl.readthedocs.io/en/stable/) to read `.xls` and
-`.xlsx` files, respectively. Optionally, if you are planning to make changes
-to this repository, you will need the [black](https://github.com/psf/black)
+`.xlsx` files, respectively. Optionally, if you are planning to contribute changes
+to the code in this repository, you will need the [black](https://github.com/psf/black)
 package for code formatting.
 
 All dependencies can be installed by running
@@ -26,6 +27,16 @@ All dependencies can be installed by running
 pip install -r requirements.txt
 ```
 in the repository root folder.
+
+### Documentation
+
+If you want to compile the documentation `docs/main.tex`, you can either compile it yourself
+with `pdflatex`, or you can run
+```
+make
+```
+in the `docs/` folder to compile it with [latexrun](https://github.com/aclements/latexrun). 
+
 
 # Obtaining the data
 
