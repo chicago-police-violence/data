@@ -2,9 +2,9 @@
 
 # The CPD Data Set
 
-This repository contains data related to the activities of 35,000 police officers
-in the Chicago Police department (CPD), including 11,000 tactical response reports
-from 2004-2016 and 110,000 civilian and administrative complaints from 2000-2018.
+This repository contains data related to the activities of ~35,000 police officers
+in the Chicago Police department (CPD), including ~11,000 tactical response reports
+from 2004-2016 and ~110,000 civilian and administrative complaints from 2000-2018.
 The data was obtained following a series of
 requests covered by the Freedom of Information Act (FOIA) and coordinated by
 the [Invisible Institute](https://invisible.institute/).
