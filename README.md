@@ -1,4 +1,6 @@
+<p align="center">
 <img src="https://cdn.theatlantic.com/thumbor/9jB6mGx0eREfH3l82uNckcwrUFI=/0x62:2343x1380/1952x1098/media/img/mt/2018/03/AP_429077000333/original.jpg" width="700" class="center"/>
+</p>
 
 # The CPD Data Set
 
@@ -15,7 +17,7 @@ can be found in the file `datasets.csv`.
 # Requirements
 
 ### Code
-This code requires **Python 3.8+** (it will not work on earlier versions).
+This code requires **Python>=3.8** (it will not work on earlier versions).
 You will require [xlrd](https://github.com/python-excel/xlrd) and
 [openpyxl](https://openpyxl.readthedocs.io/en/stable/) to read `.xls` and
 `.xlsx` files, respectively. Optionally, if you are planning to contribute changes
