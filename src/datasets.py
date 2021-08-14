@@ -301,8 +301,8 @@ datasets = {
     "P0-46987": {
         "rows": lambda fn: utils.csv_read(fn, use_dict=False, skip=1),
         "fields": [
-            "unit",
-            "description",
+            "unit_no",
+            "unit_description",
             "active"
         ],
         "rules": [],
