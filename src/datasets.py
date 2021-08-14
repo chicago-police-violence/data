@@ -298,4 +298,13 @@ datasets = {
             (["race"], utils.convert_race),
         ],
     },
+    "P0-46987": {
+        "rows": lambda fn: utils.csv_read(fn, use_dict=False, skip=1),
+        "fields": [
+            "unit",
+            "description",
+            "active"
+        ],
+        "rules": [],
+    },
 }
