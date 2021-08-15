@@ -303,7 +303,8 @@ datasets = {
         "fields": [
             "unit_no",
             "unit_description",
-            "active"
+            "active_status",
+            "status_date"
         ],
         "rules": [],
     },
