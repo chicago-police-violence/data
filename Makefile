@@ -1,7 +1,19 @@
 RAW := raw
 LOG_LEVEL := debug
-PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 SRC := src
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
+
+# check that we have python>=3.8
+PYTHON_VERSION_MIN=3.8
+PYTHON_VERSION=$(shell $(PYTHON) -c 'import sys; print("%d.%d"% sys.version_info[0:2])' )
+PYTHON_VERSION_OK=$(shell $(PYTHON) -c 'import sys;\
+  print(int(float("%d.%d"% sys.version_info[0:2]) >= $(PYTHON_VERSION_MIN)))' )
+ifeq ($(PYTHON_VERSION_OK),0)
+  $(error "This Makefile uses 'python3', which on this computer is python$(PYTHON_VERSION).\
+           Python version >= $(PYTHON_VERSION_MIN) is required.\
+           Please ensure python3.8+ is installed and edit this Makefile to force the 'PYTHON := ...' line to run python3.8+")
+endif
+
 
 .PHONY: all
 all: link
