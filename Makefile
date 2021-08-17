@@ -4,15 +4,6 @@ SRC := src
 PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 
 # check that we have python>=3.8
-PYTHON_VERSION_MIN=3.8
-PYTHON_VERSION=$(shell $(PYTHON) -c 'import sys; print("%d.%d"% sys.version_info[0:2])' )
-PYTHON_VERSION_OK=$(shell $(PYTHON) -c 'import sys;\
-  print(int(float("%d.%d"% sys.version_info[0:2]) >= $(PYTHON_VERSION_MIN)))' )
-ifeq ($(PYTHON_VERSION_OK),0)
-  $(error "This Makefile uses 'python3', which on this computer is python$(PYTHON_VERSION).\
-           Python version >= $(PYTHON_VERSION_MIN) is required.\
-           Please ensure python3.8+ is installed and edit this Makefile to force the 'PYTHON := ...' line to run python3.8+")
-endif
 
 
 .PHONY: all
@@ -21,6 +12,10 @@ all: link
 .PHONY: black
 black:
 	black .
+
+.PHONY: check
+check:
+	${PYTHON} -c 'import ${SRC}'
 
 #### Parsing ####
 
@@ -32,7 +27,7 @@ PARSED_FILES := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
 PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 
 .PHONY: parse
-parse: ${PARSED_FILES}
+parse: check ${PARSED_FILES}
 
 .INTERMEDIATE: ${RAW}/18-060-425/case_info_export.csv ${RAW}/18-060-425/accused_export.csv
 ${RAW}/18-060-425/%.csv: ${RAW}/18-060-425/%.xlsx
