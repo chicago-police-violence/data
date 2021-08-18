@@ -1,7 +1,10 @@
 RAW := raw
 LOG_LEVEL := debug
-PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 SRC := src
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
+
+# check that we have python>=3.8
+
 
 .PHONY: all
 all: link
@@ -9,6 +12,10 @@ all: link
 .PHONY: black
 black:
 	black .
+
+.PHONY: check
+check:
+	${PYTHON} -c 'import ${SRC}'
 
 #### Parsing ####
 
@@ -20,7 +27,7 @@ PARSED_FILES := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
 PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 
 .PHONY: parse
-parse: ${PARSED_FILES}
+parse: check ${PARSED_FILES}
 
 .INTERMEDIATE: ${RAW}/18-060-425/case_info_export.csv ${RAW}/18-060-425/accused_export.csv
 ${RAW}/18-060-425/%.csv: ${RAW}/18-060-425/%.xlsx
