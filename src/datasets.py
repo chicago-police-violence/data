@@ -200,7 +200,7 @@ datasets = {
         "rules": [(["appointment_date", "resignation_date"], utils.get_date)],
     },
     "18-060-425_main": {
-        "rows": lambda fn: utils.csv_read(fn, use_dict=False, skip=1),
+        "rows": lambda fn: utils.xlsx_read(fn, "Export Worksheet", reset=True),
         "fields": [
             "complaint_no",
             "incident_start",
@@ -232,7 +232,7 @@ datasets = {
         ],
     },
     "18-060-425_accused": {
-        "rows": lambda fn: utils.csv_read(fn, use_dict=False, skip=1),
+        "rows": lambda fn: utils.xlsx_read(fn, "Export Worksheet", reset=True),
         "fields": [
             "complaint_no",
             "first_name",

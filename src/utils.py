@@ -95,9 +95,12 @@ def csv_read(filename, use_dict=True, skip=0):
     return islice(reader, skip, None)
 
 
-def xlsx_read(file_name, sheet_name, skip=1):
+def xlsx_read(file_name, sheet_name, skip=1,reset=False):
     wb = load_workbook(filename=file_name, read_only=True)
-    return islice(wb[sheet_name].values, skip, None)
+    ws = wb[sheet_name]
+    if reset:
+        ws.reset_dimensions()
+    return islice(ws.values, skip, None)
 
 
 def xls_read(file_name, sheet_name, skip=1):

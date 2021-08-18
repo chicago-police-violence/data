@@ -3,9 +3,6 @@ LOG_LEVEL := debug
 SRC := src
 PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 
-# check that we have python>=3.8
-
-
 .PHONY: all
 all: link
 
@@ -29,10 +26,6 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 .PHONY: parse
 parse: check ${PARSED_FILES}
 
-.INTERMEDIATE: ${RAW}/18-060-425/case_info_export.csv ${RAW}/18-060-425/accused_export.csv
-${RAW}/18-060-425/%.csv: ${RAW}/18-060-425/%.xlsx
-	xlsx2csv -n "Export Worksheet" $< $@
-
 ${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 | ${PARSED}
 	${PYTHON} ${SRC}/parse_p046957.py $@ $<
 
@@ -45,8 +38,8 @@ ${PARSED}/16-1105.csv: ${RAW}/16-1105/Kalven_16-1105_All_Sworn_Employees.xlsx
 ${PARSED}/P4-41436.csv: ${RAW}/P4-41436/P441436-current_and_former_CPD_employee_list_run_15_Mar_2018_by_CPD_IT-redacted_1.xlsx
 ${PARSED}/P0-52262.csv: ${RAW}/P0-52262/FOIA_P052262_-_11221-FOIA-P052262-AllSwornEmployeesWithUOA.xlsx
 ${PARSED}/P0-58155.csv: ${RAW}/P0-58155/P058155_-_Kiefer.xlsx
-${PARSED}/18-060-425_main.csv: ${RAW}/18-060-425/case_info_export.csv
-${PARSED}/18-060-425_accused.csv: ${RAW}/18-060-425/accused_export.csv
+${PARSED}/18-060-425_main.csv: ${RAW}/18-060-425/case_info_export.xlsx
+${PARSED}/18-060-425_accused.csv: ${RAW}/18-060-425/accused_export.xlsx
 ${PARSED}/P0-46987.csv: ${RAW}/P0-46987/units.csv
 
 ${PARSED}/%.csv: | ${PARSED}
