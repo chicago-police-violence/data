@@ -27,7 +27,7 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 parse: check ${PARSED_FILES}
 
 ${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 | ${PARSED}
-	${PYTHON} ${SRC}/parse_p046957.py $@ $<
+	${PYTHON} ${SRC}/parse_p046957.py $(@D) $<
 
 ${PARSED}/P0-46957_accused.csv: ${RAW}/P0-46957
 ${PARSED}/P0-46360_main.csv: ${RAW}/P0-46360/10655-FOIA-P046360-TRRdata.xlsx

@@ -107,5 +107,4 @@ def get_accused(directory):
 if __name__ == "__main__":
     import sys
 
-    dirname, basename = os.path.split(sys.argv[1])
-    main(sys.argv[2], dirname)
+    main(sys.argv[2], sys.argv[1])
