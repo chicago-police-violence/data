@@ -25,7 +25,7 @@ repository, you will need the [black](https://github.com/psf/black) package for 
 
 All Python dependencies can be installed by running
 
-```
+```console
 pip install -r requirements.txt
 ```
 in the repository root folder.
@@ -36,7 +36,7 @@ We have included a `.pdf` of the documentation in `docs/main.pdf`.
 But if you want to compile the documentation yourself from the source file `docs/main.tex`, you can 
 either compile it however you normally would with your favourite LaTeX compiler 
 (e.g. with `pdflatex` and `bibtex`), or you can run
-```
+```console
 make
 ```
 in the `docs/` folder to compile it with [latexrun](https://github.com/aclements/latexrun). 
@@ -50,7 +50,7 @@ Each subfolder contains the original Excel data files along
 with the request and answer letters when available.
 
 In order to build the cleaned and linked data, run
-```
+```console
 make
 ```
 in the repository root folder. This will result in the creation of a single cleaned and linked
@@ -97,7 +97,7 @@ listed above.
 In the first stage, the raw Excel files are parsed and converted to `.csv`
 files for easier later processing. This stage can be run individually by running
 
-```
+```console
 make parse
 ```
 
@@ -113,7 +113,7 @@ working directly with the original data.
 
 ## Linking
 
-```
+```console
 make link
 ```
 
