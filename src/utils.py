@@ -90,9 +90,9 @@ def get_date(datetime):
 
 
 def csv_read(filename, use_dict=True, skip=0):
-    fh = open(filename)
-    reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
-    return islice(reader, skip, None)
+    with open(filename) as fh:
+        reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
+        yield from islice(reader, skip, None)
 
 
 def xlsx_read(file_name, sheet_name, skip=1,reset=False):
