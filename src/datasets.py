@@ -319,23 +319,22 @@ datasets = {
             "race",
             "star",
             "appointment_date",
-            "rank"
+            "rank",
             "last_promotion_date",
             "resignation_date",
             "award_ref_number",
-            "award_type"
+            "award_type",
             "award_request_date",
             "tracking_no",
             "current_status",
             "requester_name",
             "incident_start_date",
             "incident_end_date",
-            "ceremony_date"
+            "ceremony_date",
         ],
         "rules": [
-            (["appointment_date", "resignation_date", "last_promotion_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_date),
+            (["appointment_date", "resignation_date", "last_promotion_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_award_datetime),
             (["star", "birthyear", "award_ref_number"], utils.to_int),
-            (["race"], utils.convert_race),
             ]
     },
     "P5-06887": {
@@ -345,14 +344,14 @@ datasets = {
             "first_name",
             "star",
             "middle_initial",
-            "rank"
+            "rank",
             "birthyear",
             "gender",
             "race",
             "appointment_date",
             "seniority_date",
             "resignation_date",
-            "award_type"
+            "award_type",
             "award_request_date",
             "award_ref_number",
             "current_status",
@@ -362,13 +361,12 @@ datasets = {
             "incident_start_date",
             "incident_end_date",
             "incident_description",
-            "delayed_reason"
+            "delayed_reason",
             "ceremony_date"
         ],
         "rules": [
-            (["appointment_date", "resignation_date", "seniority_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_date),
+            (["appointment_date", "resignation_date", "seniority_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_award_datetime),
             (["star", "award_ref_number", "birthyear"], utils.to_int),
-            (["race"], utils.convert_race),
             ]
     },
 }
