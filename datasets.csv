@@ -1,8 +1,8 @@
-request_number,response_received,requested,description
-P0-58155,2017-04-17,,Employee database (sworn only)
-P4-41436,2018-03-21,,Employee database
-P0-52262,2016-12-04,2016-09-19,Unit history
-16-1105,2016-03-11,2016-02-10,Unit history
-P0-46957,2016-06-29,2016-04-22,Complaints obtained from CPD (2000-2016)
-18-060-425,2018-08-28,2018-08-20,Complaints obtained from COPA (2000-2018)
-P0-46360,,,Tactical Response Reports (2004-2016)
+request_number,response_received,requested,description,source
+P0-58155,2017-04-17,,Employee database (sworn only),https://github.com/invinst/chicago-police-data/raw/9acdc07632ad3fa95f966feae0156fd3c072cdc1/data/context_data/P058155_-_Kiefer.xlsx
+P4-41436,2018-03-21,,Employee database,https://www.dropbox.com/sh/n5gt9nhzot94qzj/AACRkgrKMFBUy6TLhYTU1ekza?dl=0
+P0-52262,2016-12-04,2016-09-19,Unit history,https://www.dropbox.com/sh/8scbyr2y2sy32px/AADdXAtlYyzhAyTzjy8EnI_ka?dl=0
+16-1105,2016-03-11,2016-02-10,Unit history,https://doi.org/10.3886/E114703V1-94320
+P0-46957,2016-06-29,2016-04-22,Complaints obtained from CPD (2000-2016),https://github.com/invinst/chicago-police-data/tree/a39f172b06df42a19f3bc8892825ce00aeec6ef8/data/older_data/complaints_nov2016/raw
+18-060-425,2018-08-28,2018-08-20,Complaints obtained from COPA (2000-2018),https://www.dropbox.com/sh/341tgxidhxgiqjv/AACqQvj50X21-nNGbfQeyhMSa?dl=0
+P0-46360,,,Tactical Response Reports (2004-2016),https://github.com/invinst/chicago-police-data/raw/52e413007e41d1ddcc81e0671123951b8d37fcc8/individual/TRR-main_2004-2016_2016-09_p046360/import/input/10655-FOIA-P046360-TRRdata.xlsx
