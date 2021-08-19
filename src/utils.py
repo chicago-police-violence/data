@@ -112,9 +112,9 @@ def get_award_datetime(s):
         return datetime.datetime.strptime(s, "%m/%d/%Y")
 
 def csv_read(filename, use_dict=True, skip=0):
-    fh = open(filename)
-    reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
-    return islice(reader, skip, None)
+    with open(filename) as fh:
+        reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
+        yield from islice(reader, skip, None)
 
 def zipped_csv_read(filename, use_dict=True, skip=0):
     with zipfile.ZipFile(filename, mode='r') as zf:

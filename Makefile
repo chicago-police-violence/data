@@ -27,8 +27,11 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 .PHONY: parse
 parse: check ${PARSED_FILES}
 
-${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 | ${PARSED}
+${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 ${SRC}/parse_p046957.py
 	${PYTHON} ${SRC}/parse_p046957.py $(@D) $<
+
+${PARSED}/%.csv:
+	${PYTHON} ${SRC}/parse.py "$@" "$<"
 
 ${PARSED}/P0-46957_accused.csv: ${RAW}/P0-46957
 ${PARSED}/P0-46360_main.csv: ${RAW}/P0-46360/10655-FOIA-P046360-TRRdata.xlsx
@@ -48,8 +51,7 @@ ${PARSED}/salary-01.csv: ${RAW}/salary/9-13-17_FOIA_Updated_CPD_Data-2002-2007.x
 ${PARSED}/salary-02.csv: ${RAW}/salary/9-13-17_FOIA_Updated_CPD_Data-2008-2012.xls
 ${PARSED}/salary-03.csv: ${RAW}/salary/9-13-17_FOIA_Updated_CPD_Data_-2013-2017.xls
 
-${PARSED}/%.csv: | ${PARSED}
-	${PYTHON} ${SRC}/parse.py "$@" "$<"
+${PARSED_FILES}: ${SRC}/parse.py | ${PARSED}
 
 ${PARSED}:
 	mkdir -p $@
@@ -63,26 +65,28 @@ LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 .PHONY: link
 link: ${LINKED_FILES}
 
-${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv | ${LINKED}
-	${PYTHON} ${SRC}/merge_roster.py $^ $@
+${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
+	${PYTHON} ${SRC}/merge_roster.py $@ $^
 
-${LINKED}/history.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/profiles.csv | ${LINKED}
-	${PYTHON} ${SRC}/merge_history.py $^ $@
+${LINKED}/history.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/profiles.csv ${SRC}/merge_history.py
+	${PYTHON} ${SRC}/merge_history.py $@ $^
 
-${LINKED}/P0-46957_accused.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/profiles.csv | ${LINKED}
-	${PYTHON} ${SRC}/link_p046957.py $^ $@
+${LINKED}/P0-46957_accused.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/profiles.csv ${SRC}/link_p046957.py
+	${PYTHON} ${SRC}/link_p046957.py $@ $^
 
-${LINKED}/P0-46957_main.csv: ${PARSED}/P0-46957_main.csv | ${LINKED}
+${LINKED}/P0-46957_main.csv: ${PARSED}/P0-46957_main.csv
 	cp $< $@
 
-${LINKED}/P0-46360_main.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${LINKED}/profiles.csv | ${LINKED}
-	${PYTHON} ${SRC}/link_p046360.py $^ $@
+${LINKED}/P0-46360_main.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${LINKED}/profiles.csv ${SRC}/link_p046360.py
+	${PYTHON} ${SRC}/link_p046360.py $@ $^
 
-${LINKED}/P0-46360_discharges.csv: ${PARSED}/P0-46360_discharges.csv | ${LINKED}
+${LINKED}/P0-46360_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/roster.csv: ${LINKED}/profiles.csv | ${LINKED}
-	${PYTHON} ${SRC}/clean_profiles.py $^ $@
+${LINKED}/roster.csv: ${LINKED}/profiles.csv ${SRC}/clean_profiles.py
+	${PYTHON} ${SRC}/clean_profiles.py $@ $^
+
+${LINKED_FILES}: | ${LINKED}
 
 ${LINKED}:
 	mkdir -p $@

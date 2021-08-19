@@ -80,20 +80,20 @@ if __name__ == "__main__":
 
     m = Matcher(
         flatten_stars(o)
-        for o in csv_read(argv[1])
+        for o in csv_read(argv[2])
         if o["last_name"] not in ["", "Officer", "OFFICER"]
     )
 
-    officers = filter(lambda o: o["last_name"], csv_read(argv[2]))
+    officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
-    d1, _ = os.path.splitext(os.path.basename(argv[1]))
-    d2, _ = os.path.splitext(os.path.basename(argv[2]))
+    d1, _ = os.path.splitext(os.path.basename(argv[2]))
+    d2, _ = os.path.splitext(os.path.basename(argv[3]))
     fields = datasets[d1]["fields"]
     fields += [f for f in datasets[d2]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
-    with open(argv[3], "w") as fh:
+    with open(argv[1], "w") as fh:
         writer = DictWriter(fh, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         for officer in sorted(

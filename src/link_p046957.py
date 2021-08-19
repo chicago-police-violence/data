@@ -37,11 +37,11 @@ if __name__ == "__main__":
     from sys import argv
     import os.path
 
-    root, _ = os.path.splitext(os.path.basename(argv[1]))
+    root, _ = os.path.splitext(os.path.basename(argv[2]))
     id_fields = datasets[root]["id_fields"]
 
     d = defaultdict(list)
-    for row in csv_read(argv[1]):
+    for row in csv_read(argv[2]):
         key = tuple(row[f] for f in id_fields)
         d[key].append(row)
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         officer["last_name"], officer["first_name"] = officer["name"].rsplit(", ", 1)
         officers.append(officer)
 
-    m = Matcher(flatten_stars(profile) for profile in csv_read(argv[2]))
+    m = Matcher(flatten_stars(profile) for profile in csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
     profiles = list(m.unify(linked, unlinked, matchee_source=root))
@@ -59,13 +59,13 @@ if __name__ == "__main__":
     fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
-    with open(argv[2], "w") as pf:
+    with open(argv[3], "w") as pf:
         pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         pw.writeheader()
         for profile in profiles:
             pw.writerow(profile)
 
-    with open(argv[3], "w") as pf:
+    with open(argv[1], "w") as pf:
         fields = [f for f in datasets[root]["fields"] if f not in id_fields]
         fields += ["uid"]
         w = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
