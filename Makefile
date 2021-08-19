@@ -4,7 +4,7 @@ SRC := src
 PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 
 .PHONY: all
-all: link
+all: finalize
 
 .PHONY: black
 black:
@@ -16,7 +16,7 @@ check:
 
 #### Parsing ####
 
-PARSED := parsed
+PARSED := tidy
 PARSED_FILES := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
 	P0-46360_stars.csv 16-1105.csv P4-41436.csv P0-52262.csv P0-58155.csv \
 	18-060-425_main.csv 18-060-425_accused.csv P0-46957_main.csv \
@@ -24,8 +24,8 @@ PARSED_FILES := P0-46360_main.csv P0-46360_discharges.csv P0-46360_members.csv \
         P0-61715.csv P5-06887.csv salary-01.csv salary-02.csv salary-03.csv
 PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 
-.PHONY: parse
-parse: check ${PARSED_FILES}
+.PHONY: prepare
+prepare: check ${PARSED_FILES}
 
 ${RAW}/P0-61715/Awards_Data_(New_Copy).csv : ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
 	${PYTHON} ${SRC}/unzip_awards.py "$<"
@@ -63,12 +63,12 @@ ${PARSED}:
 
 #### Linking ####
 
-LINKED := linked
+LINKED := final
 LINKED_FILES := profiles.csv history.csv P0-46957_accused.csv P0-46957_main.csv P0-46360_main.csv roster.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
-.PHONY: link
-link: ${LINKED_FILES}
+.PHONY: finalize
+finalize: ${LINKED_FILES}
 
 ${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
 	${PYTHON} ${SRC}/merge_roster.py $@ $^
