@@ -116,13 +116,13 @@ def csv_read(filename, use_dict=True, skip=0):
         reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
         yield from islice(reader, skip, None)
 
-def zipped_csv_read(filename, use_dict=True, skip=0):
-    with zipfile.ZipFile(filename, mode='r') as zf:
-        zf.extractall(os.path.dirname(filename))
-    csv_name = os.path.splitext(filename)[0]+'.csv'
-    ret = csv_read(csv_name, use_dict, skip)
-    os.remove(csv_name)
-    return ret
+#def zipped_csv_read(filename, use_dict=True, skip=0):
+#    with zipfile.ZipFile(filename, mode='r') as zf:
+#        zf.extractall(os.path.dirname(filename))
+#    csv_name = os.path.splitext(filename)[0]+'.csv'
+#    ret = csv_read(csv_name, use_dict, skip)
+#    os.remove(csv_name)
+#    return ret
 
 def xlsx_read(file_name, sheet_name, skip=1,reset=False):
     wb = load_workbook(filename=file_name, read_only=True)

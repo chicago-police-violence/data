@@ -27,6 +27,11 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 .PHONY: parse
 parse: check ${PARSED_FILES}
 
+${RAW}/P0-61715/Awards_Data_(New_Copy).csv : ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
+	${PYTHON} ${SRC}/unzip_awards.py "$<"
+
+.INTERMEDIATE: ${RAW}/P0-61715/Awards_Data_(New_Copy).csv
+
 ${PARSED}/P0-46957_main.csv ${PARSED}/P0-46957_investigators.csv &: ${RAW}/P0-46957 ${SRC}/parse_p046957.py
 	${PYTHON} ${SRC}/parse_p046957.py $(@D) $<
 
@@ -45,7 +50,7 @@ ${PARSED}/P0-58155.csv: ${RAW}/P0-58155/P058155_-_Kiefer.xlsx
 ${PARSED}/18-060-425_main.csv: ${RAW}/18-060-425/case_info_export.xlsx
 ${PARSED}/18-060-425_accused.csv: ${RAW}/18-060-425/accused_export.xlsx
 ${PARSED}/P0-46987.csv: ${RAW}/P0-46987/units.csv
-${PARSED}/P0-61715.csv: ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
+${PARSED}/P0-61715.csv: ${RAW}/P0-61715/Awards_Data_(New_Copy).csv
 ${PARSED}/P5-06887.csv: ${RAW}/P5-06887/P506887_Sinclair_Rajiv_Awards\ Data.xlsx
 ${PARSED}/salary-01.csv: ${RAW}/salary/9-13-17_FOIA_Updated_CPD_Data-2002-2007.xls
 ${PARSED}/salary-02.csv: ${RAW}/salary/9-13-17_FOIA_Updated_CPD_Data-2008-2012.xls
