@@ -308,4 +308,67 @@ datasets = {
         ],
         "rules": [],
     },
+    "P0-61715": {
+        "rows": lambda fn: utils.zipped_csv_read(fn, use_dict=False, skip=1),
+        "fields": [
+            "last_name",
+            "first_name",
+            "middle_initial",
+            "birthyear",
+            "gender",
+            "race",
+            "star",
+            "appointment_date",
+            "rank"
+            "last_promotion_date",
+            "resignation_date",
+            "award_ref_number",
+            "award_type"
+            "award_request_date",
+            "tracking_no",
+            "current_status",
+            "requester_name",
+            "incident_start_date",
+            "incident_end_date",
+            "ceremony_date"
+        ],
+        "rules": [
+            (["appointment_date", "resignation_date", "last_promotion_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_date),
+            (["star", "birthyear", "award_ref_number"], utils.to_int),
+            (["race"], utils.convert_race),
+            ]
+    },
+    "P5-06887": {
+        "rows": lambda fn: utils.xlsx_read(fn, "Sheet1"),
+        "fields": [
+            "last_name",
+            "first_name",
+            "star",
+            "middle_initial",
+            "rank"
+            "birthyear",
+            "gender",
+            "race",
+            "appointment_date",
+            "seniority_date",
+            "resignation_date",
+            "award_type"
+            "award_request_date",
+            "award_ref_number",
+            "current_status",
+            "requester_last_name",
+            "requester_first_name",
+            "requester_middle_initial",
+            "incident_start_date",
+            "incident_end_date",
+            "incident_description",
+            "delayed_reason"
+            "ceremony_date"
+        ],
+        "rules": [
+            (["appointment_date", "resignation_date", "seniority_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_date),
+            (["star", "award_ref_number", "birthyear"], utils.to_int),
+            (["race"], utils.convert_race),
+            ]
+    },
 }
