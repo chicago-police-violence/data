@@ -70,13 +70,13 @@ if __name__ == "__main__":
     from sys import argv
     import os.path
 
-    s1, _ = os.path.splitext(os.path.basename(argv[1]))
-    s2, _ = os.path.splitext(os.path.basename(argv[2]))
+    s1, _ = os.path.splitext(os.path.basename(argv[2]))
+    s2, _ = os.path.splitext(os.path.basename(argv[3]))
 
-    officers = flatten_history(csv_read(argv[1]), datasets[s1]["id_fields"])
+    officers = flatten_history(csv_read(argv[2]), datasets[s1]["id_fields"])
     m = Matcher(officers)
 
-    officers = flatten_history(csv_read(argv[2]), datasets[s2]["id_fields"])
+    officers = flatten_history(csv_read(argv[3]), datasets[s2]["id_fields"])
     linked, unlinked = m.match(officers, [f1, f2, f3])
 
     officers = defaultdict(list)
@@ -86,14 +86,14 @@ if __name__ == "__main__":
 
     from link_history import link
 
-    m, linked, unlinked = link(officers.values(), argv[3])
+    m, linked, unlinked = link(officers.values(), argv[4])
     fields = datasets["P0-58155"]["fields"]
     fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
     profiles = list(m.unify(linked, unlinked))
 
-    with open(argv[3], "w") as pf:
+    with open(argv[4], "w") as pf:
         pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         pw.writeheader()
         for profile in profiles:
@@ -104,7 +104,7 @@ if __name__ == "__main__":
         if "history" in profile:
             history[profile["uid"]].append(profile)
 
-    with open(argv[4], "w") as hf:
+    with open(argv[1], "w") as hf:
         fields = ["uid", "unit_no", "start_date", "end_date"]
         hw = DictWriter(hf, fieldnames=fields, extrasaction="ignore")
         hw.writeheader()

@@ -18,7 +18,7 @@ def key(c):
 
 if __name__ == "__main__":
     officers = defaultdict(list)
-    for profile in csv_read(argv[1]):
+    for profile in csv_read(argv[2]):
         officers[profile["uid"]].append(profile)
 
     fields = datasets["P0-58155"]["fields"]
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     fields += ["uid"]
     
 
-    with open(argv[2], "w") as pf:
+    with open(argv[1], "w") as pf:
         w = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
 
