@@ -5,6 +5,7 @@ from itertools import islice
 import datetime
 import os
 import logging
+import zipfile
 
 logging.basicConfig(
     format="%(levelname)s:%(message)s",
@@ -48,7 +49,7 @@ def parse_cell(cell):
 
 
 def to_int(a):
-    return a if a is None else int(a)
+    return None if (a is None or a == "") else int(a)
 
 
 def parse_date(date):
@@ -88,12 +89,40 @@ def parse_miltime(time):
 def get_date(datetime):
     return None if datetime is None else datetime.date()
 
+def get_award_datetime(s):
+    if (not s) or (s == ""):
+        return None
+
+    # special cases to fix data entry errors
+    # replacement dates inferred from other entries
+    if s == "17-AUG-1012 00:00:00":
+        return datetime.date(2012, 8, 17)
+    if s == "15-AUG-0201 00:00:00":
+        return datetime.date(2016, 8, 15)
+    if s == "24-JUL-0201 00:00:00":
+        return datetime.date(2014, 7, 24)
+    if s == "31-MAY-0200 00:00:00":
+        return datetime.date(2009, 5, 31)
+    if s == "04-MAR-0200 00:00:00":
+        return datetime.date(2009, 3, 4)
+
+    if ":" in s:
+        return datetime.datetime.strptime(s, "%m/%d/%Y %H:%M")
+    else:
+        return datetime.datetime.strptime(s, "%m/%d/%Y")
 
 def csv_read(filename, use_dict=True, skip=0):
     with open(filename) as fh:
         reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
         yield from islice(reader, skip, None)
 
+#def zipped_csv_read(filename, use_dict=True, skip=0):
+#    with zipfile.ZipFile(filename, mode='r') as zf:
+#        zf.extractall(os.path.dirname(filename))
+#    csv_name = os.path.splitext(filename)[0]+'.csv'
+#    ret = csv_read(csv_name, use_dict, skip)
+#    os.remove(csv_name)
+#    return ret
 
 def xlsx_read(file_name, sheet_name, skip=1,reset=False):
     wb = load_workbook(filename=file_name, read_only=True)
@@ -109,12 +138,19 @@ def xls_read(file_name, sheet_name, skip=1):
     for row in islice(rows, skip, None):
         yield list(map(parse_cell, row))
 
+def xls_read_concatenate_sheets(file_name, skip=1):
+    wb = xlrd.open_workbook(file_name)
+    for sheet_name in wb.sheet_names():
+        rows = wb.sheet_by_name(sheet_name).get_rows()
+        for row in islice(rows, skip, None):
+            parsed_row = list(map(parse_cell, row))
+            parsed_row.append(sheet_name)
+            yield parsed_row
 
 def sanitize(d, rules):
     for keys, function in rules:
         for key in keys:
             d[key] = function(d[key])
-
 
 def process(rows, output_file, field_names, rules):
     # wrapper around csv.DictWriter which cleans each dictionary according to
@@ -123,7 +159,7 @@ def process(rows, output_file, field_names, rules):
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
         for row in rows:
-            assert len(row) == len(field_names)
+            assert len(row) == len(field_names), f"len(row) = {len(row)} and len(fieldnames) = {len(field_names)}; row is {row}"
             row_dict = dict(zip(field_names, row))
             sanitize(row_dict, rules)
             writer.writerow(row_dict)
