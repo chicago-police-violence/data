@@ -309,7 +309,7 @@ datasets = {
         "rules": [],
     },
     "P0-61715": {
-        "rows": lambda fn: utils.zipped_csv_read(fn, use_dict=False, skip=1),
+        "rows": lambda fn: utils.csv_read(fn, use_dict=False, skip=1),
         "fields": [
             "last_name",
             "first_name",
