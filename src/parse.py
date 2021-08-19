@@ -13,5 +13,8 @@ if __name__ == "__main__":
                 dataset["rows"](sys.argv[2]), target, dataset["fields"], dataset["rules"]
                 )
     except:
-        os.remove(target)
+        try:
+            os.remove(target)
+        except FileNotFoundError:
+            pass
         raise
