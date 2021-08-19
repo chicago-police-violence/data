@@ -369,4 +369,71 @@ datasets = {
             (["star", "award_ref_number", "birthyear"], utils.to_int),
             ]
     },
+    "salary-01": {
+        "rows": lambda fn: utils.xls_read_concatenate_sheets(fn),
+        "fields": [
+            "last_name",
+            "first_name",
+            "middle_initial",
+            "gender",
+            "age_at_hire",
+            "title",
+            "start_date_as_officer",
+            "start_date_present_position",
+            "start_date_as_city_employee",
+            "salary",
+            "pay_grade",
+            "employee_status",
+            "salary_year",
+        ],
+        "rules": [
+            (["start_date_as_officer", "start_date_present_position", "start_date_as_city_employee"], utils.get_date),
+            (["age_at_hire", "salary", "salary_year"], utils.to_int),
+            ]
+    },
+    "salary-02": {
+        "rows": lambda fn: utils.xls_read_concatenate_sheets(fn),
+        "fields": [
+            "last_name",
+            "first_name",
+            "middle_initial",
+            "gender",
+            "age_at_hire",
+            "title",
+            "start_date_as_officer",
+            "start_date_present_position",
+            "start_date_as_city_employee",
+            "salary",
+            "pay_grade",
+            "employee_status",
+            "salary_year",
+        ],
+        "rules": [
+            (["start_date_as_officer", "start_date_present_position", "start_date_as_city_employee"], utils.get_date),
+            (["age_at_hire", "salary", "salary_year"], utils.to_int),
+            ]
+    },
+    "salary-03": {
+        "rows": lambda fn: utils.xls_read_concatenate_sheets(fn),
+        "fields": [
+            "last_name",
+            "first_name",
+            "middle_initial",
+            "gender",
+            "age_at_hire",
+            "title",
+            "start_date_as_officer",
+            "start_date_present_position",
+            "start_date_as_city_employee",
+            "salary",
+            "pay_grade",
+            "employee_status",
+            "salary_year",
+        ],
+        "rules": [
+            (["start_date_as_officer", "start_date_present_position", "start_date_as_city_employee"], utils.get_date),
+            (["age_at_hire", "salary", "salary_year"], utils.to_int),
+            ]
+    },
 }
+

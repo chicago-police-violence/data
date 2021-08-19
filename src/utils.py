@@ -138,11 +138,19 @@ def xls_read(file_name, sheet_name, skip=1):
     for row in islice(rows, skip, None):
         yield list(map(parse_cell, row))
 
+def xls_read_concatenate_sheets(file_name, skip=1):
+    wb = xlrd.open_workbook(file_name)
+    for sheet_name in wb.sheet_names():
+        rows = wb.sheet_by_name(sheet_name).get_rows()
+        for row in islice(rows, skip, None):
+            parsed_row = list(map(parse_cell, row))
+            parsed_row.append(sheet_name)
+            yield parsed_row
+
 def sanitize(d, rules):
     for keys, function in rules:
         for key in keys:
             d[key] = function(d[key])
-
 
 def process(rows, output_file, field_names, rules):
     # wrapper around csv.DictWriter which cleans each dictionary according to
