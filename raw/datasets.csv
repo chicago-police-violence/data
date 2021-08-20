@@ -6,4 +6,7 @@ P0-52262,2016-12-04,2016-09-19,Unit history,https://www.dropbox.com/sh/8scbyr2y2
 P0-46957,2016-06-29,2016-04-22,Complaints obtained from CPD (2000-2016),https://github.com/invinst/chicago-police-data/tree/a39f172b06df42a19f3bc8892825ce00aeec6ef8/data/older_data/complaints_nov2016/raw
 18-060-425,2018-08-28,2018-08-20,Complaints obtained from COPA (2000-2018),https://www.dropbox.com/sh/341tgxidhxgiqjv/AACqQvj50X21-nNGbfQeyhMSa?dl=0
 P0-46360,,,Tactical Response Reports (2004-2016),https://github.com/invinst/chicago-police-data/raw/52e413007e41d1ddcc81e0671123951b8d37fcc8/individual/TRR-main_2004-2016_2016-09_p046360/import/input/10655-FOIA-P046360-TRRdata.xlsx
-P0-46987,2016-05-13,2016-04-25,Table of unit names as of May 5 2016, https://github.com/invinst/chicago-police-data/tree/eb4521564767158523813d4fb2f3dc28fd9a8640/data/context_data/current_and_past_units
+P0-46987,2016-05-13,2016-04-25,Table of unit names (as of May 5 2016), https://github.com/invinst/chicago-police-data/tree/eb4521564767158523813d4fb2f3dc28fd9a8640/data/context_data/current_and_past_units
+P0-61715,,2017-07-26,Awards received from 1967 to 2017,https://www.dropbox.com/sh/savxsprwjme0x0i/AADDFHrN8FIhqpfDUzXOQMkTa?dl=0
+P5-06887,2019-10-11,2019-07-19,Awards received from 2017 to 2019,https://www.dropbox.com/sh/wptmrzmy94h1mcz/AACHOLYbKDiiQ4wz2q_yB3_ua?dl=0
+salary,2017-09-27,2017-09-13,Salaries from 2002 to 2017,https://www.dropbox.com/sh/8t6688jrjez9kj4/AACdt8MQ9c3mxoswkmwOxq09a?dl=0
