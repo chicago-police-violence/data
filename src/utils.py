@@ -5,7 +5,7 @@ from itertools import islice
 import datetime
 import os
 import logging
-import zipfile
+#import zipfile
 
 logging.basicConfig(
     format="%(levelname)s:%(message)s",

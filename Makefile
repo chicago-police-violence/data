@@ -28,7 +28,7 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 prepare: check ${PARSED_FILES}
 
 ${RAW}/P0-61715/Awards_Data_(New_Copy).csv : ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
-	${PYTHON} ${SRC}/unzip_awards.py "$<"
+	${PYTHON} ${SRC}/unzip.py "$<"
 
 .INTERMEDIATE: ${RAW}/P0-61715/Awards_Data_(New_Copy).csv
 
