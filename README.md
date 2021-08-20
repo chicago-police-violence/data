@@ -121,8 +121,12 @@ make link
 
 # License
 
-The code that cleans and links the data, as well as the code that produces the documentation for this project, is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-The dataset that is produced by the code is licensed under the [Creative Commons 4.0 Attribution NonCommercial License](https://creativecommons.org/licenses/by-nc/4.0/). See the LICENSE file for details.
+The code that cleans and links the data, as well as the code that produces the
+documentation for this project, is licensed under the [MIT License](https://opensource.org/licenses/MIT);
+see `MIT-LICENSE.txt` for the license text.
+The dataset that is produced by the code is licensed under the 
+[Creative Commons 4.0 Attribution NonCommercial ShareAlike License](https://creativecommons.org/licenses/by-nc-sa/4.0/);
+see `CC-BY-NC-SA-LICENSE.txt` for the license text.
 
 
 
