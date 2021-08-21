@@ -327,10 +327,11 @@ datasets = {
             "award_request_date",
             "tracking_no",
             "current_status",
-            "requester_name",
             "incident_start_date",
             "incident_end_date",
             "ceremony_date",
+            "requester_last_name",
+            "requester_first_name",
         ],
         "rules": [
             (["appointment_date", "resignation_date", "last_promotion_date", "award_request_date", "incident_start_date", "incident_end_date", "ceremony_date"], utils.get_award_datetime),

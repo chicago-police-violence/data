@@ -27,8 +27,10 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 .PHONY: prepare
 prepare: check ${PARSED_FILES}
 
-${RAW}/P0-61715/Awards_Data_(New_Copy).csv : ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
+
+${RAW}/P0-61715/Awards_Data_(New_Copy).csv: ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
 	${PYTHON} ${SRC}/unzip.py "$<"
+	${PYTHON} ${SRC}/parse_p061715.py "$@"
 
 .INTERMEDIATE: ${RAW}/P0-61715/Awards_Data_(New_Copy).csv
 
