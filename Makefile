@@ -1,7 +1,7 @@
 RAW := raw
 LOG_LEVEL := debug
 SRC := src
-PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3.8
 
 .PHONY: all
 all: finalize
@@ -92,10 +92,10 @@ ${LINKED}/roster.csv: ${LINKED}/profiles.csv ${SRC}/clean_profiles.py
 	${PYTHON} ${SRC}/clean_profiles.py $@ $^
 
 ${LINKED}/salary.csv: ${LINKED}/profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
-        ${PYTHON} ${SRC}/merge_salary.py $@ $^
+	${PYTHON} ${SRC}/merge_salary.py $@ $^
 
 ${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
-        ${PYTHON} ${SRC}/merge_awards.py $@ $^
+	${PYTHON} ${SRC}/merge_awards.py $@ $^
 
 ${LINKED_FILES}: | ${LINKED}
 
