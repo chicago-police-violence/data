@@ -78,6 +78,15 @@ f4.key = ["first_name", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
+    print(argv[2:6])
+
+    profiles = csv_read(argv[2])
+    salary1 = csv_read(argv[3])
+    salary2 = csv_read(argv[4])
+    salary3 = csv_read(argv[5])
+
+    quit()
+
     m = Matcher(
         flatten_stars(o)
         for o in csv_read(argv[2])

@@ -78,6 +78,19 @@ f4.key = ["first_name", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
+    profiles = csv_read(argv[2])
+    p061715 = csv_read(argv[3])
+    p506887 = csv_read(argv[4])
+
+
+    # split the requester name into lastname and firstname in p061715
+    print(p061715)
+    itr = 0
+    for row in p061715:
+        print(row)
+    quit()
+
+
     m = Matcher(
         flatten_stars(o)
         for o in csv_read(argv[2])
