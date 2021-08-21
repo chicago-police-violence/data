@@ -1,108 +1,67 @@
-from utils import csv_read, flatten_stars
+from utils import csv_read, multi_csv_read, flatten_stars
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
 from datasets import datasets
+from collections import defaultdict
 import os.path
 
 
-def comp_age(officer1, officer2):
-    birthyear = 2018 - int(officer2["age"])
-    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
+#def comp_age(officer1, officer2):
+#    birthyear = int(officer2018 - int(officer2["age"])
+#    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
+
+def flatten_salary(records, id_attributes):
+    officers = defaultdict(list)
+    for record in records:
+        key = tuple(record[k] for k in id_attributes)
+        officers[key].append(record)
+    for key, records in officers.items():
+        years = [record['salary_year'] for record in records]
+        if len(set(years)) != len(years):
+            print(f"Warning: multiple salary records for a year found")
+            print(records)
+        #assert len(set(years)) == len(years), f"officer salary record contains duplicate years, {records}"
+        salary_history = {}
+        for record in records:
+            salary_history[record['salary_year']] = {k : v for k, v in record.items() if k not in id_attributes and k != 'salary_year'}
+        officer = {k : v for k, v in record.items() if k in id_attributes}
+        officer['salary_history'] = salary_history
+        yield officer
 
 
 def f1(officer, m):
-    if officer["sworn"] == "N" or officer["appointment_date"] > "2017-04-17":
-        # the first roster does not contain unsworn officers (see response letter) or
-        # officers hired after 2017-04-17 since it was received on that day
-        return uuid4()
-    if len(officers := m[officer]) == 1:
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) > 1:
+            print(f"Warning: matched to multiple officers\n Officer: {officer} \n Officers: {officers}")
         return officers[0]["uid"]
-    elif len(officers) > 1:
-        for o in officers:
-            if officer["star"] != "" and officer["star"] in o["stars"]:
-                return o["uid"]
-
 
 f1.key = ["first_name", "last_name", "middle_initial", "appointment_date"]
-
-
-def f2(officer, m):
-    for o in m[officer]:
-        if officer["star"] == "" or officer["star"] not in o["stars"]:
-            continue
-        if not comp_age(o, officer):
-            continue
-        if all(
-            officer[k] == o[k]
-            for k in ["first_name", "gender", "race", "middle_initial"]
-        ):
-            # change of last name (marriage or divorce)
-            return o["uid"]
-        elif any(officer[k] == o[k] for k in ["first_name", "last_name"]):
-            # by visual inspections this covers obvious typo fixes
-            # and the case of Megan Woods, the only CPD transgender officer:
-            # https://www.nbcchicago.com/news/chicago-police-department-transgender-officer1/2295602/
-            return o["uid"]
-
-
-f2.key = ["appointment_date"]
-
-
-def f3(officer, m):
-    for o in m[officer]:
-        if comp_age(o, officer):
-            # those were missed before because the officer's current star
-            # does not appear in the first roster
-            return o["uid"]
-
-
-f3.key = ["first_name", "last_name", "appointment_date"]
-# f3.debug = True
-
-
-def f4(officer, m):
-    if len(officers := m[officer]) == 1:
-        o = officers[0]
-        if comp_age(o, officer) and o["middle_initial"] == officer["middle_initial"]:
-            # a couple additional change of last names that weren't caught
-            # earlier since the officer's current star does not appear in the
-            # first roster
-            return o["uid"]
-
-
-f4.key = ["first_name", "appointment_date"]
-# f4.debug = True
 
 
 if __name__ == "__main__":
     from sys import argv
 
-    print(argv[2:6])
-
     profiles = csv_read(argv[2])
-    salary1 = csv_read(argv[3])
-    salary2 = csv_read(argv[4])
-    salary3 = csv_read(argv[5])
+    m = Matcher(flatten_stars(profile) for profile in profiles)
 
-    quit()
+    basename, _ = os.path.splitext(os.path.basename(argv[3]))
+    salary_records = multi_csv_read(argv[3:6])
+    flattened_salary_records = flatten_salary(salary_records, datasets[basename]["id_fields"])
 
-    m = Matcher(
-        flatten_stars(o)
-        for o in csv_read(argv[2])
-        if o["last_name"] not in ["", "Officer", "OFFICER"]
-    )
-
-    officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
-    linked, unlinked = m.match(officers, [f1, f2, f3, f4])
+    linked, unlinked = m.match(flattened_salary_records, [f1])
 
     d1, _ = os.path.splitext(os.path.basename(argv[2]))
     d2, _ = os.path.splitext(os.path.basename(argv[3]))
-    fields = datasets[d1]["fields"]
-    fields += [f for f in datasets[d2]["fields"] if f not in fields]
+
+    profiles = list(m.unify(linked, unlinked, matcher_source='profiles', matchee_source='salary'))
+
+    fields = datasets["P0-58155"]["fields"]
+    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
-    with open(argv[1], "w") as fh:
+    with open(argv[2], "w") as fh:
         writer = DictWriter(fh, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         for officer in sorted(
@@ -110,3 +69,30 @@ if __name__ == "__main__":
             key=lambda l: (l["last_name"], l["first_name"], l["uid"]),
         ):
             writer.writerow(officer)
+
+    with open(argv[2], "w") as pf:
+        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
+        pw.writeheader()
+        for profile in profiles:
+            pw.writerow(profile)
+
+    history = defaultdict(list)
+    for profile in profiles:
+        if "history" in profile:
+            history[profile["uid"]].append(profile)
+
+    with open(argv[1], "w") as hf:
+        fields = ["uid", "unit_no", "start_date", "end_date"]
+        hw = DictWriter(hf, fieldnames=fields, extrasaction="ignore")
+        hw.writeheader()
+        for profiles in history.values():
+            p = None
+            if len(profiles) == 1:
+                p = profiles[0]
+            elif len(profiles) == 2:
+                for pr in profiles:
+                    if pr["source"] == "P0-52262":
+                        p = pr
+                        break
+            for e in p["history"]:
+                hw.writerow(dict(zip(fields, [p["uid"]] + list(e))))

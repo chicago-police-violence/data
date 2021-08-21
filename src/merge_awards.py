@@ -78,6 +78,8 @@ f4.key = ["first_name", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
+    quit()
+
     profiles = csv_read(argv[2])
     p061715 = csv_read(argv[3])
     p506887 = csv_read(argv[4])
