@@ -1,4 +1,4 @@
-from utils import csv_read, multi_csv_read, flatten_stars
+from utils import csv_read
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
@@ -11,7 +11,6 @@ from datetime import datetime
 #def comp_age(officer1, officer2):
 #    birthyear = int(officer2018 - int(officer2["age"])
 #    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
-
 
 # check if a record matches a list of other records
 # it does not match if there is a conflict in Age or MI (if they exist)
@@ -87,6 +86,23 @@ f1.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender", 
 def flatten_awards(records, id_attributes):
     officers = defaultdict(list)
     for record in records:
+        # this flattening procedure is very conservative (requires a very fine-grained match)
+        # and in particular, there are cases where middle initial actually helps disambiguate 
+        # (e.g. there are two JAMES BANSLEYs that are identical up to MI, but correspond to two officers per salary data)
+        # however, there are cases where MI is missing in some records but not in others -- the flatten procedure would erroneously create multiple separate entries for these
+        # so instead here we fill in the MI for the small number of special cases by visual inspection using the (independent) salary data 
+        # MARQUITA CROSBY does not appear in salary. But she also doesn't appear anywhere else, and all of her records have 
+        # exactly 2 duplicates -- one with mid initial C, one with missing entry. Award ref numbers and tracking numbers are all identical. So merge these too.
+        # I have verified by inspection that with the below 4 fixes, even though it's quite conservative, this procedure overall makes no obviously erroneous splits of officers
+        if record['first_name'] == 'AUDREY' and record['last_name'] == 'JURCZYKOWSKI':
+            record['middle_initial'] = 'A'
+        if record['first_name'] == 'ERICK' and record['last_name'] == 'VON KONDRAT':
+            record['middle_initial'] = 'M'
+        if record['first_name'] == 'STEPHEN' and record['last_name'] == 'MYTHEN':
+            record['middle_initial'] = 'C'
+        if record['first_name'] == 'MARQUITA' and record['last_name'] == 'CROSBY':
+            record['middle_initial'] = 'C'
+       
         key = tuple(record[k] for k in id_attributes)
         officers[key].append(record)
     for key, awards in officers.items():
@@ -115,35 +131,20 @@ if __name__ == "__main__":
     s2, _ = os.path.splitext(os.path.basename(argv[4]))
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
-    
-    offs = defaultdict(list)
-    for ff in p061715_flat:
-        key = (ff['last_name'], ff['first_name'], ff['birthyear'], ff['appointment_date']) 
-        offs[key].append(ff)
-
-    for key, off in offs.items():
-        if len(off) > 1:
-            print()
-            print('KEY')
-            print(key)
-            for li in off:
-                print('ITEM')
-                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['birthyear'], li['appointment_date']))
-            print()
-
-    
-    # create profile matcher
+    print('Matching p061715')
+    # create profile matcher and link to p061715
     profiles = csv_read(argv[2])
-    m = Matcher(flatten_stars(profile) for profile in profiles)
-
-    # link first dataset with profiles
+    m = Matcher(profiles)
     linked, unlinked = m.match(p061715_flat, [f1])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s1),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
         )
 
-    # link second datset with profiles
+    print('Matching p506887')
+    # create profile matcher and link to p061715
+    # create second profile matcher using new profiles and link to p506887
+    m = Matcher(profiles)
     linked, unlinked = m.match(p506887_flat, [f1])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s2),
