@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
 
     m = Matcher(profiles)
-    linked, unlinked = m.match(flattened_salary_records, [f1, f2, f3])
+    linked, unlinked = m.match(salary_flat, [f1, f2, f3])
 
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source='salary'),

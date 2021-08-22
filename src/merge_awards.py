@@ -161,15 +161,15 @@ if __name__ == "__main__":
         for officer in profiles:
             writer.writerow(officer)
 
-    #with open(argv[1], "w") as sf:
-    #    fields = ["uid","year","salary","title","pay_grade","present_posn_start_date","officer_date", "employee_status"]
-    #    salary_fields = ["year","salary","title","pay_grade","present_posn_start_date", "employee_status"]
-    #    sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
-    #    sw.writeheader()
-    #    for profile in profiles:
-    #        if 'salary_history' in profile:
-    #            sorted_years = sorted([year for year in profile["salary_history"]])
-    #            for year in sorted_years:
-    #                for record in profile["salary_history"][year]:
-    #                    row = dict([('uid', profile['uid']), ("officer_date", profile["officer_date"])] + [(key, record[key]) for key in salary_fields]) 
-    #                    sw.writerow(row)
+    with open(argv[1], "w") as af:
+        fields = ["uid", "award_request_date",  "award_ref_number", "award_type", "requester_last_name", "requester_first_name", "requester_middle_initial", "tracking_no", "current_status", "incident_start_date", "incident_end_date", "incident_description", "ceremony_date"]
+        award_fields = fields[1:]
+        aw = DictWriter(af, fieldnames=fields, extrasaction="ignore")
+        aw.writeheader()
+        for profile in profiles:
+            if 'awards' in profile:
+                awards = sorted(profile['awards'], key = lambda ll : ll['award_request_date'])
+                for award in awards:
+                    # since we have two awards files with not identical field names, insert explicit missing entries where necessary
+                    row = dict([('uid', profile['uid'])] + [(key, award[key] if key in award else '') for key in award_fields]) 
+                    aw.writerow(row)
