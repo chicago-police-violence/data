@@ -1,4 +1,4 @@
-from utils import csv_read, multi_csv_read, flatten_stars
+from utils import csv_read, multi_csv_read
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
@@ -175,18 +175,35 @@ if __name__ == "__main__":
     from sys import argv
 
     profiles = csv_read(argv[2])
-    m = Matcher(flatten_stars(profile) for profile in profiles)
 
     basename, _ = os.path.splitext(os.path.basename(argv[3]))
     salary_records = multi_csv_read(argv[3:6])
-    flattened_salary_records = flatten_salary(salary_records, datasets[basename]["id_fields"])
+    salary_flat = flatten_salary(salary_records, datasets[basename]["id_fields"])
 
+
+    # code that merges entries using a more coarse matcher
+    # shows officers that get split up by the above very fine-grained flattening
+    # so that you can visually inspect splits to make sure they are sensible
+    # this code block is just for visually debugging the flattening, so commented out.
+    #offs = defaultdict(list)
+    #for ff in salary_flat:
+    #    key = (ff['last_name'], ff['first_name'], ff['gender'], ff['age_appointment'])
+    #    offs[key].append(ff)
+
+    #for key, off in offs.items():
+    #    if len(off) > 1:
+    #        print()
+    #        print('KEY')
+    #        print(key)
+    #        for li in off:
+    #            print('ITEM')
+    #            print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+    #        print()
+    #quit()
+
+
+    m = Matcher(profiles)
     linked, unlinked = m.match(flattened_salary_records, [f1, f2, f3])
-
-    #toprint = unlinked[:10]
-    #for tp in toprint:
-    #    tp['salary_history'] = ''
-    #print(toprint)
 
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source='salary'),
