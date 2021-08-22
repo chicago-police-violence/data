@@ -1,118 +1,158 @@
-from utils import csv_read, flatten_stars
+from utils import csv_read, multi_csv_read, flatten_stars
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
 from datasets import datasets
+from collections import defaultdict
 import os.path
+from datetime import datetime
 
 
-def comp_age(officer1, officer2):
-    birthyear = 2018 - int(officer2["age"])
-    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
+#def comp_age(officer1, officer2):
+#    birthyear = int(officer2018 - int(officer2["age"])
+#    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
 
 
+# check if a record matches a list of other records
+# it does not match if there is a conflict in Age or MI (if they exist)
+def record_matches_list(rec, li):
+    for lr in li:
+        if rec['middle_initial'] != '' and lr['middle_initial'] != '' and rec['middle_initial'] != lr['middle_initial']:
+            return False
+        if rec['age_appointment'] != '' and lr['age_appointment'] != '' and abs(int(rec['age_appointment']) - int(lr['age_appointment'])) > 1:
+            return False
+    return True
+
+def flatten_salary(records, id_attributes):
+    
+    # match on name and start date (there will be multiple officers in each group, this is very coarse)
+    # if start date as city emp is missing, fill it in with appt date (it's more complete than appt date in this database since this db has civilians)
+    flatten_attributes = ['first_name', 'last_name', 'appointment_date']
+    officers = defaultdict(list)
+    for record in records:
+        key = tuple((record[k] if (record[k] != '' or k != 'appointment_date') else record['officer_date']) for k in flatten_attributes)
+        officers[key].append(record)
+
+    # now within these groupings, consider a match if (MI nonempty + matches) or if age is within 1 year
+    _officers = []
+    for key, recs in officers.items():
+        unq_officers = []
+        for rec in recs:
+            found = False
+            for unqo in unq_officers:
+                if record_matches_list(rec, unqo):
+                    unqo.append(rec)
+                    found = True
+                    break
+            if not found:
+                unq_officers.append([rec])
+        _officers.extend(unq_officers)
+    officers = _officers
+            
+    # find officers where there are multiple same-year entries with the same position and put out a warning
+    for recs in officers:
+        year_posns = defaultdict(list)
+        for rec in recs:
+            year_posns[rec['year']].append(rec['title'])
+        for year, posns in year_posns.items():
+            if len(set(posns)) != len(posns):
+                print(f"\nWarning: single officer has multiple records for same posn in same year\n{recs}\n\n")
+        
+    # there are some officers with multiple records in one year
+    # this happens when their position changes
+    # there is one case where an officer changes more than once in a year (MICHAEL CHIOCCA in 2015)
+    # there is one case where the salary changes immediately (JAMES ROUSSELL in 2014)
+    # so we will sort the records within a year by start date at present position
+    for officer in officers:
+        salary_history = defaultdict(list)
+        for record in officer:
+            salary_history[record['year']].append({k : v for k, v in record.items() if k not in id_attributes})
+        for year in salary_history:
+            salary_history[year] = sorted(salary_history[year], key=lambda ll : ll['present_posn_start_date'])
+        off = {k : v for k, v in record.items() if k in id_attributes}
+        off['salary_history'] = salary_history
+        yield off
+
+# TODO handle the multiple matches case properly
+# match on full name and apt date
 def f1(officer, m):
-    if officer["sworn"] == "N" or officer["appointment_date"] > "2017-04-17":
-        # the first roster does not contain unsworn officers (see response letter) or
-        # officers hired after 2017-04-17 since it was received on that day
-        return uuid4()
-    if len(officers := m[officer]) == 1:
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) > 1:
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
         return officers[0]["uid"]
-    elif len(officers) > 1:
-        for o in officers:
-            if officer["star"] != "" and officer["star"] in o["stars"]:
-                return o["uid"]
 
+f1.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender", "race"]
 
-f1.key = ["first_name", "last_name", "middle_initial", "appointment_date"]
+def flatten_awards(records, id_attributes):
+    officers = defaultdict(list)
+    for record in records:
+        key = tuple(record[k] for k in id_attributes)
+        officers[key].append(record)
+    for key, awards in officers.items():
+        officer = dict(zip(id_attributes, key))
+        officer["awards"] = sorted(awards, key=lambda e: e['award_request_date'])
+        yield officer
 
-
-def f2(officer, m):
-    for o in m[officer]:
-        if officer["star"] == "" or officer["star"] not in o["stars"]:
-            continue
-        if not comp_age(o, officer):
-            continue
-        if all(
-            officer[k] == o[k]
-            for k in ["first_name", "gender", "race", "middle_initial"]
-        ):
-            # change of last name (marriage or divorce)
-            return o["uid"]
-        elif any(officer[k] == o[k] for k in ["first_name", "last_name"]):
-            # by visual inspections this covers obvious typo fixes
-            # and the case of Megan Woods, the only CPD transgender officer:
-            # https://www.nbcchicago.com/news/chicago-police-department-transgender-officer1/2295602/
-            return o["uid"]
-
-
-f2.key = ["appointment_date"]
-
-
-def f3(officer, m):
-    for o in m[officer]:
-        if comp_age(o, officer):
-            # those were missed before because the officer's current star
-            # does not appear in the first roster
-            return o["uid"]
-
-
-f3.key = ["first_name", "last_name", "appointment_date"]
-# f3.debug = True
-
-
-def f4(officer, m):
-    if len(officers := m[officer]) == 1:
-        o = officers[0]
-        if comp_age(o, officer) and o["middle_initial"] == officer["middle_initial"]:
-            # a couple additional change of last names that weren't caught
-            # earlier since the officer's current star does not appear in the
-            # first roster
-            return o["uid"]
-
-
-f4.key = ["first_name", "appointment_date"]
-# f4.debug = True
-
+def merge_rows(iterators, fields):
+    for iterator in iterators:
+        for row in iterator:
+            for field in fields:
+                if field not in row:
+                    row[field] = ''
+            yield row
 
 if __name__ == "__main__":
     from sys import argv
 
-    quit()
 
-    profiles = csv_read(argv[2])
+    # get flattened versions of both awards files
     p061715 = csv_read(argv[3])
+    s1, _ = os.path.splitext(os.path.basename(argv[3]))
+    p061715_flat = flatten_awards(p061715, datasets[s1]['id_fields'])
+
     p506887 = csv_read(argv[4])
+    s2, _ = os.path.splitext(os.path.basename(argv[4]))
+    p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
+    
+    # create profile matcher
+    profiles = csv_read(argv[2])
+    m = Matcher(flatten_stars(profile) for profile in profiles)
 
-    # split the requester name into lastname and firstname in p061715
-    print(p061715)
-    itr = 0
-    for row in p061715:
-        print(row)
-    quit()
+    # link first dataset with profiles
+    linked, unlinked = m.match(p061715_flat, [f1])
+    profiles = sorted(
+            m.unify(linked, unlinked, matchee_source=s1),
+            key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
+        )
 
+    # link second datset with profiles
+    linked, unlinked = m.match(p506887_flat, [f1])
+    profiles = sorted(
+            m.unify(linked, unlinked, matchee_source=s2),
+            key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
+        )
 
-    m = Matcher(
-        flatten_stars(o)
-        for o in csv_read(argv[2])
-        if o["last_name"] not in ["", "Officer", "OFFICER"]
-    )
+    pfields = datasets["P0-58155"]["fields"]
+    pfields += [f for f in datasets["P4-41436"]["fields"] if f not in pfields]
+    pfields += ["source", "uid"]
 
-    officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
-    linked, unlinked = m.match(officers, [f1, f2, f3, f4])
-
-    d1, _ = os.path.splitext(os.path.basename(argv[2]))
-    d2, _ = os.path.splitext(os.path.basename(argv[3]))
-    fields = datasets[d1]["fields"]
-    fields += [f for f in datasets[d2]["fields"] if f not in fields]
-    fields += ["source", "uid"]
-
-    with open(argv[1], "w") as fh:
-        writer = DictWriter(fh, fieldnames=fields, extrasaction="ignore")
+    with open(argv[2], "w") as fp:
+        writer = DictWriter(fp, fieldnames=pfields, extrasaction="ignore")
         writer.writeheader()
-        for officer in sorted(
-            m.unify(linked, unlinked, d1, d2),
-            key=lambda l: (l["last_name"], l["first_name"], l["uid"]),
-        ):
+        for officer in profiles:
             writer.writerow(officer)
+
+    #with open(argv[1], "w") as sf:
+    #    fields = ["uid","year","salary","title","pay_grade","present_posn_start_date","officer_date", "employee_status"]
+    #    salary_fields = ["year","salary","title","pay_grade","present_posn_start_date", "employee_status"]
+    #    sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
+    #    sw.writeheader()
+    #    for profile in profiles:
+    #        if 'salary_history' in profile:
+    #            sorted_years = sorted([year for year in profile["salary_history"]])
+    #            for year in sorted_years:
+    #                for record in profile["salary_history"][year]:
+    #                    row = dict([('uid', profile['uid']), ("officer_date", profile["officer_date"])] + [(key, record[key]) for key in salary_fields]) 
+    #                    sw.writerow(row)

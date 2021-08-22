@@ -19,7 +19,7 @@ def record_matches_list(rec, li):
     for lr in li:
         if rec['middle_initial'] != '' and lr['middle_initial'] != '' and rec['middle_initial'] != lr['middle_initial']:
             return False
-        if rec['age_city_start_date'] != '' and lr['age_city_start_date'] != '' and abs(int(rec['age_city_start_date']) - int(lr['age_city_start_date'])) > 1:
+        if rec['age_appointment'] != '' and lr['age_appointment'] != '' and abs(int(rec['age_appointment']) - int(lr['age_appointment'])) > 1:
             return False
     return True
 
@@ -27,10 +27,10 @@ def flatten_salary(records, id_attributes):
     
     # match on name and start date (there will be multiple officers in each group, this is very coarse)
     # if start date as city emp is missing, fill it in with appt date (it's more complete than appt date in this database since this db has civilians)
-    flatten_attributes = ['first_name', 'last_name', 'city_start_date']
+    flatten_attributes = ['first_name', 'last_name', 'appointment_date']
     officers = defaultdict(list)
     for record in records:
-        key = tuple((record[k] if (record[k] != '' or k != 'city_start_date') else record['appointment_date']) for k in flatten_attributes)
+        key = tuple((record[k] if (record[k] != '' or k != 'appointment_date') else record['officer_date']) for k in flatten_attributes)
         officers[key].append(record)
 
     # now within these groupings, consider a match if (MI nonempty + matches) or if age is within 1 year
@@ -93,34 +93,9 @@ def f2(officer, m):
             print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
         off1 = officer
         mi1 = off1['middle_initial']
-        by1 = datetime.strptime(off1['city_start_date'], '%Y-%m-%d').year - int(off1['age_city_start_date'])
-        off2 = officers[0]
-        mi2 = off2['middle_initial']
-        by2 = None
-        for _o2 in officers:
-            try:
-                by2 = int(_o2['birthyear'])
-            except:
-                pass
-        if mi1.strip() == mi2.strip():
-            return off2["uid"]
-        if by2 and abs(by1-by2) < 2:
-            return off2["uid"]
-
-f2.key = ["first_name", "last_name", "appointment_date"]
-
-# match on just name (but force either apt date, MI, or age to match)
-def f3(officer, m):
-    if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
-        if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
-        off1 = officer
-        mi1 = off1['middle_initial']
-        ad1 = off1['appointment_date'] if off1['appointment_date'] != '' else off1['city_start_date']
         by1 = None
         try:
-            by1 = datetime.strptime(off1['city_start_date'], '%Y-%m-%d').year - int(off1['age_city_start_date'])
+            by1 = datetime.strptime(off1['appointment_date'], '%Y-%m-%d').year - int(off1['age_appointment'])
         except:
             pass
         off2 = officers[0]
@@ -131,31 +106,60 @@ def f3(officer, m):
                 by2 = int(_o2['birthyear'])
             except:
                 pass
-        ad2 = off2['appointment_date']
         if mi1.strip() == mi2.strip():
-            print(f"\n\nMATCH3:\n{officer}\n{officers[0]}\n\n")
             return off2["uid"]
-        if by2 and by1 and abs(by1-by2) < 2:
-            print(f"\n\nMATCH3:\n{officer}\n{officers[0]}\n\n")
-            return off2["uid"]
-        if ad1 == ad2:
-            print(f"\n\nMATCH3:\n{officer}\n{officers[0]}\n\n")
+        if by1 and by2 and abs(by1-by2) < 2:
             return off2["uid"]
 
+f2.key = ["first_name", "last_name", "appointment_date"]
+
+# match on just name (but pick the entry that matches the most of apt date, MI, and age)
+# there will be quite a few muti-uid matches here
+def f3(officer, m):
+    if len(officers := m[officer]) >= 1:
+        off1 = officer
+        mi1 = off1['middle_initial']
+        ad1 = off1['appointment_date'] if off1['appointment_date'] != '' else off1['officer_date']
+        by1 = None
+        try:
+            by1 = datetime.strptime(off1['appointment_date'], '%Y-%m-%d').year - int(off1['age_appointment'])
+        except:
+            pass
+        maxscore = 0
+        bestoff2 = None
+        for off2 in officers:
+            mi2 = off2['middle_initial']
+            by2 = None
+            for _o2 in officers:
+                try:
+                    by2 = int(_o2['birthyear'])
+                except:
+                    pass
+            ad2 = off2['appointment_date']
+            score = (mi1.strip() == mi2.strip()) + (ad1 == ad2)
+            if by1 and by2 and abs(by2-by1) < 2:
+                score += 1
+            if score > maxscore:
+                maxscore = score
+                bestoff2 = off2
+        if bestoff2:
+            print(f"\n\nMATCH3:\n{officer}\n{bestoff2}\n\n")
+            return bestoff2['uid']
 f3.key = ["first_name", "last_name"]
 
 
-## match on just one name + apt date, and match as long as there is only one UID so far in the cleaning
-## (there are a bunch of misspellings of names in the HR data...)
-#def f3(officer, m):
-#    if len(officers := m[officer]) >= 1:
-#        unique_uids = set([officer['uid'] for officer in officers])
-#        if len(unique_uids) == 1:
-#            print(f"\n\nMATCH3:\n{officer}\n{officers[0]}\n\n")
-#            if officer['middle_initial'] != '' and officers[0]['middle_initial'] != '' and officer['middle_initial'] != officers[0]['middle_initial']:
-#                print(f"\n\nBADMATCH3:\n{officer}\n{officers[0]}\n\n")
-#            return officers[0]['uid']
-#f3.key = ["last_name", "appointment_date"]
+# match on just one name + apt date, and match as long as there is only one UID so far in the cleaning
+# (there are a bunch of misspellings of names in the HR data...)
+def f4(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) == 1:
+            print(f"\n\nMATCH3:\n{officer}\n{officers[0]}\n\n")
+            if officer['middle_initial'] != '' and officers[0]['middle_initial'] != '' and officer['middle_initial'] != officers[0]['middle_initial']:
+                print(f"\n\nBADMATCH3:\n{officer}\n{officers[0]}\n\n")
+            return officers[0]['uid']
+f4.key = ["last_name", "appointment_date"]
+
 #
 #def f4(officer, m):
 #    if len(officers := m[officer]) >= 1:
@@ -179,10 +183,10 @@ if __name__ == "__main__":
 
     linked, unlinked = m.match(flattened_salary_records, [f1, f2, f3])
 
-    toprint = unlinked[:10]
-    for tp in toprint:
-        tp['salary_history'] = ''
-    print(toprint)
+    #toprint = unlinked[:10]
+    #for tp in toprint:
+    #    tp['salary_history'] = ''
+    #print(toprint)
 
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source='salary'),
@@ -199,7 +203,7 @@ if __name__ == "__main__":
             writer.writerow(officer)
 
     with open(argv[1], "w") as sf:
-        fields = ["uid","year","salary","title","pay_grade","present_posn_start_date","city_start_date", "employee_status"]
+        fields = ["uid","year","salary","title","pay_grade","present_posn_start_date","officer_date", "employee_status"]
         salary_fields = ["year","salary","title","pay_grade","present_posn_start_date", "employee_status"]
         sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
         sw.writeheader()
@@ -208,5 +212,5 @@ if __name__ == "__main__":
                 sorted_years = sorted([year for year in profile["salary_history"]])
                 for year in sorted_years:
                     for record in profile["salary_history"][year]:
-                        row = dict([('uid', profile['uid']), ("city_start_date", profile["city_start_date"])] + [(key, record[key]) for key in salary_fields]) 
+                        row = dict([('uid', profile['uid']), ("officer_date", profile["officer_date"])] + [(key, record[key]) for key in salary_fields]) 
                         sw.writerow(row)
