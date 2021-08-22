@@ -143,7 +143,7 @@ def f3(officer, m):
                 maxscore = score
                 bestoff2 = off2
         if bestoff2:
-            print(f"\n\nMATCH3:\n{officer}\n{bestoff2}\n\n")
+            #print(f"\n\nMATCH3:\n{officer}\n{bestoff2}\n\n")
             return bestoff2['uid']
 f3.key = ["first_name", "last_name"]
 

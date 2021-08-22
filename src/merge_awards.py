@@ -116,6 +116,22 @@ if __name__ == "__main__":
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
     
+    offs = defaultdict(list)
+    for ff in p061715_flat:
+        key = (ff['last_name'], ff['first_name'], ff['birthyear'], ff['appointment_date']) 
+        offs[key].append(ff)
+
+    for key, off in offs.items():
+        if len(off) > 1:
+            print()
+            print('KEY')
+            print(key)
+            for li in off:
+                print('ITEM')
+                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['birthyear'], li['appointment_date']))
+            print()
+
+    
     # create profile matcher
     profiles = csv_read(argv[2])
     m = Matcher(flatten_stars(profile) for profile in profiles)
