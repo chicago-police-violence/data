@@ -41,11 +41,47 @@ def f3(officer, m):
 
 f3.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender"]
 
-# TODO handle the multiple matches case properly
-# match on name/birthyear now
+# match on name / appointment star, and at least one of star or apt date must exist
+# must only be one match and at least one of star or appointment must exist
 def f4(officer, m):
     if len(officers := m[officer]) >= 1:
         unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) == 1:
+            for off in officers:
+                if off['star'] != '' or off['appointment_date'] != '':
+                    return officers[0]['uid']
+
+f4.key = ["first_name", "last_name", "appointment_date", "star"]
+
+# match on name and star (star must exist)
+def f5(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) == 1:
+            for off in officers:
+                if off['star'] != '':
+                    return officers[0]['uid']
+
+f5.key = ["first_name", "last_name", "star"]
+
+# match on name and star (star must exist)
+def f6(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) == 1:
+            for off in officers:
+                if off['appointment_date'] != '':
+                    return officers[0]['uid']
+
+f6.key = ["first_name", "last_name", "appointment_date"]
+
+
+# match on name / appointment star, and at least one of star or apt date must exist
+# must only be one match and at least one of star or appointment must exist
+def f7(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+
         print('MATCH')
         print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
         print([(off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']) for off in officers])
@@ -54,20 +90,16 @@ def f4(officer, m):
             print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
 
-f4.key = ["first_name", "last_name", "birthyear"]
+f7.key = ["first_name", "last_name"]
+
 
 
 def flatten_awards(records, id_attributes):
     officers = defaultdict(list)
     for record in records:
         # this flattening procedure is very conservative (requires a very fine-grained match)
-        # and in particular, there are cases where middle initial actually helps disambiguate 
-        # (e.g. there are two JAMES BANSLEYs that are identical up to MI, but correspond to two officers per salary data)
-        # however, there are cases where MI is missing in some records but not in others -- the flatten procedure would erroneously create multiple separate entries for these
-        # so instead here we fill in the MI for the small number of special cases by visual inspection using the (independent) salary data 
-        # MARQUITA CROSBY does not appear in salary. But she also doesn't appear anywhere else, and all of her records have 
-        # exactly 2 duplicates -- one with mid initial C, one with missing entry. Award ref numbers and tracking numbers are all identical. So merge these too.
-        # I have verified by inspection that with the below 4 fixes, even though it's quite conservative, this procedure overall makes no obviously erroneous splits of officers
+        # however, there are cases where data is missing in some records but not in others -- the flatten procedure would erroneously create multiple separate entries for these
+        # so instead here we fix a few officers' entries by visual inspection, using the other data sources + salary to verify that these are uniquely identifiable
         if record['first_name'] == 'AUDREY' and record['last_name'] == 'JURCZYKOWSKI':
             record['middle_initial'] = 'A'
         if record['first_name'] == 'ERICK' and record['last_name'] == 'VON KONDRAT':
@@ -76,6 +108,27 @@ def flatten_awards(records, id_attributes):
             record['middle_initial'] = 'C'
         if record['first_name'] == 'MARQUITA' and record['last_name'] == 'CROSBY':
             record['middle_initial'] = 'C'
+        if record['first_name'] == "HERBERT" and record['last_name'] == 'KORDECK':
+            record['middle_initial'] = 'C'
+            record['birthyear'] = '1936' 
+            record['gender'] = 'M'
+            record['race'] = 'WHTIE'
+            record['appointment_date'] = '1962-02-26'
+            record['resignation_date'] = '1990-06-08' 
+        if record['first_name'] == 'THOMAS' and record['last_name'] == 'SLAD':
+            record['appointment_date'] = '1997-07-07'
+        if record['first_name'] == 'VINCENT' and record['last_name'] == 'BROWN':
+            record['appointment_date'] = '2007-04-02'
+        if record['first_name'] == 'EDDIE' and record['last_name'] == 'YOSHIMURA':
+            record['birthyear'] = '1957'
+        if record['first_name'] == 'GARY' and record['last_name'] == 'LORDEN':
+            record['middle_initial'] = 'E'
+            record['star'] = '11893'
+            record['appointment_date'] = '1993-11-22'
+        if record['first_name'] == 'SILVIA' and record['last_name'] == 'LOPEZ':
+            record['birthyear'] = '1960'
+            record['race'] = 'HISPANIC'
+           
        
         key = tuple(record[k] for k in id_attributes)
         officers[key].append(record)
@@ -127,21 +180,37 @@ if __name__ == "__main__":
     #    offs[key].append(ff)
 
     #for key, off in offs.items():
-    #    if len(off) > 1:
+    #    if len(off) > 1 or (key[0], key[1], '', key[3]) in offs or (key[0], key[1], key[2], '') in offs or (key[0], key[1], '', '') in offs:
     #        print()
     #        print('KEY')
     #        print(key)
     #        for li in off:
     #            print('ITEM')
     #            print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
-    #        print()
+    #        if (key[0], key[1], '', key[3]) in offs and key != (key[0], key[1], '', key[3]):
+    #            print(f"IN {(key[0], key[1], '', key[3])}")
+    #            for li in offs[(key[0], key[1], '', key[3])]:
+    #                print('ITEM')
+    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
+    #        if (key[0], key[1], key[2], '') in offs and key != (key[0], key[1], key[2], ''):
+    #            print(f"IN {(key[0], key[1], key[2], '')}")
+    #            for li in offs[(key[0], key[1], key[2], '')]:
+    #                print('ITEM')
+    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
+    #        if (key[0], key[1], '', '') in offs and key != (key[0], key[1], '', ''):
+    #            print(f"IN {(key[0], key[1], '', '')}")
+    #            for li in offs[(key[0], key[1], '', '')]:
+    #                print('ITEM')
+    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
 
+
+    #        print()
 
     print('Matching p061715')
     # create profile matcher and link to p061715
     profiles = csv_read(argv[2])
     m = Matcher(profiles)
-    linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4])
+    linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4, f5, f6, f7])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s1),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
