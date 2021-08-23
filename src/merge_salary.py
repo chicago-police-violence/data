@@ -7,11 +7,9 @@ from collections import defaultdict
 import os.path
 from datetime import datetime
 
-
 #def comp_age(officer1, officer2):
 #    birthyear = int(officer2018 - int(officer2["age"])
 #    return int(officer1["birthyear"]) in [birthyear, birthyear - 1]
-
 
 # check if a record matches a list of other records
 # it does not match if there is a conflict in Age or MI (if they exist)
@@ -26,7 +24,7 @@ def record_matches_list(rec, li):
 def flatten_salary(records, id_attributes):
     
     # match on name and start date (there will be multiple officers in each group, this is very coarse)
-    # if start date as city emp is missing, fill it in with appt date (it's more complete than appt date in this database since this db has civilians)
+    # if start date as city emp is missing, fill it in with officer date
     flatten_attributes = ['first_name', 'last_name', 'appointment_date']
     officers = defaultdict(list)
     for record in records:
@@ -185,21 +183,68 @@ if __name__ == "__main__":
     # shows officers that get split up by the above very fine-grained flattening
     # so that you can visually inspect splits to make sure they are sensible
     # this code block is just for visually debugging the flattening, so commented out.
-    #offs = defaultdict(list)
-    #for ff in salary_flat:
-    #    key = (ff['last_name'], ff['first_name'], ff['gender'], ff['age_appointment'])
-    #    offs[key].append(ff)
 
-    #for key, off in offs.items():
-    #    if len(off) > 1:
-    #        print()
-    #        print('KEY')
-    #        print(key)
-    #        for li in off:
-    #            print('ITEM')
-    #            print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
-    #        print()
-    #quit()
+    offs = defaultdict(list)
+    for ff in salary_flat:
+        key = (ff['last_name'], ff['first_name'], ff['appointment_date'])
+        offs[key].append(ff)
+
+    for key, off in offs.items():
+        # last_name,first_name,middle_initial,gender,age_appointment,position_description,officer_date,present_posn_start_date,appointment_date,salary,pay_grade,employee_status,year
+        key1 = (key[0], key[1], '')
+        if len(off) > 1 or (key1 != key and key1 in offs):
+            print()
+            print('KEY')
+            print(key)
+            print(f'IN {key}')
+            for li in off:
+                print('ITEM')
+                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            if key1 != key and key1 in offs:
+               print(f'IN {key1}')
+               for li in offs[key1]:
+                   print('ITEM')
+                   print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            print()
+    quit()
+
+
+
+    offs = defaultdict(list)
+    for ff in salary_flat:
+        key = (ff['last_name'], ff['first_name'], ff['appointment_date'], ff['age_appointment'])
+        offs[key].append(ff)
+
+    for key, off in offs.items():
+        # last_name,first_name,middle_initial,gender,age_appointment,position_description,officer_date,present_posn_start_date,appointment_date,salary,pay_grade,employee_status,year
+        key1 = (key[0], key[1], '', '')
+        key2 = (key[0], key[1], key[2], '')
+        key3 = (key[0], key[1], '', key[3])
+        if len(off) > 1 or (key1 != key and key1 in offs) or (key2 != key and key2 in offs) or (key3 != key and key3 in offs):
+            print()
+            print('KEY')
+            print(key)
+            print(f'IN {key}')
+            for li in off:
+                print('ITEM')
+                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            if key1 != key and key1 in offs:
+               print(f'IN {key1}')
+               for li in offs[key1]:
+                   print('ITEM')
+                   print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            if key2 != key and key2 in offs:
+               print(f'IN {key2}')
+               for li in offs[key2]:
+                   print('ITEM')
+                   print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            if key3 != key and key3 in offs:
+               print(f'IN {key3}')
+               for li in offs[key3]:
+                   print('ITEM')
+                   print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['appointment_date'], li['age_appointment'], li['officer_date']))
+            print()
+    quit()
 
 
     m = Matcher(profiles)
