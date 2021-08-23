@@ -1,93 +1,20 @@
 % !TEX root = ../main.tex
 
 
-\section{Introduction}
+\section{Introduction} \label{sec:intro}
 
 %%The lack of accessibility to data on policing has severely limited researchers’ ability to conduct thorough quantitative analyses on police activity and behavior, particularly with regard to predicting and explaining police violence. 
 
 
-Over the last few decades, the problem of police brutality has emerged as a mainstream social and political issue. In the United States, in the attempt to provide effective response measures and promote reforms to solve this problem, policymakers have identified data collection and downstream analysis as key tools for monitoring policing activities and enforcing police accountability. For example, the 21st Century Task Force, a presidential initiative proposed in 2014 to build trust between citizens and their law enforcement officers, identified the lack of policing data as a major contributor to the inability of communities and law enforcement agencies to ``make informed policy and practice adjustments based on good information''. Relatedly, the task force highlighted the need to collect more and better data, to ``improve the level of trust, transparency, and accountability between communities and law enforcement agencies.''\footnote{\url{https://cops.usdoj.gov/RIC/Publications/cops-p341-pub.pdf}}. 
+Over the last few decades, the problem of police brutality has emerged as a mainstream social and political issue. In the United States,  policymakers have identified collection and thorough downstream analysis of policing data as key missing pieces needed to improve monitoring activities, enhancing accountability and promoting reforms of the police. For example, the 21st Century Task Force, a presidential initiative proposed in 2014 to build trust between citizens and their law enforcement officers, identified the lack of policing data as a major contributor to the inability of communities and law enforcement agencies to ``make informed policy and practice adjustments based on good information''. Relatedly, the task force highlighted the need to collect more and better data, to ``improve the level of trust, transparency, and accountability between communities and law enforcement agencies.''\footnote{\url{https://cops.usdoj.gov/RIC/Publications/cops-p341-pub.pdf}}. 
 
 Small steps in this directions are underway: the Department of Justice (DOJ) is currently collecting data on arrest-related deaths through the implementation of the ``Death in Custody Reporting Act'' of 2013 (DCRA, P.L. 113-242). Under this act, states are required to provide data regarding the death of any person related to policing activity (detained, under arrest, in the process of being arrested, etc.). Starting January 2019, also the Federal Bureau of Investigation(FBI) has started collecting data within the ``National Use-of-Force Data Collection'' program.\footnote{\url{https://crime-data-explorer.app.cloud.gov/pages/home}}. This program is open to all federal, state, local, and tribal law enforcement and investigative agencies, although participation to it is not enforced, rather on voluntary basis. 
 
-However, to the day,  the insufficient amount, quality and accessibility of policing data has fundamentally limited the ability of the wider scientific community to conduct thorough quantitative analysis on police activity and behavior (see, e.g.\ \citet{peeples2019data,peeples2020data} for recent overviews of the problem of the lack of data in the context of police brutality). As a consequence, we are still far from having developed effective ``data-driven'' policy-making pipelines. Indeed, recent work has investigated how the incompleteness and bias of available data can lead data-driven solutions to violate fundamental fairness principles. E.g.\ \citet{richardson2019dirty} discuss how developing predictive policing system which leverage ``bad'' historical data --- corrupted incomplete and racially biased --- can produce dangerous downstream predictions, potentially violating individual civil rights. Relatedly, machine learning scientists have started investigating the problem of ``algorithmic fairness'', analyzing  risks and flaws related to the employment of black-box, automated decision systems within complex data-driven policy making procedures \citep{veale2018fairness, sloane2019ai, d2020fairness}. Because of all these reasons, it is imperative for the community to collect, curate and provide freely-accessible, easy-to-use data on policing activity.
+However, to the day,  policymakers are fundamentally limited by the insufficient amount, quality and accessibility of policing data. And, more generally, the data-scarcity has prevented the wider scientific community from conducting thorough quantitative analysis on police activity and behavior (see, e.g.\ \citet{peeples2019data,peeples2020data} for recent overviews of the problem of the lack of data in the context of police brutality). As a consequence, we are still far from having developed effective ``data-driven'' policy-making pipelines. Indeed, recent work has investigated how the incompleteness and bias of available data can lead to unwarranted data-driven solutions: \citet{richardson2019dirty} discuss how developing predictive policing system which leverage ``bad'' historical data --- corrupted incomplete and racially biased --- can produce dangerous downstream predictions, potentially violating individual civil rights. Relatedly, machine learning scientists have started investigating the problem of ``algorithmic fairness'', analyzing  risks and flaws related to the employment of black-box, automated decision systems within complex data-driven policy making procedures \citep{veale2018fairness, sloane2019ai, d2020fairness}. Because of all these reasons, it is imperative for the community to collect, curate and provide freely-accessible, easy-to-use data on policing activity.
 
 
-In the present work, we provide a new dataset that contains information on the personnel, activities, use of force, and complaints in the Chicago Police Department (CPD). \textcolor{red}{maybe short discussion of why Chicago is special? + cite some work on policing activity in Chicago? + cite some relevant recent work eg \citep{ba2021role}}. 
-The original data was obtained following a series of requests covered by the
-Freedom of Information Act (FOIA) to the Chicago Police Department (CPD) and
-the Civilian Office of Police Accountability (COPA). The information which was
-requested pertained to CPD's personnel and its activities.
+In the present work, we provide a new dataset that contains information on the personnel, activities, use of force, and complaints in the Chicago Police Department (CPD). \textcolor{red}{maybe short discussion of why Chicago is ``special''? + cite some work on policing activity in Chicago? + cite some relevant recent work eg \citep{ba2021role}}. The original data comprises a collection of datasets, each obtained following different requests covered by the Freedom of Information Act (FOIA) to the Chicago Police Department (CPD) and the Civilian Office of Police Accountability (COPA) on the CPD's personnel and its activities. The data on complaints against police include complaints filed by citizens or internally by other members of the department.  Prior to our work, joint, coherent use of these different dataset for data-analysis purposes was highly non-trivial: for example, publicly available data does not contain coherent unique identifiers for officers across the different datasets. We discuss in detail in \Cref{sec:data} our data cleaning, linking and formatting process. Next, we provide examples and use-cases on the datasets in \Cref{sec:analysis}. These include, but are not limited to, prediction tasks (e.g., predicting officer's misconduct on the basis of their traits, experience, and assigned units), network analysis (e.g., detecting communities within the social network of officers co-listed on complaints), spatiotemporal data analysis (e.g., investigating patterns of officer shooting events), causal inference (e.g., tracking the effects of new disciplinary practices, new training techniques, and new oversight on complaints and use of force). We conclude with a discussion of intended use, and future research directions in \Cref{sec:discussion}.
 
-\tbo{merge}
-The data on complaints against police include complaints filed by citizens or internally by other members of the department. This data was obtained by Jamie Kalven, an independent journalist represented by the University of Chicago’s Mandel Legal Aid Clinic, who filed Illinois Freedom of Information Act requests with the Chicago Police Department. These FOIA requests asked for documents containing the names of repeat police complainees, lists that had been produced in discovery in lawsuits alleging police abuse. In Kalven v. City of Chicago, an Illinois appellate court issued a general ruling in March of 2014 that documents bearing on allegations of police abuse are public information. Following the decision, the non-profit Invisible Institute began to collaborate with Kalven and the Mandel Legal Aid Clinic to follow up on earlier FOIA requests and to file new ones. The data disclosed in response to these earlier and now ongoing FOIA requests are uploaded on the Invisible Institute’s website and are made publicly available. 
-
-\textbf{TODO:} ideally say a bit more about the history of these FOIA requests.
-Apparently they were initiated by individual journalists and lawyers and were
-later coordinated by the Invisible Institute which ultimately became the
-central location were (almost) all the data is currently available.
-
-\begin{table}[h]
-	\begin{center}
-\begin{tabular}{@{}llll@{}}
-	\toprule
-	request \#&received&requested&description\\
-\midrule
-	\texttt{P0-58155}&2017-04-17& &Officer roster\\
-	\texttt{P4-41436}&2018-03-21& &Officer roster\\
-		\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
-		\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
-	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
-	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
-	\texttt{P0-46360}& & &Tactical Response Reports\\
-\bottomrule
-\end{tabular}
-\caption{Summary of the FOIA requests to the CPD and COPA contained in our repository.}
-\label{table:summary}
-\end{center}
-\end{table}
-
-Each FOIA request is identified by a request number, \cref{table:summary} gives
-an overview of all the requests made to the CPD and COPA that are present in
-our repository. This information is also available in the file
-\texttt{dataset.csv} in the root folder of the repository. The original
-data—that is the files received after each FOIA request—are present in the
-\texttt{raw/} folder of the repository, with one subfolder for each request,
-identified by the request number. When available, each subfolder also contains
-the formal request letter as well as the reply letter from the CPD or COPA,
-which are useful in understanding what data was included in each dataset.
-Some additional comments about the data:
-\begin{itemize}
-	\item \emph{Officer roster:} lists all officers (past or present) employed
-		by the CPD along with attributes such as year of birth, age, race,
-		gender, appointment date, resignation date, etc.
-	\item \emph{Unit assignment:} the CPD is organized into (500 or so?) units.
-		Each officer can be assigned to one or multiple units and these
-		assignments can change over time. The unit assignment datasets contain
-		one record for each officer and each unit they were assigned to, with
-		the start date and end date of this assignment.
-	\item \emph{Complaints:} formal complaints filed by citizens against police
-		officers. Complaints are identified by a complaint number, and there is
-		one record for each complaint and each officer listed on the complaint,
-		indicating the allegation made against them, result of the
-		investigation of the allegation (with possible sanction), etc.
-	\item \emph{Tactical Response Reports:} these are forms that officers are
-		required to file after each incident for which the officer's response
-		involved use of force.
-\end{itemize}
-
-Let us already mention an inherent difficulty in making use of this data, which
-will be discussed in \cref{sec:linking}: there is no number/identifier which
-uniquely identifies officers across datasets. Such an identifier probably
-exists internally in the CPD, but was never included in the data released to
-the public. One would be tempted to believe that the \emph{badge number} (also
-sometimes referred to as \emph{star number} of an officer is such an
-identifier, but unfortunately, it changes over the course of an officer's
-career in the CPD, and a given badge number can be reassigned to different
-officers when they are no longer in use.
-
-
-The rest of this document is organized as follows: .
 
 %%%%%% DARIA'S TEXT
 

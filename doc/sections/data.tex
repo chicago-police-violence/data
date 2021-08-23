@@ -1,9 +1,72 @@
-\section{The CPD Data}
+\section{The CPD Data} \label{sec:data}
+
+
+This data was obtained by Jamie Kalven, an independent journalist represented by the University of Chicago’s Mandel Legal Aid Clinic, who filed Illinois Freedom of Information Act requests with the Chicago Police Department. These FOIA requests asked for documents containing the names of repeat police complainees, lists that had been produced in discovery in lawsuits alleging police abuse. In Kalven v. City of Chicago, an Illinois appellate court issued a general ruling in March of 2014 that documents bearing on allegations of police abuse are public information. Following the decision, the non-profit Invisible Institute began to collaborate with Kalven and the Mandel Legal Aid Clinic to follow up on earlier FOIA requests and to file new ones. The data disclosed in response to these earlier and now ongoing FOIA requests are uploaded on the Invisible Institute’s website and are made publicly available. 
+
+\textbf{TODO:} ideally say a bit more about the history of these FOIA requests.
+Apparently they were initiated by individual journalists and lawyers and were
+later coordinated by the Invisible Institute which ultimately became the
+central location were (almost) all the data is currently available.
+
 
 The original raw data files released by the CPD, 
 the code to clean and link the data,
 and the code to generate this documentation is 
 all available online at \url{https://github.com/chicago-police-violence/data}.
+
+
+
+\begin{table}[h]
+	\begin{center}
+\begin{tabular}{@{}llll@{}}
+	\toprule
+	request \#&received&requested&description\\
+\midrule
+	\texttt{P0-58155}&2017-04-17& &Officer roster\\
+	\texttt{P4-41436}&2018-03-21& &Officer roster\\
+		\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
+		\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
+	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
+	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
+	\texttt{P0-46360}& & &Tactical Response Reports\\
+\bottomrule
+\end{tabular}
+\caption{Summary of the FOIA requests to the CPD and COPA contained in our repository.}
+\label{table:summary}
+\end{center}
+\end{table}
+
+
+
+Each FOIA request is identified by a request number, \cref{table:summary} gives
+an overview of all the requests made to the CPD and COPA that are present in
+our repository. This information is also available in the file
+\texttt{dataset.csv} in the root folder of the repository. The original
+data—that is the files received after each FOIA request—are present in the
+\texttt{raw/} folder of the repository, with one subfolder for each request,
+identified by the request number. When available, each subfolder also contains
+the formal request letter as well as the reply letter from the CPD or COPA,
+which are useful in understanding what data was included in each dataset.
+Some additional comments about the data:
+\begin{itemize}
+	\item \emph{Officer roster:} lists all officers (past or present) employed
+		by the CPD along with attributes such as year of birth, age, race,
+		gender, appointment date, resignation date, etc.
+	\item \emph{Unit assignment:} the CPD is organized into (500 or so?) units.
+		Each officer can be assigned to one or multiple units and these
+		assignments can change over time. The unit assignment datasets contain
+		one record for each officer and each unit they were assigned to, with
+		the start date and end date of this assignment.
+	\item \emph{Complaints:} formal complaints filed by citizens against police
+		officers. Complaints are identified by a complaint number, and there is
+		one record for each complaint and each officer listed on the complaint,
+		indicating the allegation made against them, result of the
+		investigation of the allegation (with possible sanction), etc.
+	\item \emph{Tactical Response Reports:} these are forms that officers are
+		required to file after each incident for which the officer's response
+		involved use of force.
+\end{itemize}
+
 
 \paragraph{Technical choices.} Code is written in Python, use of \texttt{Make}
 to coordinate the various processing steps and easily reproduce them.
