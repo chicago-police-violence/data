@@ -66,28 +66,28 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := profiles.csv history.csv P0-46957_accused.csv P0-46957_main.csv P0-46360_main.csv roster.csv awards.csv salary.csv
+LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
 finalize: ${LINKED_FILES}
 
-${LINKED}/profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
+${LINKED}/officer_profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
 	${PYTHON} ${SRC}/merge_roster.py $@ $^
 
-${LINKED}/history.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/profiles.csv ${SRC}/merge_history.py
+${LINKED}/unit_assignments.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/officer_profiles.csv ${SRC}/merge_history.py
 	${PYTHON} ${SRC}/merge_history.py $@ $^
 
-${LINKED}/P0-46957_accused.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/profiles.csv ${SRC}/link_p046957.py
+${LINKED}/complaints_officers.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/officer_profiles.csv ${SRC}/link_p046957.py
 	${PYTHON} ${SRC}/link_p046957.py $@ $^
 
-${LINKED}/P0-46957_main.csv: ${PARSED}/P0-46957_main.csv
+${LINKED}/complaints.csv: ${PARSED}/P0-46957_main.csv
 	cp $< $@
 
-${LINKED}/P0-46360_main.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${LINKED}/profiles.csv ${SRC}/link_p046360.py
+${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${LINKED}/officer_profiles.csv ${SRC}/link_p046360.py
 	${PYTHON} ${SRC}/link_p046360.py $@ $^
 
-${LINKED}/P0-46360_discharges.csv: ${PARSED}/P0-46360_discharges.csv
+${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
 ${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
@@ -96,8 +96,11 @@ ${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5
 ${LINKED}/salary.csv: ${LINKED}/profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
 	${PYTHON} ${SRC}/merge_salary.py $@ $^
 
-${LINKED}/roster.csv: ${LINKED}/profiles.csv ${SRC}/clean_profiles.py
+${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
 	${PYTHON} ${SRC}/clean_profiles.py $@ $^
+
+${LINKED}/unit_descriptions.csv: ${PARSED}/P0-46987.csv ${PARSED}/P0-58155.csv ${PARSED}/16-1105.csv ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46957_accused.csv ${PARSED}/P0-52262.csv ${SRC}/unit_descriptions.py
+	${PYTHON} ${SRC}/unit_descriptions.py $@ $^
 
 ${LINKED_FILES}: | ${LINKED}
 

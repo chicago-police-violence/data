@@ -1,6 +1,6 @@
 __pycache__
-parsed/
-linked/
+tidy/
+final/
 *.aux
 *.bbl
 *.blg
