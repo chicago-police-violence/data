@@ -12,7 +12,7 @@ from datetime import datetime
 # match on everything available
 def f1(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) > 1:
             print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
@@ -23,7 +23,7 @@ f1.key = ["first_name", "last_name", "middle_initial", "birthyear", "appointment
 # match on everything except middle initial
 def f2(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) > 1:
             print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
@@ -34,7 +34,7 @@ f2.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender", 
 # match on name/dates/gender (remove race -- e.g. a lot of "WHITE HISPANIC" from other data is just "HISPANIC" here)
 def f3(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) > 1:
             print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
@@ -45,7 +45,7 @@ f3.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender"]
 # must only be one match and at least one of star or appointment must exist
 def f4(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) == 1:
             for off in officers:
                 if off['star'] != '' or off['appointment_date'] != '':
@@ -56,7 +56,7 @@ f4.key = ["first_name", "last_name", "appointment_date", "star"]
 # match on name and star (star must exist)
 def f5(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) == 1:
             for off in officers:
                 if off['star'] != '':
@@ -67,7 +67,7 @@ f5.key = ["first_name", "last_name", "star"]
 # match on name and star (star must exist)
 def f6(officer, m):
     if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+        unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) == 1:
             for off in officers:
                 if off['appointment_date'] != '':
