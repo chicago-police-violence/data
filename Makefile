@@ -66,7 +66,7 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := profiles.csv history.csv P0-46957_accused.csv P0-46957_main.csv P0-46360_main.csv roster.csv salary.csv awards.csv
+LINKED_FILES := profiles.csv history.csv P0-46957_accused.csv P0-46957_main.csv P0-46360_main.csv roster.csv awards.csv 
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
