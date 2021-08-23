@@ -64,7 +64,7 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv roster.csv
+LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv roster.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
@@ -90,6 +90,9 @@ ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharge
 
 ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
 	${PYTHON} ${SRC}/clean_profiles.py $@ $^
+
+${LINKED}/unit_descriptions.csv: ${PARSED}/P0-46987.csv ${PARSED}/P0-58155.csv ${PARSED}/16-1105.csv ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46957_accused.csv ${PARSED}/P0-52262.csv ${SRC}/unit_descriptions.py
+	${PYTHON} ${SRC}/unit_descriptions.py $@ $^
 
 ${LINKED_FILES}: | ${LINKED}
 
