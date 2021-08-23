@@ -60,6 +60,10 @@ def f5(officer, m):
         if len(unique_uids) == 1:
             for off in officers:
                 if off['star'] != '':
+                    print('MATCH5')
+                    print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
+                    print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
+
                     return officers[0]['uid']
 
 f5.key = ["first_name", "last_name", "star"]
@@ -71,26 +75,35 @@ def f6(officer, m):
         if len(unique_uids) == 1:
             for off in officers:
                 if off['appointment_date'] != '':
+                    print('MATCH6')
+                    print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
+                    print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
+
                     return officers[0]['uid']
 
 f6.key = ["first_name", "last_name", "appointment_date"]
 
-
 # match on name / appointment star, and at least one of star or apt date must exist
 # must only be one match and at least one of star or appointment must exist
 def f7(officer, m):
-    if len(officers := m[officer]) >= 1:
-        unique_uids = set([officer['uid'] for officer in officers])
+    for off in (officers := m[officer]):
+        if off['star'] != '' and (off['first_name'] == officer['first_name'] or off['last_name'] == officer['last_name']):
+            print('MATCH7')
+            print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
+            print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
 
-        print('MATCH')
-        print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
-        print([(off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']) for off in officers])
+            return off['uid']
 
-        if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
-        return officers[0]["uid"]
+f7.key = ["star"]
 
-f7.key = ["first_name", "last_name"]
+def f8(officer, m):
+    for off in (officers := m[officer]):
+        if off['appointment_date'] != '':
+            print('MATCH8')
+            print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
+            print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
+            return off['uid']
+f8.key = ["last_name", "appointment_date", "race"]
 
 
 
@@ -210,7 +223,7 @@ if __name__ == "__main__":
     # create profile matcher and link to p061715
     profiles = csv_read(argv[2])
     m = Matcher(profiles)
-    linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4, f5, f6, f7])
+    linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4, f5, f6, f7, f8])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s1),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
@@ -220,7 +233,7 @@ if __name__ == "__main__":
     # create profile matcher and link to p061715
     # create second profile matcher using new profiles and link to p506887
     m = Matcher(profiles)
-    linked, unlinked = m.match(p506887_flat, [f1, f2, f3])
+    linked, unlinked = m.match(p506887_flat, [f1, f2, f3, f4, f5, f6, f7, f8])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s2),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
