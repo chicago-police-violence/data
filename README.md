@@ -44,11 +44,6 @@ in the `docs/` folder to compile it with [latexrun](https://github.com/aclements
 
 # Obtaining the data
 
-The data in this repository exists in its raw format, as obtained in multiple FOIA requests.
-These files may be found in the `raw` folder, with one subfolder per FOIA request.
-Each subfolder contains the original Excel data files along
-with the request and answer letters when available.
-
 In order to build the cleaned and linked data, run
 ```console
 make
@@ -98,7 +93,7 @@ In the first stage, the raw Excel files are parsed and converted to `.csv`
 files for easier later processing. This stage can be run individually by running
 
 ```console
-make parse
+make prepare
 ```
 
 in the repository root folder. This will create and populate the `parsed` folder.
@@ -114,7 +109,7 @@ working directly with the original data.
 ## Linking
 
 ```console
-make link
+make finalize
 ```
 
 *todo: discuss the code and its structure here*
