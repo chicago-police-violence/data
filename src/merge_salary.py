@@ -53,7 +53,7 @@ def flatten_salary(records, id_attributes):
     for recs in officers:
         year_posns = defaultdict(list)
         for rec in recs:
-            year_posns[rec['year']].append(rec['title'])
+            year_posns[rec['year']].append(rec['position_description'])
         for year, posns in year_posns.items():
             if len(set(posns)) != len(posns):
                 print(f"\nWarning: single officer has multiple records for same posn in same year\n{recs}\n\n")
@@ -221,7 +221,7 @@ if __name__ == "__main__":
 
     with open(argv[1], "w") as sf:
         fields = ["uid","year","salary","position_description","pay_grade","present_posn_start_date","officer_date", "employee_status"]
-        salary_fields = ["year","salary","title","pay_grade","present_posn_start_date", "employee_status"]
+        salary_fields = ["year","salary","position_description","pay_grade","present_posn_start_date", "employee_status"]
         sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
         sw.writeheader()
         for profile in profiles:
