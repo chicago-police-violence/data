@@ -9,15 +9,53 @@ from datetime import datetime
 
 
 # TODO handle the multiple matches case properly
-# match on full name and apt date
+# match on everything available
 def f1(officer, m):
     if len(officers := m[officer]) >= 1:
         unique_uids = set([officer['uid'] for officer in officers])
         if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
 
-f1.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender", "race"]
+f1.key = ["first_name", "last_name", "middle_initial", "birthyear", "appointment_date", "gender", "race"]
+
+# TODO handle the multiple matches case properly
+# match on everything except middle initial
+def f2(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) > 1:
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
+        return officers[0]["uid"]
+
+f2.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender", "race"]
+
+# TODO handle the multiple matches case properly
+# match on name/dates/gender (remove race -- e.g. a lot of "WHITE HISPANIC" from other data is just "HISPANIC" here)
+def f3(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        if len(unique_uids) > 1:
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
+        return officers[0]["uid"]
+
+f3.key = ["first_name", "last_name", "birthyear", "appointment_date", "gender"]
+
+# TODO handle the multiple matches case properly
+# match on name/birthyear now
+def f4(officer, m):
+    if len(officers := m[officer]) >= 1:
+        unique_uids = set([officer['uid'] for officer in officers])
+        print('MATCH')
+        print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
+        print([(off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']) for off in officers])
+
+        if len(unique_uids) > 1:
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
+        return officers[0]["uid"]
+
+f4.key = ["first_name", "last_name", "birthyear"]
+
 
 def flatten_awards(records, id_attributes):
     officers = defaultdict(list)
@@ -44,11 +82,30 @@ def flatten_awards(records, id_attributes):
     for key, awards in officers.items():
         officer = dict(zip(id_attributes, key))
         officer["awards"] = sorted(awards, key=lambda e: e['award_request_date'])
+        # replace the star entries that were unused in flattening 
+        # since multiple stars may exist over time, use the star1 star2 star3 ... entries
+        # ordered by award request date
+        # fill in the "star" entry with the officer's final recorded star number 
+        stars = [award["star"] for award in officer["awards"] if award["star"] != ""]
+        # get unique star numbers preserving order
+        seen = set()
+        stars = [st for st in stars if not (st in seen or seen.add(st))] 
+        assert len(stars) < 11, f"Officer has more than 11 star numbers on record; out of room in profiles.\nKEY:\n{key}\nSTARS:\n{stars}\nRECORDS\n{awards}"
+        for i in range(11):
+            if i < len(stars):
+                officer[f"star{i+1}"] = stars[i]
+            else:
+                officer[f"star{i+1}"] = ""
+        officer["star"] = "" if len(stars) == 0 else stars[-1]
+        # same thing for position_no and description: fill in with latest entry
+        posns = [(award["position_no"], award["position_description"]) for award in officer["awards"] if "position_no" in award and award["position_no"] != ""]
+        officer["position_no"] = "" if len(posns) == 0 else posns[-1][0]
+        officer["position_description"] = "" if len(posns) == 0 else posns[-1][1]
+
         yield officer
 
 if __name__ == "__main__":
     from sys import argv
-
 
     # get flattened versions of both awards files
     p061715 = csv_read(argv[3])
@@ -59,11 +116,32 @@ if __name__ == "__main__":
     s2, _ = os.path.splitext(os.path.basename(argv[4]))
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
+
+    ## code that merges entries using a more coarse matcher
+    ## shows officers that get split up by the above very fine-grained flattening
+    ## so that you can visually inspect splits to make sure they are sensible
+    ## this code block is just for visually debugging the flattening, so commented out.
+    #offs = defaultdict(list)
+    #for ff in p061715_flat:
+    #    key = (ff['last_name'], ff['first_name'], ff['birthyear'], ff['appointment_date'])
+    #    offs[key].append(ff)
+
+    #for key, off in offs.items():
+    #    if len(off) > 1:
+    #        print()
+    #        print('KEY')
+    #        print(key)
+    #        for li in off:
+    #            print('ITEM')
+    #            print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
+    #        print()
+
+
     print('Matching p061715')
     # create profile matcher and link to p061715
     profiles = csv_read(argv[2])
     m = Matcher(profiles)
-    linked, unlinked = m.match(p061715_flat, [f1])
+    linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s1),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
@@ -73,7 +151,7 @@ if __name__ == "__main__":
     # create profile matcher and link to p061715
     # create second profile matcher using new profiles and link to p506887
     m = Matcher(profiles)
-    linked, unlinked = m.match(p506887_flat, [f1])
+    linked, unlinked = m.match(p506887_flat, [f1, f2, f3])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s2),
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
@@ -90,7 +168,7 @@ if __name__ == "__main__":
             writer.writerow(officer)
 
     with open(argv[1], "w") as af:
-        fields = ["uid", "award_request_date",  "award_ref_number", "award_type", "requester_last_name", "requester_first_name", "requester_middle_initial", "tracking_no", "current_status", "incident_start_date", "incident_end_date", "incident_description", "ceremony_date"]
+        fields = ["uid", "star", "position_no", "position_description", "award_request_date",  "award_ref_number", "award_type", "requester_last_name", "requester_first_name", "requester_middle_initial", "tracking_no", "current_status", "incident_start_date", "incident_end_date", "incident_description", "ceremony_date"]
         award_fields = fields[1:]
         aw = DictWriter(af, fieldnames=fields, extrasaction="ignore")
         aw.writeheader()

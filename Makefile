@@ -90,14 +90,14 @@ ${LINKED}/P0-46360_main.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_star
 ${LINKED}/P0-46360_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/roster.csv: ${LINKED}/profiles.csv ${SRC}/clean_profiles.py
-	${PYTHON} ${SRC}/clean_profiles.py $@ $^
-
 ${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
 	${PYTHON} ${SRC}/merge_awards.py $@ $^
 
 ${LINKED}/salary.csv: ${LINKED}/profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
 	${PYTHON} ${SRC}/merge_salary.py $@ $^
+
+${LINKED}/roster.csv: ${LINKED}/profiles.csv ${SRC}/clean_profiles.py
+	${PYTHON} ${SRC}/clean_profiles.py $@ $^
 
 ${LINKED_FILES}: | ${LINKED}
 

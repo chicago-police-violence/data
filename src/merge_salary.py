@@ -79,7 +79,7 @@ def f1(officer, m):
     if len(officers := m[officer]) >= 1:
         unique_uids = set([officer['uid'] for officer in officers])
         if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         return officers[0]["uid"]
 
 f1.key = ["first_name", "last_name", "middle_initial", "appointment_date"]
@@ -90,7 +90,7 @@ def f2(officer, m):
     if len(officers := m[officer]) >= 1:
         unique_uids = set([officer['uid'] for officer in officers])
         if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(officer['first_name'], officer['last_name'], officer['uid']) for officer in officers])}")
+            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
         off1 = officer
         mi1 = off1['middle_initial']
         by1 = None
@@ -220,7 +220,7 @@ if __name__ == "__main__":
             writer.writerow(officer)
 
     with open(argv[1], "w") as sf:
-        fields = ["uid","year","salary","title","pay_grade","present_posn_start_date","officer_date", "employee_status"]
+        fields = ["uid","year","salary","position_description","pay_grade","present_posn_start_date","officer_date", "employee_status"]
         salary_fields = ["year","salary","title","pay_grade","present_posn_start_date", "employee_status"]
         sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
         sw.writeheader()
