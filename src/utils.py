@@ -107,14 +107,20 @@ def get_award_datetime(s):
         return datetime.date(2009, 3, 4)
 
     if ":" in s:
-        return datetime.datetime.strptime(s, "%m/%d/%Y %H:%M")
+        return datetime.datetime.strptime(s, "%m/%d/%Y %H:%M").date()
     else:
-        return datetime.datetime.strptime(s, "%m/%d/%Y")
+        return datetime.datetime.strptime(s, "%m/%d/%Y").date()
 
 def csv_read(filename, use_dict=True, skip=0):
     with open(filename) as fh:
         reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
         yield from islice(reader, skip, None)
+
+def multi_csv_read(filenames, use_dict=True, skip=0):
+    for fn in filenames:
+        with open(fn) as fh:
+            reader = csv.DictReader(fh) if use_dict else csv.reader(fh)
+            yield from islice(reader, skip, None)
 
 #def zipped_csv_read(filename, use_dict=True, skip=0):
 #    with zipfile.ZipFile(filename, mode='r') as zf:

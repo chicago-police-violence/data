@@ -1,7 +1,7 @@
 RAW := raw
 LOG_LEVEL := debug
 SRC := src
-PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3.8
 
 .PHONY: all
 all: finalize
@@ -27,8 +27,10 @@ PARSED_FILES := $(addprefix ${PARSED}/, ${PARSED_FILES})
 .PHONY: prepare
 prepare: check ${PARSED_FILES}
 
-${RAW}/P0-61715/Awards_Data_(New_Copy).csv : ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
+
+${RAW}/P0-61715/Awards_Data_(New_Copy).csv: ${RAW}/P0-61715/Awards_Data_(New_Copy).zip
 	${PYTHON} ${SRC}/unzip.py "$<"
+	${PYTHON} ${SRC}/parse_p061715.py "$@"
 
 .INTERMEDIATE: ${RAW}/P0-61715/Awards_Data_(New_Copy).csv
 
@@ -64,7 +66,7 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv roster.csv
+LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
@@ -87,6 +89,12 @@ ${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P
 
 ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
+
+${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
+	${PYTHON} ${SRC}/merge_awards.py $@ $^
+
+${LINKED}/salary.csv: ${LINKED}/profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
+	${PYTHON} ${SRC}/merge_salary.py $@ $^
 
 ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
 	${PYTHON} ${SRC}/clean_profiles.py $@ $^
