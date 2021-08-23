@@ -90,10 +90,10 @@ ${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P
 ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/awards.csv: ${LINKED}/profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
+${LINKED}/awards.csv: ${LINKED}/officer_profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
 	${PYTHON} ${SRC}/merge_awards.py $@ $^
 
-${LINKED}/salary.csv: ${LINKED}/profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
+${LINKED}/salary.csv: ${LINKED}/officer_profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
 	${PYTHON} ${SRC}/merge_salary.py $@ $^
 
 ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
