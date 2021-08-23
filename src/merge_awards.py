@@ -60,10 +60,6 @@ def f5(officer, m):
         if len(unique_uids) == 1:
             for off in officers:
                 if off['star'] != '':
-                    print('MATCH5')
-                    print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
-                    print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
-
                     return officers[0]['uid']
 
 f5.key = ["first_name", "last_name", "star"]
@@ -75,10 +71,6 @@ def f6(officer, m):
         if len(unique_uids) == 1:
             for off in officers:
                 if off['appointment_date'] != '':
-                    print('MATCH6')
-                    print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
-                    print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
-
                     return officers[0]['uid']
 
 f6.key = ["first_name", "last_name", "appointment_date"]
@@ -88,10 +80,6 @@ f6.key = ["first_name", "last_name", "appointment_date"]
 def f7(officer, m):
     for off in (officers := m[officer]):
         if off['star'] != '' and (off['first_name'] == officer['first_name'] or off['last_name'] == officer['last_name']):
-            print('MATCH7')
-            print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
-            print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
-
             return off['uid']
 
 f7.key = ["star"]
@@ -99,9 +87,6 @@ f7.key = ["star"]
 def f8(officer, m):
     for off in (officers := m[officer]):
         if off['appointment_date'] != '':
-            print('MATCH8')
-            print((officer['first_name'], officer['last_name'], officer['gender'], officer['race'], officer['appointment_date'], officer['star']))
-            print((off['first_name'], off['last_name'], off['gender'], off['race'], off['appointment_date'], off['star']))
             return off['uid']
 f8.key = ["last_name", "appointment_date", "race"]
 
@@ -181,43 +166,6 @@ if __name__ == "__main__":
     p506887 = csv_read(argv[4])
     s2, _ = os.path.splitext(os.path.basename(argv[4]))
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
-
-
-    ## code that merges entries using a more coarse matcher
-    ## shows officers that get split up by the above very fine-grained flattening
-    ## so that you can visually inspect splits to make sure they are sensible
-    ## this code block is just for visually debugging the flattening, so commented out.
-    #offs = defaultdict(list)
-    #for ff in p061715_flat:
-    #    key = (ff['last_name'], ff['first_name'], ff['birthyear'], ff['appointment_date'])
-    #    offs[key].append(ff)
-
-    #for key, off in offs.items():
-    #    if len(off) > 1 or (key[0], key[1], '', key[3]) in offs or (key[0], key[1], key[2], '') in offs or (key[0], key[1], '', '') in offs:
-    #        print()
-    #        print('KEY')
-    #        print(key)
-    #        for li in off:
-    #            print('ITEM')
-    #            print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
-    #        if (key[0], key[1], '', key[3]) in offs and key != (key[0], key[1], '', key[3]):
-    #            print(f"IN {(key[0], key[1], '', key[3])}")
-    #            for li in offs[(key[0], key[1], '', key[3])]:
-    #                print('ITEM')
-    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
-    #        if (key[0], key[1], key[2], '') in offs and key != (key[0], key[1], key[2], ''):
-    #            print(f"IN {(key[0], key[1], key[2], '')}")
-    #            for li in offs[(key[0], key[1], key[2], '')]:
-    #                print('ITEM')
-    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
-    #        if (key[0], key[1], '', '') in offs and key != (key[0], key[1], '', ''):
-    #            print(f"IN {(key[0], key[1], '', '')}")
-    #            for li in offs[(key[0], key[1], '', '')]:
-    #                print('ITEM')
-    #                print((li['last_name'], li['first_name'], li['middle_initial'], li['gender'], li['race'], li['appointment_date'], li['birthyear']))
-
-
-    #        print()
 
     print('Matching p061715')
     # create profile matcher and link to p061715
