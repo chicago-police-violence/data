@@ -140,9 +140,10 @@ f2.key = ["first_name", "last_name", "appointment_date"]
 
 
 def normalize_name(name):
-    # first strip whitespace
-    name = name.strip()
-    # first remove suffix
+    # replace special characters with whitespace, and compress whitespaces
+    name = (''.join([ch if ch.isalpha() else ' ' for ch in name])).strip()
+    name = ' '.join(name.split())
+    # remove suffix
     suffixes = [' JR', ' SR', ' II', ' III', ' IV']
     namesuff = ''
     for suff in suffixes:
@@ -187,7 +188,8 @@ def f4(officer, m):
     if len(officers := m[officer]) >= 1:
         unique_uids = set([off['uid'] for off in officers])
         if len(unique_uids) > 1:
-            print(f"Warning: matched to multiple officers:\n Officers: {set([(off['first_name'], off['last_name'], off['uid']) for off in officers])}")
+            # if multiple matches on this (weak) key, just ignore
+            return
         off1 = officer
         mi1 = off1['middle_initial']
         by1 = off1['birthyear']
