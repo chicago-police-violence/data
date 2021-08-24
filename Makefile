@@ -96,8 +96,8 @@ ${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge
 ${LINKED}/salary.csv: ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py | ${LINKED}/awards.csv ${LINKED}/officer_profiles.csv 
 	${PYTHON} ${SRC}/merge_salary.py $@ $^ $|
 
-${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
-	${PYTHON} ${SRC}/clean_profiles.py $@ $^
+${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/generate_roster.py | ${LINKED}/salary.csv
+	${PYTHON} ${SRC}/generate_roster.py $@ $^
 
 ${LINKED}/unit_descriptions.csv: ${PARSED}/P0-46987.csv ${PARSED}/P0-58155.csv ${PARSED}/16-1105.csv ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46957_accused.csv ${PARSED}/P0-52262.csv ${SRC}/unit_descriptions.py
 	${PYTHON} ${SRC}/unit_descriptions.py $@ $^
