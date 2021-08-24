@@ -1,5 +1,9 @@
 import sys
 
+# we use a few "modern" Python features in the code:
+# - dictionary unpacking (Python 3.5)
+# - formatted string literals (Python 3.6)
+# - "walrus operator"/assignment expressions (Python 3.8)
 PYTHON_VERSION_MIN=(3,8)
 
 dotjoin = lambda x: ".".join(map(str, x))
