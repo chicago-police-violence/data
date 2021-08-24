@@ -1,7 +1,21 @@
 \section{The CPD Data} \label{sec:data}
+The original raw data released by the CPD, 
+as well as the code to clean the data and generate this document, 
+are both available at \url{https://github.com/chicago-police-violence/data}.
 
-
-This data was obtained by Jamie Kalven, an independent journalist represented by the University of Chicago’s Mandel Legal Aid Clinic, who filed Illinois Freedom of Information Act requests with the Chicago Police Department. These FOIA requests asked for documents containing the names of repeat police complainees, lists that had been produced in discovery in lawsuits alleging police abuse. In Kalven v. City of Chicago, an Illinois appellate court issued a general ruling in March of 2014 that documents bearing on allegations of police abuse are public information. Following the decision, the non-profit Invisible Institute began to collaborate with Kalven and the Mandel Legal Aid Clinic to follow up on earlier FOIA requests and to file new ones. The data disclosed in response to these earlier and now ongoing FOIA requests are uploaded on the Invisible Institute’s website and are made publicly available. 
+\subsection{Data origin}
+This data was obtained by Jamie Kalven, an independent journalist represented
+by the University of Chicago’s Mandel Legal Aid Clinic, who filed Illinois
+Freedom of Information Act requests with the Chicago Police Department. These
+FOIA requests asked for documents containing the names of repeat police
+complainees, lists that had been produced in discovery in lawsuits alleging
+police abuse. In Kalven v. City of Chicago, an Illinois appellate court issued
+a general ruling in March of 2014 that documents bearing on allegations of
+police abuse are public information. Following the decision, the non-profit
+Invisible Institute began to collaborate with Kalven and the Mandel Legal Aid
+Clinic to follow up on earlier FOIA requests and to file new ones. The data
+disclosed in response to these earlier and now ongoing FOIA requests are
+uploaded on the Invisible Institute’s website and are made publicly available. 
 
 \textbf{TODO:} ideally say a bit more about the history of these FOIA requests.
 Apparently they were initiated by individual journalists and lawyers and were
@@ -9,29 +23,28 @@ later coordinated by the Invisible Institute which ultimately became the
 central location were (almost) all the data is currently available.
 
 
-The original raw data files released by the CPD, 
-the code to clean and link the data,
-and the code to generate this documentation is 
-all available online at \url{https://github.com/chicago-police-violence/data}.
-
 
 
 \begin{table}[h]
 	\begin{center}
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lllll@{}}
 	\toprule
 	request \#&received&requested&description\\
 \midrule
 	\texttt{P0-58155}&2017-04-17& &Officer roster\\
 	\texttt{P4-41436}&2018-03-21& &Officer roster\\
-		\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
-		\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
+	\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
+	\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
 	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
 	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
 	\texttt{P0-46360}& & &Tactical Response Reports\\
+	\texttt{P0-46987}&2016-05-13&2016-04-25&Unit names\\
+	\texttt{P0-61715}& &2017-07-26&Awards\\
+	\texttt{P5-06887}&2019-10-11&2019-07-19&Awards\\
+	&2017-09-27&2017-09-13&Salary\\
 \bottomrule
 \end{tabular}
-\caption{Summary of the FOIA requests to the CPD and COPA contained in our repository.}
+\caption{Summary of the FOIA requests contained in our repository (blanks are missing entries).}
 \label{table:summary}
 \end{center}
 \end{table}
