@@ -1,9 +1,7 @@
 from utils import csv_read, flatten_stars
 from uuid import uuid4
 from matcher import Matcher
-from csv import DictWriter
-from datasets import datasets
-import os.path
+from datasets import write_profiles
 
 
 def comp_age(officer1, officer2):
@@ -90,17 +88,5 @@ if __name__ == "__main__":
     officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
-    # get union of attributes from both roster for `profiles.csv`
-    d1, d2 = "P0-58155", "P4-41436"
-    fields = datasets[d1]["fields"]
-    fields += [f for f in datasets[d2]["fields"] if f not in fields]
-    fields += ["source", "uid"]
-
-    with open(argv[1], "w") as fh:
-        writer = DictWriter(fh, fieldnames=fields, extrasaction="ignore")
-        writer.writeheader()
-        for officer in sorted(
-            m.unify(linked, unlinked, d1, d2),
-            key=lambda l: (l["last_name"], l["first_name"], l["uid"]),
-        ):
-            writer.writerow(officer)
+    profiles = m.unify(linked, unlinked, "P0-58155", "P4-41436")
+    write_profiles(argv[1], profiles)

@@ -80,7 +80,7 @@ class Matcher:
             f: Matching criterion.
             linked: List to which records are added as they are matched.
             unlinked: List of records to match against the collection.
-            remove: Boolean, remove records from collection when they are matched against.
+            remove: Boolean, remove records from collection once they are matched against.
         """
 
         if hasattr(f, "key"):
@@ -102,7 +102,7 @@ class Matcher:
                 elif type(item) is dict: # item to be matched is a single record
                     item["uid"] = match
                 else:
-                    raise TypeError("Item to be matched is neither a list or a disct.")
+                    raise TypeError("Item to be matched is neither a list or a dict.")
 
                 if getattr(f, "debug", False):
                     logging.debug((self._dict[match], item))
@@ -122,7 +122,7 @@ class Matcher:
 
         Args:
             records: The list of records to match.
-            funs: The list of functions ot use as a macthing citerion at each pass.
+            funs: The list of functions to use as a matching citerion at each pass.
         """
 
         self._matched = []

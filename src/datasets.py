@@ -1,5 +1,6 @@
-import utils
 from parse_p046957 import get_accused
+from csv import DictWriter
+import utils
 
 datasets = {
     "P0-46360_main": {
@@ -481,3 +482,14 @@ datasets = {
     },
 }
 
+def write_profiles(filename, profiles):
+    fields = datasets["P0-58155"]["fields"] 
+    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
+    fields += ["source", "uid"]
+
+    profiles = sorted(profiles, key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])))
+    with open(filename, "w") as pf:
+        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
+        pw.writeheader()
+        for profile in profiles:
+            pw.writerow(profile)

@@ -75,8 +75,8 @@ finalize: ${LINKED_FILES}
 ${LINKED}/officer_profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
 	${PYTHON} ${SRC}/merge_roster.py $@ $^
 
-${LINKED}/unit_assignments.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${LINKED}/officer_profiles.csv ${SRC}/merge_history.py
-	${PYTHON} ${SRC}/merge_history.py $@ $^
+${LINKED}/unit_assignments.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${SRC}/merge_history.py | ${LINKED}/officer_profiles.csv
+	${PYTHON} ${SRC}/merge_history.py $@ $^ $|
 
 ${LINKED}/complaints_officers.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/officer_profiles.csv ${SRC}/link_p046957.py
 	${PYTHON} ${SRC}/link_p046957.py $@ $^

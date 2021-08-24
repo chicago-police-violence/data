@@ -47,9 +47,9 @@ f5.key = ["first_name", "appointment_date", "birthyear"]
 # f5.debug = True
 
 
-def link(officers, profiles):
+def link(officers, profiles_file):
     from sys import argv
 
-    m = Matcher(flatten_stars(profile) for profile in csv_read(profiles))
+    m = Matcher(flatten_stars(profile) for profile in csv_read(profiles_file))
     linked, unlinked = m.match(officers, [f1, f2, f1, f3, f4, f5])
-    return m, linked, unlinked
+    return list(m.unify(linked, unlinked))

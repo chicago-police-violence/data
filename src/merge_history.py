@@ -2,10 +2,8 @@ from utils import csv_read
 from matcher import Matcher
 from collections import defaultdict
 from uuid import uuid4
-from itertools import chain
-from datetime import date
 from csv import DictWriter
-from datasets import datasets
+from datasets import datasets, write_profiles
 
 
 def before(old, new):
@@ -68,54 +66,40 @@ f3.key = ["last_name", "gender", "race", "appointment_date"]
 
 if __name__ == "__main__":
     from sys import argv
-    import os.path
+    import link_history
 
-    s1, _ = os.path.splitext(os.path.basename(argv[2]))
-    s2, _ = os.path.splitext(os.path.basename(argv[3]))
+    s1, s2 = "16-1105", "P0-52262" # old dataset, new dataset
 
+    # first we merge the two history datasets together
     officers = flatten_history(csv_read(argv[2]), datasets[s1]["id_fields"])
     m = Matcher(officers)
-
     officers = flatten_history(csv_read(argv[3]), datasets[s2]["id_fields"])
     linked, unlinked = m.match(officers, [f1, f2, f3])
 
+    # next we build the list of officer profiles found in the history datasets.
+    # for all uids which match between the two datasets we have two profiles
+    # so `officers` maps a uid to one or two profiles
     officers = defaultdict(list)
     for o in m.unify(linked, unlinked, s1, s2):
         officers[o["uid"]].append(o)
-        del o["uid"]
+        del o["uid"] # del uid since we are going to match against `profiles.csv`
 
-    from link_history import link
-
-    m, linked, unlinked = link(officers.values(), argv[4])
-    fields = datasets["P0-58155"]["fields"]
-    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
-    fields += ["source", "uid"]
-
-    profiles = list(m.unify(linked, unlinked))
-
-    with open(argv[4], "w") as pf:
-        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
-        pw.writeheader()
-        for profile in profiles:
-            pw.writerow(profile)
-
-    history = defaultdict(list)
-    for profile in profiles:
-        if "history" in profile:
-            history[profile["uid"]].append(profile)
+    # link the profiles from history datasets to the profiles in `profiles.csv`
+    profiles = link_history.link(officers.values(), argv[-2])
+    write_profiles(argv[-2], profiles)
 
     with open(argv[1], "w") as hf:
         fields = ["uid", "unit_no", "start_date", "end_date"]
         hw = DictWriter(hf, fieldnames=fields, extrasaction="ignore")
         hw.writeheader()
-        for profiles in history.values():
+        for profiles in officers.values():
+            # we keep the assignment history from the latest dataset
             p = None
-            if len(profiles) == 1:
+            for pr in profiles:
+                if pr["source"] == "P0-52262":
+                    p = pr
+                    break
+            else:
                 p = profiles[0]
-            elif len(profiles) == 2:
-                for pr in profiles:
-                    if pr["source"] == "P0-52262":
-                        p = pr
-                        break
             for e in p["history"]:
                 hw.writerow(dict(zip(fields, [p["uid"]] + list(e))))
