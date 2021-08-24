@@ -7,6 +7,9 @@ from datasets import datasets, write_profiles
 
 
 def before(old, new):
+    # tests whether `old` as an assignement history is a prefix of `new` that
+    # is, `new` contains all the assignements in `old` (possibly adding an end
+    # date to the last one) and possibly more.
     h1, h2 = old["history"], new["history"]
     if (n := len(h1)) > len(h2):
         return False
@@ -39,6 +42,8 @@ def flatten_history(changes, id_attributes):
 
 def f1(officer, m):
     if officer["appointment_date"] >= "2016-02-29":
+        # officers appointed after the second release,
+        # so they con't be present in the first release
         return uuid4()
     for o in (officers := m[officer]) :
         if comp_age(officer, o) and before(o, officer):
@@ -47,8 +52,13 @@ def f1(officer, m):
         if officer["history"] == sorted(
             (e for o in officers for e in o["history"]), key=lambda e: e[1]
         ):
-            return [({**officer, "history": o["history"]}, o["uid"]) for o in officers]
+            # we can't find a match with a single officer, but this officer's
+            # assignement history is equal to the concatenation of the
+            # assignement histories of all his potential matches, so we "split"
+            # this officer.
 
+            # handles the case of SMTIH, ROBERT
+            return [{**officer, "history": o["history"], "uid": o["uid"]} for o in officers]
 
 f1.key = ["last_name", "first_name", "gender", "appointment_date"]
 

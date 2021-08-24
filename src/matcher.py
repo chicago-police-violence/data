@@ -73,6 +73,20 @@ class Matcher:
     def matched(self):
         return iter(self._matched)
 
+    def process_match(self, item, linked, remove):
+        """Processes a matched `item`: adds to `linked`and remove from index."""
+        linked.append(item)
+        if isinstance(item, list):
+            uid = item[0]["uid"]
+        elif isinstance(item, dict):
+            uid = item["uid"]
+        else:
+            raise TypeError("Matched item is neither a list or a dict.")
+        if remove:
+            self._matched.append(self._dict[uid])
+            del self[uid]
+
+
     def matching_pass(self, f, linked, unlinked, remove):
         """Performs a single pass of the iterative pairwise matching procedure.
 
@@ -89,27 +103,20 @@ class Matcher:
         for item in unlinked:
             match = f(item, self)
             if isinstance(match, list):
-                for (new, matched) in match:
-                    new["uid"] = matched
-                    linked.append(new)
-                    if remove:
-                        self._matched.append(self._dict[matched])
-                        del self[matched]
+                for item in match:
+                    self.process_match(item, linked, remove)
             elif isinstance(match, UUID) or isinstance(match, str):
-                if type(item) is list: # item to be matched is a list of records
+                if isinstance(item, list): # item to be matched is a list of records
                     for u in item:
                         u["uid"] = match
-                elif type(item) is dict: # item to be matched is a single record
+                elif isinstance(item, dict): # item to be matched is a single record
                     item["uid"] = match
                 else:
                     raise TypeError("Item to be matched is neither a list or a dict.")
 
+                self.process_match(item, linked, remove)
                 if getattr(f, "debug", False):
                     logging.debug((self._dict[match], item))
-                linked.append(item)
-                if remove:
-                    self._matched.append(self._dict[match])
-                    del self[match]
             else:
                 # matching criterion `f` returned `None`
                 # item is added to list of unlinked records
