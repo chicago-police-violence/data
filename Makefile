@@ -1,7 +1,7 @@
 RAW := raw
 LOG_LEVEL := debug
 SRC := src
-PYTHON := LOG_LEVEL=${LOG_LEVEL} python3.8
+PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 
 .PHONY: all
 all: finalize
