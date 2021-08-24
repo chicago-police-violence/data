@@ -90,11 +90,29 @@ class Matcher:
     def matching_pass(self, f, linked, unlinked, remove):
         """Performs a single pass of the iterative pairwise matching procedure.
 
+        For each record in `unlinked`, either it matches a record in `self`, in
+        which case it is appended to `linked` or it fails to match, in which
+        case it is added to a new list (`next_unlinked`) in the code. The
+        function returns the pair (`linked`, `next_unlinked`).
+
+        The matching criterion `f` takes an argument a record to match and
+        `self` and can return either:
+            - the `uid` of a target record in `self` to indicate a match to
+              this target
+            - a list of records (containing uids found in `self`) to indicated
+              that the record to match should be split into multiple records
+              corresponding to several target uids. This is rarely used but is
+              useful in cases where the matching procedure helps figure out
+              that a source record in fact represents multiple uids.
+            - None (or equivalently no explicit return instruction) to indicate
+              a failure to find a matching target record.
+
         Args:
             f: Matching criterion.
             linked: List to which records are added as they are matched.
             unlinked: List of records to match against the collection.
-            remove: Boolean, remove records from collection once they are matched against.
+            remove: Boolean. If true, one a record from collection has been matched against,
+                it is removed and moved to the self._matched dictionary.
         """
 
         if hasattr(f, "key"):
@@ -130,6 +148,8 @@ class Matcher:
         Args:
             records: The list of records to match.
             funs: The list of functions to use as a matching citerion at each pass.
+                See `matching_pass` for more details about how these functions
+                are used, and what they are expected to return.
         """
 
         self._matched = []
