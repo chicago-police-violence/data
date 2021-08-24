@@ -37,7 +37,7 @@ if __name__ == "__main__":
             d[key].append(row)
     officers = [dict(zip(id_fields, key), rows=rows) for key, rows in d.items()]
 
-    m = Matcher(flatten_stars(profile) for profile in csv_read(argv[4]))
+    m = Matcher(flatten_stars(profile) for profile in csv_read(argv[-2]))
     linked, unlinked = m.match(officers, [f1, f2])
 
     profiles = list(m.unify(linked, unlinked, matchee_source=root))
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
     fields += ["source", "uid"]
 
-    with open(argv[4], "w") as pf:
+    with open(argv[-2], "w") as pf:
         pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         pw.writeheader()
         for profile in profiles:

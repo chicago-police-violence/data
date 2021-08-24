@@ -203,10 +203,10 @@ f4.key = ["first_name", "middle_initial", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
-    profiles = csv_read(argv[2])
-
-    basename, _ = os.path.splitext(os.path.basename(argv[3]))
-    salary_records = multi_csv_read(argv[3:6])
+    profiles = csv_read(argv[-2])
+    
+    basename, _ = os.path.splitext(os.path.basename(argv[2]))
+    salary_records = multi_csv_read(argv[2:5])
     salary_flat = flatten_salary(salary_records, datasets[basename]["id_fields"])
 
     m = Matcher(profiles)
@@ -220,7 +220,7 @@ if __name__ == "__main__":
     pfields += [f for f in datasets["P4-41436"]["fields"] if f not in pfields]
     pfields += ["source", "uid"]
 
-    with open(argv[2], "w") as fp:
+    with open(argv[-2], "w") as fp:
         writer = DictWriter(fp, fieldnames=pfields, extrasaction="ignore")
         writer.writeheader()
         for officer in profiles:

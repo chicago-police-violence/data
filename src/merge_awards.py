@@ -159,17 +159,17 @@ if __name__ == "__main__":
     from sys import argv
 
     # get flattened versions of both awards files
-    p061715 = csv_read(argv[3])
-    s1, _ = os.path.splitext(os.path.basename(argv[3]))
+    p061715 = csv_read(argv[2])
+    s1, _ = os.path.splitext(os.path.basename(argv[2]))
     p061715_flat = flatten_awards(p061715, datasets[s1]['id_fields'])
 
-    p506887 = csv_read(argv[4])
-    s2, _ = os.path.splitext(os.path.basename(argv[4]))
+    p506887 = csv_read(argv[3])
+    s2, _ = os.path.splitext(os.path.basename(argv[3]))
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
     print('Matching p061715')
     # create profile matcher and link to p061715
-    profiles = csv_read(argv[2])
+    profiles = csv_read(argv[-2])
     m = Matcher(profiles)
     linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4, f5, f6, f7, f8])
     profiles = sorted(
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     pfields += [f for f in datasets["P4-41436"]["fields"] if f not in pfields]
     pfields += ["source", "uid"]
 
-    with open(argv[2], "w") as fp:
+    with open(argv[-2], "w") as fp:
         writer = DictWriter(fp, fieldnames=pfields, extrasaction="ignore")
         writer.writeheader()
         for officer in profiles:

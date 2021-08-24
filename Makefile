@@ -78,23 +78,23 @@ ${LINKED}/officer_profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${
 ${LINKED}/unit_assignments.csv: ${PARSED}/16-1105.csv ${PARSED}/P0-52262.csv ${SRC}/merge_history.py | ${LINKED}/officer_profiles.csv
 	${PYTHON} ${SRC}/merge_history.py $@ $^ $|
 
-${LINKED}/complaints_officers.csv: ${PARSED}/P0-46957_accused.csv ${LINKED}/officer_profiles.csv ${SRC}/link_p046957.py
-	${PYTHON} ${SRC}/link_p046957.py $@ $^
+${LINKED}/complaints_officers.csv: ${PARSED}/P0-46957_accused.csv ${SRC}/link_p046957.py | ${LINKED}/unit_assignments.csv ${LINKED}/officer_profiles.csv
+	${PYTHON} ${SRC}/link_p046957.py $@ $^ $|
 
 ${LINKED}/complaints.csv: ${PARSED}/P0-46957_main.csv
 	cp $< $@
 
-${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${LINKED}/officer_profiles.csv ${SRC}/link_p046360.py
-	${PYTHON} ${SRC}/link_p046360.py $@ $^
+${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46360_stars.csv ${SRC}/link_p046360.py | ${LINKED}/complaints_officers.csv ${LINKED}/officer_profiles.csv 
+	${PYTHON} ${SRC}/link_p046360.py $@ $^ $|
 
 ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/awards.csv: ${LINKED}/officer_profiles.csv ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py
-	${PYTHON} ${SRC}/merge_awards.py $@ $^
+${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py | ${LINKED}/tactical_response_reports.csv ${LINKED}/officer_profiles.csv 
+	${PYTHON} ${SRC}/merge_awards.py $@ $^ $|
 
-${LINKED}/salary.csv: ${LINKED}/officer_profiles.csv ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py
-	${PYTHON} ${SRC}/merge_salary.py $@ $^
+${LINKED}/salary.csv: ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py | ${LINKED}/awards.csv ${LINKED}/officer_profiles.csv 
+	${PYTHON} ${SRC}/merge_salary.py $@ $^ $|
 
 ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/clean_profiles.py
 	${PYTHON} ${SRC}/clean_profiles.py $@ $^
