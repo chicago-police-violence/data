@@ -86,9 +86,11 @@ if __name__ == "__main__":
         if o["last_name"] not in ["", "Officer", "OFFICER"]
     )
 
+    # load officers from second roster to be matched
     officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
+    # get union of attributes from both roster for `profiles.csv`
     d1, d2 = "P0-58155", "P4-41436"
     fields = datasets[d1]["fields"]
     fields += [f for f in datasets[d2]["fields"] if f not in fields]
