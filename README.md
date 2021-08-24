@@ -12,7 +12,7 @@ requests covered by the Freedom of Information Act (FOIA) and coordinated by
 the [Invisible Institute](https://invisible.institute/).
 
 Details about the FOIA requests and which information about the CPD they cover
-can be found in the file [`src/datasets.csv`](src/datasets.csv). The original
+can be found in the file [`raw/datasets.csv`](raw/datasets.csv). The original
 data which serves as a starting point for this repository was imported from the
 Invisible Institute's [download page](https://invisible.institute/download-the-data)
 
