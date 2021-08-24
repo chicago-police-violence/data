@@ -28,8 +28,9 @@ f1.key = ["first_name", "last_name", "middle_initial", "appointment_date"]
 
 
 def f2(officer, m):
+    # try to detect changes of names
     for o in m[officer]:
-        if officer["star"] == "" or officer["star"] not in o["stars"]:
+        if not(officer["star"] != "" and officer["star"] in o["stars"]):
             continue
         if not comp_age(o, officer):
             continue
@@ -37,7 +38,7 @@ def f2(officer, m):
             officer[k] == o[k]
             for k in ["first_name", "gender", "race", "middle_initial"]
         ):
-            # change of last name (marriage or divorce)
+            # change of last name (typically marriage or divorce)
             return o["uid"]
         elif any(officer[k] == o[k] for k in ["first_name", "last_name"]):
             # by visual inspections this covers obvious typo fixes
@@ -78,6 +79,7 @@ f4.key = ["first_name", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
+    # initialize Matcher with first roster (oldest one)
     m = Matcher(
         flatten_stars(o)
         for o in csv_read(argv[2])
@@ -87,8 +89,7 @@ if __name__ == "__main__":
     officers = filter(lambda o: o["last_name"], csv_read(argv[3]))
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
-    d1, _ = os.path.splitext(os.path.basename(argv[2]))
-    d2, _ = os.path.splitext(os.path.basename(argv[3]))
+    d1, d2 = "P0-58155", "P4-41436"
     fields = datasets[d1]["fields"]
     fields += [f for f in datasets[d2]["fields"] if f not in fields]
     fields += ["source", "uid"]
