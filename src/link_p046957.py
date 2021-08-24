@@ -1,7 +1,7 @@
 from utils import csv_read, flatten_stars
 from collections import defaultdict
 from matcher import Matcher
-from datasets import datasets
+from datasets import datasets, write_profiles
 from csv import DictWriter
 
 
@@ -55,18 +55,11 @@ if __name__ == "__main__":
     linked, unlinked = m.match(officers, [f1, f2, f3, f4])
 
     profiles = list(m.unify(linked, unlinked, matchee_source=root))
-    fields = datasets["P0-58155"]["fields"]
-    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
-    fields += ["source", "uid"]
-
-    with open(argv[-2], "w") as pf:
-        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
-        pw.writeheader()
-        for profile in profiles:
-            pw.writerow(profile)
+    write_profiles(argv[-2], profiles)
 
     with open(argv[1], "w") as pf:
-        fields = [f for f in datasets[root]["fields"] if f not in id_fields]
+        fields = [f for f in datasets[root]["fields"]
+                if f not in id_fields + ["unit_no", "position_description"]]
         fields += ["uid"]
         w = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         w.writeheader()

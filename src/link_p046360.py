@@ -1,4 +1,4 @@
-from datasets import datasets
+from datasets import datasets, write_profiles
 from collections import defaultdict
 from utils import csv_read, flatten_stars
 from matcher import Matcher
@@ -21,6 +21,8 @@ def f2(officer, m):
     if len(s) == 1:
         return s.pop()
 
+# f2.debug = True
+
 if __name__ == "__main__":
     import os.path
     from sys import argv
@@ -41,18 +43,11 @@ if __name__ == "__main__":
     linked, unlinked = m.match(officers, [f1, f2])
 
     profiles = list(m.unify(linked, unlinked, matchee_source=root))
-    fields = datasets["P0-58155"]["fields"]
-    fields += [f for f in datasets["P4-41436"]["fields"] if f not in fields]
-    fields += ["source", "uid"]
-
-    with open(argv[-2], "w") as pf:
-        pw = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
-        pw.writeheader()
-        for profile in profiles:
-            pw.writerow(profile)
+    write_profiles(argv[-2], profiles)
 
     with open(argv[1], "w") as pf:
-        fields = [f for f in datasets[root]["fields"] if f not in id_fields]
+        fields = [f for f in datasets[root]["fields"]
+                if f not in id_fields + ["age", "unit_no", "unit_detail", "assigned_beat", "position_description"]]
         fields += ["uid"]
         w = DictWriter(pf, fieldnames=fields, extrasaction="ignore")
         w.writeheader()

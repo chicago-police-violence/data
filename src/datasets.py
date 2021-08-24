@@ -36,7 +36,7 @@ datasets = {
             "unit_no",
             "unit_detail",
             "assigned_beat",
-            "rank",
+            "position_description",
             "duty_status",
             "injured",
             "member_in_uniform",
