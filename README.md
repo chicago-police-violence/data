@@ -33,7 +33,7 @@ in the repository root folder.
 
 ### Documentation (optional)
 
-We have included a `.pdf` of the documentation in `docs/main.pdf`.
+We have included a `.pdf` of the documentation in the current release version.
 But if you want to compile the documentation yourself from the source file `docs/main.tex`, you can 
 either compile it however you normally would with your favourite LaTeX compiler 
 (e.g. with `pdflatex` and `bibtex`), or you can run
@@ -58,12 +58,16 @@ with unique IDs that enable linkage among the records.
 
 Once you have completed the above build step, the repository will contain
 the cleaned and linked data. In particular, the following files will have been generated:
-- `linked/roster.csv`: A merged and linked roster of all unique officers in the data
-- `linked/profiles.csv`: A roster of all officers, including duplicate entries when an officer appears in multiple source files
-- `linked/history.csv`: A history of unit membership of each officer
-- `linked/P0-46360_main.csv`: (TBD)
-- `linked/P0-46957_accused.csv`: (TBD)
-- `linked/P0-46957_main.csv`: (TBD)
+- `final/roster.csv`: A merged and linked roster of all unique officers in the data
+- `final/officer_profiles.csv`: A list of all officers, including duplicate entries when an officer appears in multiple source files
+- `final/erroneous_officers.csv`: A list of probable erroneous officer records in the original data
+- `final/unit_assignments.csv`: A list of unit assignments for each officer with start and end date
+- `final/unit_descriptions.csv`: A list of unit names
+- `final/complaints.csv`: Formal complaints filed against officers
+- `final/complaints_officers.csv`: The officers involved in the complaints, with allegations, findings, and sanctions
+- `final/tactical_response_reports.csv`: Forms that officers are required to file when their response involves use of force
+- `final/awards.csv`: A list of awards requested for officers, request date, and result
+- `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
 ### `roster.csv`
 
