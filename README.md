@@ -1,8 +1,7 @@
 <p align="center">
-<img src="https://cdn.theatlantic.com/thumbor/9jB6mGx0eREfH3l82uNckcwrUFI=/0x62:2343x1380/1952x1098/media/img/mt/2018/03/AP_429077000333/original.jpg" width="700" class="center"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Chicago_%282551781706%29.jpg" width="600" class="center"/>
+<h1 align="center">The CPD Data Set</h1>
 </p>
-
-# The CPD Data Set
 
 This repository contains data related to the activities of ~35,000 police officers
 in the Chicago Police department (CPD), including ~11,000 tactical response reports
@@ -124,6 +123,9 @@ see `MIT-LICENSE.txt` for the license text.
 The dataset that is produced by the code is licensed under the 
 [Creative Commons 4.0 Attribution NonCommercial ShareAlike License](https://creativecommons.org/licenses/by-nc-sa/4.0/);
 see `CC-BY-NC-SA-LICENSE.txt` for the license text.
+
+The header image in this README is by Bert Kaufmann via Wikimedia Commons (CC BY 2.0).
+
 
 
 
