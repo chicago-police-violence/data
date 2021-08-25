@@ -41,24 +41,29 @@ def flatten_history(changes, id_attributes):
 
 
 def f1(officer, m):
+    #if officer["last_name"] == "VARGAS" and officer["first_name"] == "THOMAS":
+    #    print(officer)
+
     if officer["appointment_date"] >= "2016-02-29":
         # officers appointed after the second release,
         # so they con't be present in the first release
         return uuid4()
+
+    officers = m[officer]
+    if len(officers) > 1 and officer["history"] == sorted(
+        (e for o in officers for e in o["history"]), key=lambda e: e[1]
+    ):
+        # we can't find a match with a single officer, but this officer's
+        # assignement history is equal to the concatenation of the
+        # assignement histories of all his potential matches, so we "split"
+        # this officer.
+
+        # handles the case of SMITH, ROBERT and some erroneous officers:
+        # JOSE CHAMBERS, LACZ WOJCIECH, JORGE ROMO, THOMAS VARGAS
+        return [{**officer, "history": o["history"], "uid": o["uid"]} for o in officers]
     for o in (officers := m[officer]) :
         if comp_age(officer, o) and before(o, officer):
             return o["uid"]
-    else:
-        if officer["history"] == sorted(
-            (e for o in officers for e in o["history"]), key=lambda e: e[1]
-        ):
-            # we can't find a match with a single officer, but this officer's
-            # assignement history is equal to the concatenation of the
-            # assignement histories of all his potential matches, so we "split"
-            # this officer.
-
-            # handles the case of SMTIH, ROBERT
-            return [{**officer, "history": o["history"], "uid": o["uid"]} for o in officers]
 
 f1.key = ["last_name", "first_name", "gender", "appointment_date"]
 

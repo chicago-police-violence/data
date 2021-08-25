@@ -111,8 +111,9 @@ class Matcher:
             f: Matching criterion.
             linked: List to which records are added as they are matched.
             unlinked: List of records to match against the collection.
-            remove: Boolean. If true, one a record from collection has been matched against,
-                it is removed and moved to the self._matched dictionary.
+            remove: Boolean. If true, one a record from collection has been
+                matched against, it is removed and moved to the self._matched
+                dictionary.
         """
 
         if hasattr(f, "key"):

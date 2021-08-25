@@ -66,7 +66,7 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv
+LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv erroneous_officers.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
@@ -90,7 +90,10 @@ ${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P
 ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py | ${LINKED}/tactical_response_reports.csv ${LINKED}/officer_profiles.csv 
+${LINKED}/erroneous_officers.csv: ${LINKED}/unit_assignments.csv  ${SRC}/find_erroneous.py | ${LINKED}/tactical_response_reports.csv ${LINKED}/officer_profiles.csv
+	${PYTHON} ${SRC}/find_erroneous.py $@ $^ $|
+
+${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py | ${LINKED}/erroneous_officers.csv ${LINKED}/officer_profiles.csv 
 	${PYTHON} ${SRC}/merge_awards.py $@ $^ $|
 
 ${LINKED}/salary.csv: ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py | ${LINKED}/awards.csv ${LINKED}/officer_profiles.csv 

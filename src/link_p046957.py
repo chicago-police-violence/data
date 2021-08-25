@@ -31,6 +31,10 @@ f3.key = ["last_name", "gender", "birthyear", "appointment_date"]
 f4 = lambda o, m: f1(o, m)
 f4.key = ["first_name", "gender", "birthyear", "appointment_date"]
 
+f5 = lambda o, m: f2(o, m)
+f5.key = ["first_name", "last_name", "appointment_date"]
+# f5.debug = True
+
 
 if __name__ == "__main__":
 
@@ -52,7 +56,7 @@ if __name__ == "__main__":
         officers.append(officer)
 
     m = Matcher(flatten_stars(profile) for profile in csv_read(argv[-2]))
-    linked, unlinked = m.match(officers, [f1, f2, f3, f4])
+    linked, unlinked = m.match(officers, [f1, f2, f3, f4, f5])
 
     profiles = list(m.unify(linked, unlinked, matchee_source=root))
     write_profiles(argv[-2], profiles)
