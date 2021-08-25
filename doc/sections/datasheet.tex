@@ -24,12 +24,32 @@ The acquisition of the original raw data was funded by the Invisible Institute.
 \subsection{Composition}
 
 \paragraph{What do the instances that comprise the dataset represent?}
+There are multiple types of instance in this data. 
+\begin{itemize}
+\item Officer: information about an individual police officer
+\item Unit assignment: a single unit assignment for an officer
+\item Complaint: a complaint filed against a police officer, either internally or by a civilian
+\item Tactical Response Report: a form that an officer is required to fill out after their response requires use of force
+\item Award request: a request to grant an award to an officer
+\item Salary: a record of an officer's salary, pay grade, and position across multiple years
+\end{itemize}
 
 \paragraph{How many instances are there in total (of each type)?}
+{\color{red} todo}
 
 \paragraph{Does the dataset contain all possible instances or is it a sample of instances from a larger set?}
+This data contains information regarding all sworn officers in the Chicago Police Department / City of Chicago
+databases for the stated date ranges (which differ for each source of raw data).
 
 \paragraph{What data does each instance consist of?}
+\begin{itemize}
+\item Officer: officer unique ID, race, gender, age, appointment date, resignation date, badge number(s), position title(s)
+\item Unit assignment: officer unique ID, start date, end date, unit number
+\item Complaint: complaint ID, involved officer IDs, allegation, result of the investigation, resulting sanction (where available)
+\item Tactical Response Report: {\color{red} TODO}
+\item Award Request: awardee unique ID, requester, request date, award reference number, award type, request tracking number, incident dates, ceremony date
+\item Salary: officer unique ID, salary, position title, pay grade, year
+\end{itemize}
 
 \paragraph{Is there a label or target associated with each instance?}
 Not explicitly. However, labels could be constructed from the data 
@@ -38,13 +58,20 @@ an integer ``number of complaints'' for each officer in the data,
 and use that as the response variable in a prediction task.
 
 \paragraph{Is any information missing from individual instances?}
+{\color{red} TODO yes}
 
 \paragraph{Are relationships between individual instances made explicit?}
+In the raw data, no. In the cleaned data, we provide a unique officer
+identification that enables linking the activities and records regarding
+individual officers across datasets. There is no relational data (i.e., network edges)
+explicitly contained in the data. However, it is possible to use the data
+to construct a network, e.g., by linking officers co-listed on complaints.
 
 \paragraph{Are there recommended data splits?}
 No.
 
 \paragraph{Are there any errors, sources of noise, or redundancies in the dataset?}
+{\color{red} TODO yes}
 
 \paragraph{Is the dataset self-contained, or does it rely on external resources?}
 The dataset is self-contained: the raw data itself is stored in the \url{raw/} folder of the repository 
@@ -52,6 +79,9 @@ The dataset is self-contained: the raw data itself is stored in the \url{raw/} f
 and the cleaned/linked data is produced by the source code in the repository.
 
 \paragraph{Does the dataset contain data that might be considered confidential?}
+No; all of this data was publicly released as part of FOIA requests. 
+Confidential data (e.g., relating to under cover officers) was withheld 
+by the Chicago Police Department.
 
 \paragraph{Does the dataset contain data that, if viewed directly, might be offensive, insulting, or threatening?}
 No.
@@ -60,36 +90,65 @@ No.
 Yes; it contains records relating to police officers in the Chicago Police Department.
 
 \paragraph{Does the dataset identify any subpopulations?}
+Yes; officer records include race, gender, age, appointment date, unit history, badge numbers, position title,
+salary, awards, complaints, and tactical response reports. Subpopulations of officers can be constructed
+using these fields.
 
 \paragraph{Is it possible to identify individuals?}
+Yes; detailed information is available that could be used to identify individual officers.
 
 \paragraph{Does the dataset contain data that might be considered sensitive in any way?}
+The data contains a coarse categorization of racial origins of officers.
 
 \subsection{Collection Process}
 
 \paragraph{How was the data associated with each instance acquired?}
+The raw data were obtained via FOIA requests to the City of Chicago and Chicago Police Department.
 
 \paragraph{What mechanisms or procedures were used to collect the data?}
+The raw data were obtained via FOIA requests to the City of Chicago and Chicago Police Department.
 
 \paragraph{If the data are a sample from a larger set, what was the sampling strategy?}
+Not applicable. 
 
 \paragraph{Who was involved in the data collection process and how were they compensated?}
+Journalists in collaboration with the Invisible Institute were responsible for filing
+the FOIA requests, and officials within the Chicago Police Department and City of Chicago were responsible
+for providing data in response to those requests. It is not known explicitly whether or how 
+either party was compensated.
 
 \paragraph{Over what timeframe was the data collected?}
+The earliest releases per FOIA request occurred in 2016, and continue to occur
+as more FOIA requests are filed. The raw data itself pertain to records from the CPD
+dating back to the mid 20$^\text{th}$ century. The roster data covers the period up
+to 2018. The awards data pertains to records from 1967 to 2019.
+The salary data pertains to the years 2002 to 2017. The unit history data covers records up
+to 2016. The complaints data pertains to records from 1967 to 2016. The tactical response 
+report data pertains to records from 2004 to 2017.
 
 \paragraph{Were any ethical review processes conducted?}
+It is unknown whether the CPD conducted any ethical review processes prior to the release
+of the raw data. No ethical review process was conducted prior to the activities
+involved in the present repository, i.e., cleaning the publicly available data.
 
 \paragraph{Does the dataset relate to people?}
+Yes; it contains detailed records regarding the activities of police officers in the City of Chicago.
 
 \paragraph{Did you collect the data from the individuals directly, or obtain it via third parties?}
+The raw data was acquired from public links provided by the Invisible Institute (\url{https://invisible.institute}).
+The Invisible Institute acquired the data through FOIA requests made to the CPD and the City of Chicago.
 
 \paragraph{Were the individuals notified about the data collection?}
+It is unknown whether the individual officers were notified by the CPD when the raw data was released. 
 
 \paragraph{Did the individuals in question consent to the collection and use of their data?}
+Not explicitly. The Chicago Police Department was compelled by law to produce these records per FOIA requests.
 
 \paragraph{If consent was obtained, were the consenting individuals provided with a mechanism to revoke their consent in the future or for certain uses?}
+Not applicable.
 
 \paragraph{Has analysis of the potential impact of the dataset and its use on data subjects been conducted?}
+Not known.
 
 \subsection{Preprocessing and cleaning}
 
@@ -106,14 +165,19 @@ Yes; the source for cleaning and linking is provided in the \url{src/} folder in
 \subsection{Uses}
 
 \paragraph{Has the dataset been used for any tasks already?}
+{\color{red} todo -- ask Daria}
 
 \paragraph{Is there a repository that links to any or all papers that use the dataset?}
+Not that the authors of this work are aware of.
 
 \paragraph{What (other) tasks could the dataset be used for?}
+{\color{red} todo, fill in using the discussion section of the paper}
 
 \paragraph{Is there anything about the composition of the dataset or the way it was collected and cleaned that might impact future uses?}
+{\color{red} todo, fill in using limitations from the paper}
 
 \paragraph{Are there tasks for which the dataset should not be used?}
+{\color{red} todo}
 
 \subsection{Distribution}
 
