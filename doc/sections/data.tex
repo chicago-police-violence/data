@@ -3,27 +3,20 @@ The original raw data released by the CPD,
 as well as the code to clean the data and generate this document, 
 are both available at \url{https://github.com/chicago-police-violence/data}.
 
-\subsection{Data origin}
-This data was obtained by Jamie Kalven, an independent journalist represented
-by the University of Chicago’s Mandel Legal Aid Clinic, who filed Illinois
-Freedom of Information Act requests with the Chicago Police Department. These
-FOIA requests asked for documents containing the names of repeat police
-complainees, lists that had been produced in discovery in lawsuits alleging
-police abuse. In Kalven v. City of Chicago, an Illinois appellate court issued
-a general ruling in March of 2014 that documents bearing on allegations of
-police abuse are public information. Following the decision, the non-profit
-Invisible Institute began to collaborate with Kalven and the Mandel Legal Aid
+\subsection{The raw data: origin, description, and challenges}
+The first raw data files in this repository were obtained by J.~Kalven, an 
+independent journalist, who filed Illinois Freedom of Information Act requests with 
+the Chicago Police Department regarding complaints filed against officers. 
+In Kalven v.~City of Chicago, an Illinois appellate court issued
+a general ruling that documents bearing on allegations of
+police abuse are public information \cite{kalven2014}. Following 
+the decision, the non-profit
+Invisible Institute began to collaborate with Kalven 
+and the University of Chicago's Mandel Legal Aid
 Clinic to follow up on earlier FOIA requests and to file new ones. The data
-disclosed in response to these earlier and now ongoing FOIA requests are
-uploaded on the Invisible Institute’s website and are made publicly available. 
-
-\textbf{TODO:} ideally say a bit more about the history of these FOIA requests.
-Apparently they were initiated by individual journalists and lawyers and were
-later coordinated by the Invisible Institute which ultimately became the
-central location were (almost) all the data is currently available.
-
-
-
+disclosed in response to these earlier and now ongoing FOIA requests were made available
+online as part of the Citizens Police Data Project \cite{cpdp}.
+These data form the basis of the cleaned and linked data set provided by the present work.
 
 \begin{table}[h]
 	\begin{center}
@@ -49,17 +42,17 @@ central location were (almost) all the data is currently available.
 \end{center}
 \end{table}
 
+The raw data files are contained in the \url{raw/} folder of the
+repository. Each subfolder corresponds to a FOIA request, which is
+generally identified by a request number. \cref{table:summary} gives
+an overview of all the requests that we include in
+our repository; this meta-information is also included in the \url{raw/datasets.csv}
+file in the repository. The subfolders contain the data provided by the city
+in response to their corresponding FOIA requests, which typically comprises multiple
+Excel spreadsheets. In addition, when available, the subfolders contain formal correspondence 
+regarding the request, which
+often provides useful contextual information in understanding the data.  
 
-
-Each FOIA request is identified by a request number, \cref{table:summary} gives
-an overview of all the requests made to the CPD and COPA that are present in
-our repository. This information is also available in the file
-\texttt{dataset.csv} in the root folder of the repository. The original
-data—that is the files received after each FOIA request—are present in the
-\texttt{raw/} folder of the repository, with one subfolder for each request,
-identified by the request number. When available, each subfolder also contains
-the formal request letter as well as the reply letter from the CPD or COPA,
-which are useful in understanding what data was included in each dataset.
 Some additional comments about the data:
 \begin{itemize}
 	\item \emph{Officer roster:} lists all officers (past or present) employed
