@@ -7,15 +7,16 @@ if __name__ == "__main__":
 
     erroneous_uids = set()
 
+    # load profiles
     key_attrs = ["first_name", "last_name", "appointment_date"]
     officers = defaultdict(list)
-    for row in csv_read(sys.argv[-2]):
+    for row in csv_read(sys.argv[2]):
         row = flatten_stars(row)
         key = tuple(row[k] for k in key_attrs)
         officers[key].append(row)
 
     assignments = defaultdict(list)
-    for assignment in csv_read(sys.argv[2]):
+    for assignment in csv_read(sys.argv[3]):
         if assignment["unit_no"]:
             assignments[assignment["uid"]].append(assignment)
 
@@ -34,10 +35,7 @@ if __name__ == "__main__":
             for k, d in dicts.items():
                 for profile in profiles:
                     if profile[k]:
-                        if profile["uid"] in d:
-                            assert(profile[k] == d[profile["uid"]])
-                        else:
-                            d[profile["uid"]] = profile[k]
+                        d[profile["uid"]] = profile[k]
 
             # we first check whether the different uids correspond to different
             # birthyears, in which case we are fairly confident these are

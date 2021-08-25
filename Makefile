@@ -66,11 +66,11 @@ ${PARSED}:
 #### Linking ####
 
 LINKED := final
-LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv erroneous_officers.csv
+LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv tactical_response_reports_discharges.csv unit_descriptions.csv awards.csv salary.csv roster.csv erroneous_officers.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
 .PHONY: finalize
-finalize: check ${LINKED_FILES}
+finalize: check ${LINKED_FILES} clean_assignments
 
 ${LINKED}/officer_profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
 	${PYTHON} ${SRC}/merge_roster.py $@ $^
@@ -90,8 +90,8 @@ ${LINKED}/tactical_response_reports.csv: ${PARSED}/P0-46360_main.csv ${PARSED}/P
 ${LINKED}/tactical_response_reports_discharges.csv: ${PARSED}/P0-46360_discharges.csv
 	cp $< $@
 
-${LINKED}/erroneous_officers.csv: ${LINKED}/unit_assignments.csv  ${SRC}/find_erroneous.py | ${LINKED}/tactical_response_reports.csv ${LINKED}/officer_profiles.csv
-	${PYTHON} ${SRC}/find_erroneous.py $@ $^ $|
+${LINKED}/erroneous_officers.csv: ${SRC}/find_erroneous.py | ${LINKED}/officer_profiles.csv ${LINKED}/unit_assignments.csv  ${LINKED}/tactical_response_reports.csv
+	${PYTHON} ${SRC}/find_erroneous.py $@ $|
 
 ${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py | ${LINKED}/erroneous_officers.csv ${LINKED}/officer_profiles.csv 
 	${PYTHON} ${SRC}/merge_awards.py $@ $^ $|
@@ -104,6 +104,10 @@ ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/generate_roster.py |
 
 ${LINKED}/unit_descriptions.csv: ${PARSED}/P0-46987.csv ${PARSED}/P0-58155.csv ${PARSED}/16-1105.csv ${PARSED}/P0-46360_main.csv ${PARSED}/P0-46957_accused.csv ${PARSED}/P0-52262.csv ${SRC}/unit_descriptions.py
 	${PYTHON} ${SRC}/unit_descriptions.py $@ $^
+
+.PHONY: clean_assignments
+clean_assignments: ${LINKED}/unit_assignments.csv ${LINKED}/roster.csv
+	${PYTHON} ${SRC}/clean_assignments.py $^
 
 ${LINKED_FILES}: | ${LINKED}
 
