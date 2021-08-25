@@ -1,12 +1,31 @@
 % !TEX root = ../main.tex
 
+\section{Examples and data analysis} \label{sec:analysis}
 
-\section{Analysis} \label{sec:analysis}
+In this section, we provide examples and use-cases on the dataset. Code to reproduce our examples is available online, in the \texttt{examples} folder.
 
-summary statistics
+\subsection{Summary statistics}
 
-network construction?
+First, we start by providing some summary statistics. We use the  \texttt{roster.csv} file to generate figures on historical data on appointment and resignation dates as detailed in \Cref{fig:history}.
 
-informative plots
+\begin{figure}[h] 
+	\includegraphics[width=\textwidth]{figs/history} 
+	\caption{Historical data from the CPD. The left subplot shows the number of officers' appointments, the central subplot the number of officers' resignations, while the right subplot shows the number of active officers in the database (vertical axis) as a function of time (horizontal axis).} \label{fig:history}
+\end{figure}
 
-etc
+
+\begin{table}[h]
+\begin{tabular}{l|c|c|c|l|c|c|c|c|c|c|}
+\cline{2-4} \cline{6-11}
+                                                       & \multicolumn{3}{c|}{\textit{\textbf{Gender}}}                                                                                  &                       & \multicolumn{6}{c|}{\textit{\textbf{Race}}}                                                                                                                                                                                                                                                           \\ \cline{2-4} \cline{6-11} 
+                                                       & \multicolumn{1}{l|}{\textit{\textbf{M}}} & \multicolumn{1}{l|}{\textit{\textbf{F}}} & \multicolumn{1}{l|}{\textit{\textbf{X}}} &                       & \multicolumn{1}{l|}{\textit{\textbf{White}}} & \multicolumn{1}{l|}{\textit{\textbf{Black}}} & \multicolumn{1}{l|}{\textit{\textbf{Hispanic}}} & \multicolumn{1}{l|}{\textit{\textbf{Asian}}} & \multicolumn{1}{l|}{\textit{\textbf{Am. Indian}}} & \multicolumn{1}{l|}{\textit{\textbf{Bl. Hisp.}}} \\ \cline{1-4} \cline{6-11} 
+\multicolumn{1}{|c|}{\textit{\textbf{All}}}            & 28316                                    & 7122                                     & 12                                       & \multicolumn{1}{c|}{} & 21047                                        & 8599                                         & 4811                                            & 582                                          & 67                                                & 9                                                  \\ \cline{1-4} \cline{6-11} 
+\multicolumn{1}{|c|}{\textit{\textbf{Active}}} & 12283                                    & 4914                                     & 12                                       & \multicolumn{1}{c|}{} & 8131                                         & 4357                                         & 3841                                            & 490                                          & 46                                                & 9                                                  \\ \cline{1-4} \cline{6-11} 
+\end{tabular}
+\caption{This is a table} \label{tab:stats}
+\end{table}
+
+\begin{figure}[h] 
+	\includegraphics[width=\textwidth]{figs/history_by} 
+	\caption{Historical data from the CPD. } \label{fig:history_by}
+\end{figure}
