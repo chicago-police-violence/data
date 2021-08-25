@@ -60,7 +60,7 @@ Once you have completed the above build step, the repository will contain
 the cleaned and linked data. In particular, the following files will have been generated:
 - `final/roster.csv`: A merged and linked roster of all unique officers in the data
 - `final/officer_profiles.csv`: A list of all officers, including duplicate entries when an officer appears in multiple source files
-- `final/erroneous_officers.csv`: A list of probable erroneous officer records in the original data
+- `final/erroneous_officers.csv`: A list of probable erroneous/duplicate officer records in the original data
 - `final/unit_assignments.csv`: A list of unit assignments for each officer with start and end date
 - `final/unit_descriptions.csv`: A list of unit names
 - `final/complaints.csv`: Formal complaints filed against officers
@@ -69,19 +69,19 @@ the cleaned and linked data. In particular, the following files will have been g
 - `final/awards.csv`: A list of awards requested for officers, request date, and result
 - `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
-### `roster.csv`
+### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
 
 Fill in details for each of these: field names and their meanings
 
-### `profiles.csv`
+### `unit_assignments.csv` and `unit_descriptions.csv`
 
-### `history.csv`
+### `complaints.csv` and `complaints_officers.csv`
 
-### `P0-46360_main.csv`
+### `tactical_response_reports.csv`
 
-### `P0-46957_accused.csv`
+### `awards.csv`
 
-### `P0-46957_main.csv`
+### `salary.csv`
 
 # How the data are processed
 
