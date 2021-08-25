@@ -3,12 +3,23 @@
 \subsection{Motivation}
 
 \paragraph{For what purpose was the dataset created?}
+The original raw data files were sought by J.~Kalven, a journalist in the City
+of Chicago, as part of his investigation into police abuse. After the original
+FOIA requests and legal case, the non-profit Invisible Institute (\url{https://invisible.institute}) 
+began to collaborate with Kalven and the University of Chicago's Mandel Legal Aid Clinic
+to follow up on earlier FOIA requests and to file new ones. The data disclosed
+in response to these earlier and now ongoing FOIA requests were made available
+online as part of the Citizens Police Data Project.
 
 \paragraph{Who created the dataset, and on behalf of which entity?}
+The Chicago Police Department (CPD), Civilian Office of Police Accountability
+(COPA), and the City of Chicago produced the raw data files in response to FOIA
+requests. The raw data were curated and released publicly by the Invisible
+Institute and its collaborators. The cleaned and linked data were produced
+as part of research by the authors of this document.
 
 \paragraph{Who funded the creation of the dataset?}
-
-\paragraph{Any other comments?}
+The acquisition of the original raw data was funded by the Invisible Institute.
 
 \subsection{Composition}
 
@@ -21,22 +32,32 @@
 \paragraph{What data does each instance consist of?}
 
 \paragraph{Is there a label or target associated with each instance?}
+Not explicitly. However, labels could be constructed from the data 
+that exists. For example, one could aggregate complaints to produce
+an integer ``number of complaints'' for each officer in the data,
+and use that as the response variable in a prediction task.
 
 \paragraph{Is any information missing from individual instances?}
 
 \paragraph{Are relationships between individual instances made explicit?}
 
 \paragraph{Are there recommended data splits?}
+No.
 
 \paragraph{Are there any errors, sources of noise, or redundancies in the dataset?}
 
 \paragraph{Is the dataset self-contained, or does it rely on external resources?}
+The dataset is self-contained: the raw data itself is stored in the \url{raw/} folder of the repository 
+(with links to the external source files for reference), 
+and the cleaned/linked data is produced by the source code in the repository.
 
 \paragraph{Does the dataset contain data that might be considered confidential?}
 
 \paragraph{Does the dataset contain data that, if viewed directly, might be offensive, insulting, or threatening?}
+No.
 
 \paragraph{Does the dataset relate to people?} 
+Yes; it contains records relating to police officers in the Chicago Police Department.
 
 \paragraph{Does the dataset identify any subpopulations?}
 
@@ -73,10 +94,14 @@
 \subsection{Preprocessing and cleaning}
 
 \paragraph{Was any preprocessing of the data done?}
+Yes; the main section of this documentation provides details the cleaning and linking of the raw
+data resulting from FOIA requests made to the City of Chicago.
 
 \paragraph{Was the ``raw'' data saved in addition to the cleaned data?}
+Yes; the raw data is available in the \url{raw/} folder in the repository.
 
 \paragraph{Is the software used to clean the data available?}
+Yes; the source for cleaning and linking is provided in the \url{src/} folder in the repository.
 
 \subsection{Uses}
 
@@ -93,61 +118,49 @@
 \subsection{Distribution}
 
 \paragraph{Will the dataset be distributed to third parties outside of the entity on behalf of which the dataset was created?}
-
 Yes, the data is publicly available.
 
 \paragraph{How will the dataset be distributed?}
-
 It is available on GitHub at \url{https://github.com/chicago-police-violence/data}.
+Release versions will be marked using the ``release'' feature on GitHub.
 
 \paragraph{When will the dataset be distributed?}
-
 It is currently publicly accessible.
 
 \paragraph{Will the dataset be distributed under a copyright, other IP license, or terms of use?}
-
 Yes; the source code is released under the MIT license, and the data output by the cleaning code is released under the Creative Commons 4.0 BY-NC-SA license.
 
 \paragraph{Have any third parties imposed IP-based or other restrictions on the data associated with the instances?}
-
 No.
 
 \paragraph{Do any export controls or other regulatory restrictions apply to the data?}
-
 No.
 
 \subsection{Maintenance}
 
 \paragraph{Who is supporting/hosting/maintaining the dataset?}
-
 The repository will be hosted on GitHub. As of August 2021, the repository
 owners are Thibaut Horel, Trevor Campbell, and Lorenzo Masoero, but ownership
 may change over time.
 
 \paragraph{How can the data owner/curator be contacted?}
-
 Issue threads on GitHub are the primary channel of contact for the repository maintainers.
 
 \paragraph{Is there an erratum?}
-
 Not as of yet. For each major release version, notes will be included and
 hosted in the repository that will detail cleaning/linking errors that have been fixed.
 
 \paragraph{Will the dataset be updated?}
-
 The original raw source data from FOIA requests will not be modified. More raw
 data files may be added over time corresponding to new FOIA requests. The data
 cleaning and linking code will be edited over time to fix errors; release
-versions will be clearly marked on GitHub.
+versions will be clearly marked on GitHub. There is no set schedule for updates.
 
 \paragraph{If the dataset relates to people, are there applicable limits on the retention of data associated with the instances?}
-
 No; this data was released per FOIA requests and is in the public domain.
 
 \paragraph{Will older versions of the dataset continue to be supported/hosted/maintained?}
-
-Yes; a full version-controlled history of the project will exist on GitHub.
+Yes; a full version-controlled history of the project exists on GitHub.
 
 \paragraph{If others want to extend/augment/build on/contribute to the dataset, is there a mechanism for them to do so?}
-
 Yes; the repository for the dataset is hosted on GitHub, where pull requests are a usual channel for external contribution.
