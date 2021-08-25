@@ -1,17 +1,17 @@
 \section{The CPD Data} \label{sec:data}
 
-\tbo{this paragraph feels oddly specific and technical to have as the first
-thing in the section. I think most of it could be moved further down.}
-The original raw data released by the CPD, the code to generate the cleaned
-data, and the source code for this document are available at
-\url{https://github.com/chicago-police-violence/data}.  The data processing
-code is written in Python, and the documentation is written in \LaTeX.
-\texttt{Make} is used to coordinate the various processing steps and easily
-reproduce them.  Refer to \url{README.md} in the repository for details
-regarding system requirements and how to generate the cleaned data.
+The original raw data released by the CPD as well as the code to generate the
+cleaned data, and the source code for this document are available in a GitHub
+repository at \url{https://github.com/chicago-police-violence/data}. This
+repository will serve as a long-term home for this data, its current and future
+releases, as well as discussions regarding improvements and extensions of the
+data processing code.
+
+
 
 \subsection{The raw data: origin, description, and challenges}
 
+\paragraph{Origin.}
 The first raw data files in this repository were obtained by J.~Kalven, an 
 independent journalist, who filed Illinois Freedom of Information Act requests with 
 the Chicago Police Department regarding complaints filed against officers. 
@@ -51,6 +51,7 @@ These data form the basis of the cleaned and linked data set provided by the pre
 \end{center}
 \end{table}
 
+\paragraph{Description.}
 The raw data files are contained in the \url{raw/} folder of the
 repository. Each subfolder corresponds to a FOIA request, which is
 generally identified by a request number. \cref{table:summary} gives
@@ -83,7 +84,7 @@ provide the following information: {\color{red} todo: year ranges for each?}
 		involved use of force. There is one record for each incident and each
 		officer involved in the incident. Each record contains details about
 		the incident (such as time and location), the officer involved and the
-		subject of the use of force. In case one or several weapons were used,
+		subject of the use of force. In case one or multiple weapons were used,
 		detailed information about each use is also provided including, for
 		firearms, the number of discharges and the object struck at each
 		discharge.
@@ -98,16 +99,64 @@ provide the following information: {\color{red} todo: year ranges for each?}
 		position, and pay grade.
 \end{description}
 
-Challenges:
-- time varying attributes: badge numbers (stars), unit numbers, job titles change over time. but 
-more unusual things change too -- names (e.g.~marrying), appointment dates (e.g.~when db entries are corrected)
-- systematic errors: unit history backwards, 
-- multiple DBs: salary comes from different DB from the rest of it. names were entered differently, etc.
-- ambiguous field meanings: salary has 2 different dates for apt, etc.
-- dead entries: 
-- inconsistent entries across different files: officers missing from history, roster, present in salary, etc
-- idiosyncratic errors: 
+\paragraph{Challenges.}
+Despite the richness of the information contained in these FOIA data releases,
+there is a major obstacle to using them for investigating the activities of the
+CPD. Police officers are not uniquely identified across datasets, so there is
+a priori no reliable way to know whether, for example, an officer listed on
+a Complaint is the same individual as an officer with similar attributes listed
+on a Tactical Response Report. Although the CPD almost certainly assigns
+a unique identifier to each of its officers internally, these identifiers were
+never publicly released in the responses to FOIA requests. Linking officers
+across datasets must thus be performed by using the restricted set of
+attributes present in the dataset, and comes with the following challenges:
+\begin{itemize}
+	\item \emph{Time-varying attributes:} many attributes change over the
+		course of an officer's career in the CPD, such as their unit
+		assignments, rank or badge number (star). Perhaps surprisingly some
+		attributes which would usually be considered stable and useful
+		identifiers also change over time. These include surnames (e.g.\ when
+		marrying) or appointment dates (e.g.\ when a database entry is
+		corrected internally).
+	\item \emph{Multiple internal sources:} the salary data comes from
+		a different database. In particular, the officers' names were entered
+		separately, which makes linking this data to the other datasets
+		particularly challenging.
+	\item \emph{Inconsistent entries:} various choices were made by the CPD to
+		decide which officers to include in each dataset.  There are, for
+		example, officers missing from the roster or unit assignment data, but
+		present in the salary data. Furthermore, the same attribute can appear
+		under different names in different datasets and sometimes have
+		ambiguous meanings: for example, the salary data contains two different
+		attributes for the appointment date.
+	\item \emph{Duplicate entries:} probably due to internal errors in the CPD
+		data infrastructure, some officers are sometimes duplicated in the
+		roster and unit assignment data: they appear twice in the same dataset,
+		as two different individuals but with the exact same attributes. One of
+		the two “copies” of each duplicate officer is inactive and never
+		appears in the rest of the data, but introduces ambiguities to uniquely
+		identify officers across datasets.
+	\item \emph{Systematic errors:} an unusual difficulty arose from the unit
+		assignment data, in which a significant fraction of the assignments
+		have an end date chronologically preceding the start date. This appears
+		to be a systematic error, either in the data entry process or in the
+		code which produced the data. A close inspection of the pattern of
+		errors revealed that the faulty records cannot be fixed by simply
+		swapping the start date with the end date.
+\end{itemize}
 
+A major contribution of the present work is to address all the above challenges
+by carefully cleaning and linking the original datasets. The output of this
+process is a small collection of comma-separated values (CSV) files
+corresponding to the different entities described in the \emph{Description}
+paragraph above. Importantly, each officer is uniquely identified by
+a hexadecimal string across output files.
+
+The data processing code is written in Python, and the documentation is written
+in \LaTeX.  \texttt{Make} is used to coordinate the various processing steps
+and easily reproduce them.  Refer to \url{README.md} in the repository for
+details regarding system requirements and running the data processing code. The
+remainder of this section describes the processing steps in detail.
 
 \subsection{Initial Cleaning}
 
