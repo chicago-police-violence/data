@@ -113,3 +113,12 @@ ${LINKED}:
 .PHONY: clean
 clean:
 	rm -rf ${PARSED} ${LINKED}
+
+.PHONY: documentation
+documentation:
+	${MAKE} -C doc
+
+.PHONY: release
+release: documentation finalize
+	tar -czf `git rev-parse HEAD`.tar.gz final/ doc/main.pdf
+
