@@ -120,5 +120,5 @@ documentation:
 
 .PHONY: release
 release: documentation finalize
-	tar -czf `git rev-parse HEAD`.tar.gz final/ doc/main.pdf
+	tar -czf `git rev-parse --short HEAD`.tar.gz final/ doc/main.pdf
 
