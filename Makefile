@@ -4,7 +4,7 @@ SRC := src
 PYTHON := LOG_LEVEL=${LOG_LEVEL} python3
 
 .PHONY: all
-all: finalize
+all: check finalize
 
 .PHONY: black
 black:
@@ -69,7 +69,7 @@ LINKED := final
 LINKED_FILES := officer_profiles.csv unit_assignments.csv complaints_officers.csv complaints.csv tactical_response_reports.csv unit_descriptions.csv awards.csv salary.csv roster.csv erroneous_officers.csv
 LINKED_FILES := $(addprefix ${LINKED}/, ${LINKED_FILES})
 
-.PHONY: finalize
+.PHONY: check finalize
 finalize: ${LINKED_FILES}
 
 ${LINKED}/officer_profiles.csv: ${PARSED}/P0-58155.csv ${PARSED}/P4-41436.csv ${SRC}/merge_roster.py
