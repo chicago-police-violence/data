@@ -1,13 +1,17 @@
 \section{The CPD Data} \label{sec:data}
-The original raw data released by the CPD, 
-the code to generate the cleaned data, and the source code for this document 
-are available at \url{https://github.com/chicago-police-violence/data}.
-The data processing code is written in Python, and the documentation is written in \LaTeX.
-\texttt{Make} is used to coordinate the various processing steps and easily reproduce them.
-Refer to \url{README.md} in the repository for details regarding system requirements and 
-how to generate the cleaned data.
+
+\tbo{this paragraph feels oddly specific and technical to have as the first
+thing in the section. I think most of it could be moved further down.}
+The original raw data released by the CPD, the code to generate the cleaned
+data, and the source code for this document are available at
+\url{https://github.com/chicago-police-violence/data}.  The data processing
+code is written in Python, and the documentation is written in \LaTeX.
+\texttt{Make} is used to coordinate the various processing steps and easily
+reproduce them.  Refer to \url{README.md} in the repository for details
+regarding system requirements and how to generate the cleaned data.
 
 \subsection{The raw data: origin, description, and challenges}
+
 The first raw data files in this repository were obtained by J.~Kalven, an 
 independent journalist, who filed Illinois Freedom of Information Act requests with 
 the Chicago Police Department regarding complaints filed against officers. 
@@ -24,21 +28,21 @@ These data form the basis of the cleaned and linked data set provided by the pre
 
 \begin{table}[h]
 	\begin{center}
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llllr@{}}
 	\toprule
-	request \#&received&requested&description\\
+	request \#&received&requested&description& \# of records\\
 \midrule
-	\texttt{P0-58155}&2017-04-17& &Officer roster\\
-	\texttt{P4-41436}&2018-03-21& &Officer roster\\
-	\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignments\\
-	\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignments\\
-	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
-	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
-	\texttt{P0-46360}& & &Tactical Response Reports\\
-	\texttt{P0-46987}&2016-05-13&2016-04-25&Unit names\\
-	\texttt{P0-61715}& &2017-07-26&Awards\\
-	\texttt{P5-06887}&2019-10-11&2019-07-19&Awards\\
-	&2017-09-27&2017-09-13&Salary\\
+	\texttt{P0-58155}&2017-04-17& &Officer roster& 32\,446\\
+	\texttt{P4-41436}&2018-03-21& &Officer roster& 14\,634\\
+	\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignments&114\,630\\
+	\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignments&115\,987\\
+	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)&109\,339\\
+	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)&182\,337\\
+	\texttt{P0-46360}& & &Tactical Response Reports&67\,019\\
+	\texttt{P0-46987}&2016-05-13&2016-04-25&Unit names&237\\
+	\texttt{P0-61715}& &2017-07-26&Awards&699\,912\\
+	\texttt{P5-06887}&2019-10-11&2019-07-19&Awards&60\,556\\
+					 &2017-09-27&2017-09-13&Salary&212\,508\\
 \bottomrule
 \end{tabular}
 \caption{Summary of the FOIA requests contained in our repository (blanks are missing entries).}
