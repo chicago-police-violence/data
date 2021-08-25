@@ -30,8 +30,8 @@ These data form the basis of the cleaned and linked data set provided by the pre
 \midrule
 	\texttt{P0-58155}&2017-04-17& &Officer roster\\
 	\texttt{P4-41436}&2018-03-21& &Officer roster\\
-	\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignment\\
-	\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignment\\
+	\texttt{P0-52262}&2016-12-04&2016-09-19&Unit assignments\\
+	\texttt{16-1105}&2016-03-11&2016-02-10&Unit assignments\\
 	\texttt{P0-46957}&2016-06-29&2016-04-22&Complaints (CPD)\\
 	\texttt{18-060-425}&2018-08-28&2018-08-20&Complaints (COPA)\\
 	\texttt{P0-46360}& & &Tactical Response Reports\\
@@ -54,31 +54,45 @@ our repository; this meta-information is also included in the \url{raw/datasets.
 file in the repository. The subfolders contain the data provided by the city
 in response to their corresponding FOIA requests, which typically comprises multiple
 Excel spreadsheets. In addition, when available, the subfolders contain formal correspondence 
-regarding the request, which
-often provides useful contextual information in understanding the data.  
+regarding the request, which often provides useful contextual information in understanding the data.  
 
-Some additional comments about the data:
-\begin{itemize}
-	\item \emph{Officer roster:} lists all officers (past or present) employed
+In particular, the raw data files contained in the repository
+provide the following information: {\color{red} todo: year ranges for each?}
+\begin{description}
+	\item[Officer roster:] a list of all officers (past and present) employed
 		by the CPD along with attributes such as year of birth, age, race,
 		gender, appointment date, resignation date, etc.
-	\item \emph{Unit assignment:} the CPD is organized into (500 or so?) units.
+	\item[Unit assignments:] the CPD is organized into over 200 units.
 		Each officer can be assigned to one or multiple units and these
 		assignments can change over time. The unit assignment datasets contain
 		one record for each officer and each unit they were assigned to, with
 		the start date and end date of this assignment.
-	\item \emph{Complaints:} formal complaints filed by citizens against police
-		officers. Complaints are identified by a complaint number, and there is
-		one record for each complaint and each officer listed on the complaint,
+	\item[Complaints:] formal complaints against police officers, filed both by citizens
+                and internally within the department. Complaints are identified by a complaint number. 
+                There is one record for each complaint and each officer listed on the complaint,
 		indicating the allegation made against them, result of the
 		investigation of the allegation (with possible sanction), etc.
-	\item \emph{Tactical Response Reports:} these are forms that officers are
+	\item[Tactical Response Reports:] these are forms that officers are
 		required to file after each incident for which the officer's response
-		involved use of force.
-\end{itemize}
+		involved use of force. Each record contains... {\color{red} thibaut fill in, similar to above for complaints}
+        \item[Unit names:] the (human-readable) name of each (past and present) unit in the CPD. 
+                Unit names also appear occasionally where unit numbers are listed in the other data files.
+        \item[Awards:] a list of all awards requested for officers in the CPD, including 
+                award tracking number, reference number, award type, request date, requester name,
+                etc.
+        \item[Salary:] a list of officers from 2002--2017 including their salary, position, and pay grade.
+\end{description}
 
+Challenges:
+- time varying attributes: badge numbers (stars), unit numbers, job titles change over time. but 
+more unusual things change too -- names (e.g.~marrying), appointment dates (e.g.~when db entries are corrected)
+- systematic errors: unit history backwards, 
+- multiple DBs: salary comes from different DB from the rest of it. names were entered differently, etc.
+- ambiguous field meanings: salary has 2 different dates for apt, etc.
+- dead entries: 
+- inconsistent entries across different files: officers missing from history, roster, present in salary, etc
+- idiosyncratic errors: 
 
-\subsection{Technical choices} 
 
 \subsection{Initial Cleaning}
 
