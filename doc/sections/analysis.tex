@@ -6,26 +6,31 @@ In this section, we provide examples and use-cases on the dataset. Code to repro
 
 \subsection{Summary statistics}
 
-First, we start by providing some summary statistics. We use the  \texttt{roster.csv} file to generate figures on historical data on appointment and resignation dates as detailed in \Cref{fig:history}.
+First, we start by providing some summary statistics. 
 
+\subsubsection{The roster file}
+The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD officers. For each officer --- identified by a Unique Identifier (``uid''), \texttt{roster.csv} provides, among other covariates, the officer's name, gender, race, birthyear, appointment and resignation dates. It is straightforward  to use the data to generate summary statistics, e.g., using appointment and resignation dates to understand the number of appointments, retirements as well as active officers over the years of  (\Cref{fig:history}). We report in \Cref{tab:stats} some 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/history} 
 	\caption{Historical data from the CPD. The left subplot shows the number of officers' appointments, the central subplot the number of officers' resignations, while the right subplot shows the number of active officers in the database (vertical axis) as a function of time (horizontal axis).} \label{fig:history}
 \end{figure}
 
-
 \begin{table}[h]
-\begin{tabular}{l|c|c|c|l|c|c|c|c|c|c|}
+\begin{tabular}{l|c|c|c|c|c|c|c|c|c|c|}
 \cline{2-4} \cline{6-11}
-                                                       & \multicolumn{3}{c|}{\textit{\textbf{Gender}}}                                                                                  &                       & \multicolumn{6}{c|}{\textit{\textbf{Race}}}                                                                                                                                                                                                                                                           \\ \cline{2-4} \cline{6-11} 
-                                                       & \multicolumn{1}{l|}{\textit{\textbf{M}}} & \multicolumn{1}{l|}{\textit{\textbf{F}}} & \multicolumn{1}{l|}{\textit{\textbf{X}}} &                       & \multicolumn{1}{l|}{\textit{\textbf{White}}} & \multicolumn{1}{l|}{\textit{\textbf{Black}}} & \multicolumn{1}{l|}{\textit{\textbf{Hispanic}}} & \multicolumn{1}{l|}{\textit{\textbf{Asian}}} & \multicolumn{1}{l|}{\textit{\textbf{Am. Indian}}} & \multicolumn{1}{l|}{\textit{\textbf{Bl. Hisp.}}} \\ \cline{1-4} \cline{6-11} 
-\multicolumn{1}{|c|}{\textit{\textbf{All}}}            & 28316                                    & 7122                                     & 12                                       & \multicolumn{1}{c|}{} & 21047                                        & 8599                                         & 4811                                            & 582                                          & 67                                                & 9                                                  \\ \cline{1-4} \cline{6-11} 
-\multicolumn{1}{|c|}{\textit{\textbf{Active}}} & 12283                                    & 4914                                     & 12                                       & \multicolumn{1}{c|}{} & 8131                                         & 4357                                         & 3841                                            & 490                                          & 46                                                & 9                                                  \\ \cline{1-4} \cline{6-11} 
+                                               & \multicolumn{3}{c|}{\textit{\textbf{Gender}}}                   & \multicolumn{1}{l|}{} & \multicolumn{6}{c|}{\textit{\textbf{Race}}}                                                                                                                           \\ \cline{2-4} \cline{6-11} 
+                                               & \textit{\textbf{M}} & \textit{\textbf{F}} & \textit{\textbf{X}} &                       & \textit{\textbf{White}} & \textit{\textbf{Black}} & \textit{\textbf{Hispanic}} & \textit{\textbf{Asian}} & \textit{\textbf{Am. Indian}} & \textit{\textbf{Bl. Hisp.}} \\ \cline{1-4} \cline{6-11} 
+\multicolumn{1}{|c|}{\textit{\textbf{All}}}    & 28316               & 7122                & 12                  &                       & 21047                   & 8599                    & 4811                       & 582                     & 67                           & 9                           \\ \cline{1-4} \cline{6-11} 
+\multicolumn{1}{|c|}{\textit{\textbf{Active}}} & 11118               & 4452                & 12                  &                       & 7241                    & 3895                    & 3596                       & 467                     & 40                           & 9                           \\ \cline{1-4} \cline{6-11} 
 \end{tabular}
-\caption{This is a table} \label{tab:stats}
+\caption{Summary statistics (gender, race) for all officer (first row), as well as for active officers --- those whose resignation date is not before Jan 1st 2019.} \label{tab:stats}
 \end{table}
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/history_by} 
-	\caption{Historical data from the CPD. } \label{fig:history_by}
+	\caption{Historical data from the CPD. Birthyears for officers in the CPD dataset: blue dots count all officers, while red count only officers who are ``active'' as of January 1st, 2019.} \label{fig:history_by}
 \end{figure}
+
+\subsection{Tactical response reports}
+
+The file \texttt{P0-46360\_main.csv} contains information about tactical response reports, filed as a consequence of  events involving use of force of CPD officers. This dataset contains $9{,}246$ distinct events, as identified by the index ``\texttt{event\_no}'', between January 17th 2004 and April 12th 2016. For each event, the time and location is recorded. Details about the officers involved, as well as the civilian subject are available too. 
