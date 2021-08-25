@@ -124,7 +124,7 @@ The dataset that is produced by the code is licensed under the
 [Creative Commons 4.0 Attribution NonCommercial ShareAlike License](https://creativecommons.org/licenses/by-nc-sa/4.0/);
 see `CC-BY-NC-SA-LICENSE.txt` for the license text.
 
-The header image in this README is by Bert Kaufmann via Wikimedia Commons (CC BY 2.0).
+The header image in this README is by [Bert Kaufmann via Wikimedia Commons (CC BY 2.0)](https://commons.wikimedia.org/wiki/File:Chicago_(2551781706).jpg).
 
 
 
