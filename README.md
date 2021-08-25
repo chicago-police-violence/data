@@ -75,6 +75,18 @@ Fill in details for each of these: field names and their meanings
 
 ### `unit_assignments.csv` and `unit_descriptions.csv`
 
+In `unit_assignments.csv`:
+- `uid` is the unique ID for the officer to which the record pertains
+- `unit_no` is the CPD unit number (names are available in `unit_descriptions.csv`)
+- `start_date` and `end_date`: the start and end date for the assignment
+
+In `unit_descriptions.csv`:
+- `unit_no`: contains the CPD unit number
+- `unit_description`: the name of the unit from CPD records. These names were collected from both the unit reference table provided in `P0-46987` and throughout the remainder of the data, where available. There *are* other units with duplicated numbers that existed in the original unit reference table, but these have been removed when they do not appear in the remainder of the data (e.g. officer unit assignments).
+- `active_status`: whether the unit was active as of the `status_date` 
+- `status_date`: the date for the `active_status`
+
+
 ### `complaints.csv` and `complaints_officers.csv`
 
 ### `tactical_response_reports.csv`
