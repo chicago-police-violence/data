@@ -69,9 +69,10 @@ the cleaned and linked data. In particular, the following files will have been g
 - `final/awards.csv`: A list of awards requested for officers, request date, and result
 - `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
-### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
+**TODO: fill in details for each of these: field names, their meanings, and any additional useful info to know about them**
 
-Fill in details for each of these: field names and their meanings
+
+### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
 
 ### `unit_assignments.csv` and `unit_descriptions.csv`
 
