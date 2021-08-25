@@ -28,6 +28,8 @@ These data form the basis of the cleaned and linked data set provided by the pre
 
 \begin{table}[h]
 	\begin{center}
+\caption{Summary of the FOIA requests contained in our repository (blanks are missing entries).}
+\label{table:summary}
 \begin{tabular}{@{}llllr@{}}
 	\toprule
 	request \#&received&requested&description& \# records\\
@@ -45,9 +47,6 @@ These data form the basis of the cleaned and linked data set provided by the pre
 					 &2017-09-27&2017-09-13&Salary&212\,508\\
 \bottomrule
 \end{tabular}
-\vspace{0.7em}
-\caption{Summary of the FOIA requests contained in our repository (blanks are missing entries).}
-\label{table:summary}
 \end{center}
 \end{table}
 
@@ -147,10 +146,10 @@ attributes present in the dataset, and comes with the following challenges:
 
 A major contribution of the present work is to address all the above challenges
 by carefully cleaning and linking the original datasets. The output of this
-process is a small collection of comma-separated values (CSV) files
-corresponding to the different entities described in the \emph{Description}
-paragraph above. Importantly, each officer is uniquely identified by
-a hexadecimal string across output files.
+process is a collection of comma-separated values (CSV) files corresponding to
+the different entities described in the \emph{Description} paragraph above.
+Importantly, each officer is uniquely identified by a hexadecimal string across
+output files.
 
 The data processing code is written in Python, and the documentation is written
 in \LaTeX.  \texttt{Make} is used to coordinate the various processing steps
@@ -160,7 +159,7 @@ remainder of this section describes the processing steps in detail.
 
 \subsection{Initial Cleaning}
 
-The files initially released by the CPD as a reply to the FOIA requests are for
+The files initially released by the CPD are for
 the most part Excel spreadsheets, with inconsistent formatting and which can
 thus be difficult to process programmatically. As an example, the reader is
 invited to open the file
@@ -169,41 +168,51 @@ available in the folder \texttt{raw/P0-46957/}. As can be seen, each record in
 this file is spread over two rows of the spreadsheet, with the field names
 repeated at the beginning of the second row for each record.
 
-The goal of the cleaning step is thus to produce ``reasonable'' CSV files from
-the original files, with the minimum requirement that each record be presented
-on a single line after this step. The code for this cleaning step is contained
-in the files \texttt{datasets.py}, \texttt{parse.py} and
-\texttt{parse\_p046957.py} in the \texttt{src/} folder and the entire step can
-be applied by running \texttt{make parse} in the root of the repository. This
-creates the folder \texttt{parsed/} containing the clean CSV files.
+The goal of the cleaning step is thus to produce uniformly formatted CSV files,
+with the minimum requirement that each record be presented on a single line
+after this step. The code is contained in the files \texttt{datasets.py},
+\texttt{parse.py} and \texttt{parse\_p046957.py} in the \texttt{src/} folder.
+The step can be applied by running \texttt{make prepare} in the root of the
+repository, which creates the folder \texttt{tidy/} containing the cleaned CSV
+files.
 
-As can be seen by inspecting the code, the decisions made at this stage are, we
-believe, uncontroversial as they only consists of:
+The decisions made at this stage are straightforward and involve no subjective
+judgment. They consist of:
 \begin{itemize}
-	\item unifying field names across datasets, so that the same type of data
-		is always identified in the saw way (for example, \texttt{Appointment
-		Date}, \texttt{Appt Date}, \texttt{appointment\_date} are all mapped to
-		\texttt{appointment\_date}.
-	\item unifying field values across datasets. For example, the gender of an
-		officer is indicated as a single letter \texttt{M} or \texttt{F} in
-		some datasets or as \texttt{Male}, \texttt{Female} (based on the data
-		release, it does not seem that the system used by the CPD has an option
-		to represent non-binary officers).
+	\item unifying attribute names across datasets, so that the same type of
+		data is always identified in the same way (for example,
+		\texttt{Appointment Date}, \texttt{Appt Date},
+		\texttt{appointment\_date} are all mapped to
+		\texttt{appointment\_date}).
+	\item unifying attribute values across datasets. For example, the gender of
+		an officer is indicated as a single letter \texttt{M}/\texttt{F} in
+		some datasets or as \texttt{Male}/\texttt{Female}. A similar issue
+		arises with the race of officers, sometimes given as a three-letter
+		code, and sometimes described in full. In such cases we map all
+		possible forms of a given attribute value to a canonical one.
 	\item parsing values into the correct data type or format. For example,
-		dates are formatted differently depending on the dataset, and we map
-		everything to the ISO 8601 format.
+		dates and times are formatted differently depending on the dataset, and
+		we map everything to the ISO\,8601 format. Integers are also parsed so
+		as to remove the various paddings present in the original data.
+	\item concatenating all the files containing a given type of record in each
+		data release. Indeed, the CPD's responses to some FOIA requests split
+		the records chronologically over multiple Excel spreadsheets (see for
+		example \texttt{raw/P0-46957}). Having a single file for each record
+		type instead simplifies later processing steps.
 \end{itemize}
 
-Consequently, for someone planning to use the data in the present repository,
-there is virtually no reason not to start at the minimum from the output of
-this cleaning step. The subsequent steps required making more difficult and
-debatable decisions, so depending on the application, researchers might want to
-perform them differently, but in all cases, those alternative decisions can
-branch off from the output of the cleaning step.
+Although this initial cleaning is only the first step in the process producing
+our final dataset, we structured our processing code in such a way that it is
+easy to stop the process at this step and keep the intermediate output in the
+\texttt{tidy/} folder. This is because the next steps required making more
+subjective judgment calls, to decide how to clean erroneous records and resolve
+ambiguities arising from the merging and linking of datasets. Consequently, it
+is possible that some applications will require performing these next steps
+differently. In such cases, the files contained in the \texttt{tidy/} folder
+should provide a safe intermediate point at which to branch off from our
+processing pipeline.
 
 \subsection{Linking and Merging Datasets}\label{sec:linking}
-
-\subsubsection{Officer matching}
 
 As already alluded to, the main challenge at this step is that there is no
 identifier uniquely identifying officers across records. In other words, there
@@ -299,7 +308,9 @@ remaining datasets \textbf{expand}
 \textbf{TODO} give in appendix table summarizing which subset of attributes are
 used at each linking operation 
 
-\subsubsection{Roster consolidation}
+\subsection{Final cleaning and output}
+
+\paragraph{Roster consolidation.}
 
 A byproduct of matching officers across datasets is that for each officer, we
 now have as many “profiles” as the number of datasets in which they appear,
@@ -316,7 +327,7 @@ consolidated profile. But if an attribute appears with different values across
 different profiles, we choose the value coming from the profile corresponding
 to the \emph{most recent data release}.
 
-\subsubsection{Unit assignment history} TODO.
+\paragraph{Cleaning unit assignments.}
 
 
-\subsection{Unit identification and binning}
+\paragraph{Final output.}
