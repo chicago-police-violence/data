@@ -1,4 +1,37 @@
 \paragraph{Roster consolidation.}
+The procedure described in \cref{sec:linking} produces, for each unique officer
+in our dataset, a collection of profiles presenting the list of identifying
+attributes of this officer as they appear in each dataset provided by the CPD.
+Since, these attributes can change over time for legitimate reasons, we believe
+that the collection of profiles as a whole is the most faithful and complete
+representation of each officer.
+
+Working with such collections of profiles can however be counter-intuitive and
+inconvenient, since some applications might for example require to display the
+name of an officer, without having to choose from possibly two or more names in
+cases this officer changed name over the course of their career in the CPD. For
+such use cases, we consolidated the different profiles of each officer into
+a single, canonical profile as follows. For each officer's identifying
+attribute, we choose the \emph{most recent nonempty} value it takes among all
+profiles of this officer, where \emph{most recent} is defined using the release
+date of each dataset by the CPD. This way, if an attribute is empty in some
+profiles but not in others, a nonempty value will be selected. Choosing the
+most recent value is justified since (1) it is more likely to still be current
+(2) it is more likely to contain the latest corrections made by the CPD to
+their database.\footnote{This assumes that on average, it is less likely for
+errors to be introduced in the CPD database, than for records to be fixed. This
+assumption is highly debatable and the authors' posterior belief after working
+on the CPD data for more than a year assigns at most $0.6$ probability to its
+veracity.}
+
+
+
+This consolidated profile was obtained as follows:
+for 
+
+
+
+Thus 
 
 A byproduct of matching officers across datasets is that for each officer, we
 now have as many “profiles” as the number of datasets in which they appear,
