@@ -1,0 +1,18 @@
+\paragraph{Roster consolidation.}
+
+A byproduct of matching officers across datasets is that for each officer, we
+now have as many “profiles” as the number of datasets in which they appear,
+where by \emph{profile} we mean a collection of attributes. Note that each
+profile can contain a different subset of attributes (since not all attributes
+are present in each dataset) and that a given attribute might take a different
+value in different profiles of the same officer (since the iterative matching
+procedure is not restricted to performing strict matching).
+
+We are thus faced with the task of “consolidating” the different profiles of
+a given officer into a single profile. Of course, if an attribute is present in
+a single profile, and absent from the others, this is the value we keep in the
+consolidated profile. But if an attribute appears with different values across
+different profiles, we choose the value coming from the profile corresponding
+to the \emph{most recent data release}.
+
+\paragraph{Cleaning unit assignments.}
