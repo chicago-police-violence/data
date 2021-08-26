@@ -8,14 +8,16 @@ reproduce our examples is available online, in the \texttt{examples} folder.
 \subsection{Visualizations}
 
 \paragraph{Roster.}
-The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD
-officers. For each officer --- identified by a Unique Identifier (``uid''),
-\texttt{roster.csv} provides, among other covariates, the officer's name,
-gender, race, birthyear, appointment and resignation dates. It is
-straightforward  to use the data to generate summary statistics, e.g., using
-appointment and resignation dates to understand the number of appointments,
-retirements as well as active officers over the years of  (\Cref{fig:history}).
-We report in \Cref{tab:stats} some 
+%The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD
+%officers. For each officer --- identified by a Unique Identifier (``uid''),
+%\texttt{roster.csv} provides, among other covariates, the officer's name,
+%gender, race, birthyear, appointment and resignation dates. It is
+%straightforward  to use the data to generate summary statistics, e.g., using
+%appointment and resignation dates to understand the number of appointments,
+%retirements as well as active officers over the years of  (\Cref{fig:history}).
+%We report in \Cref{tab:stats} some 
+
+
 \begin{figure}[t!] 
 \includegraphics[width=\textwidth]{figs/history} 
 \caption{Appointments (left), resignations (center), and the number of active
@@ -28,17 +30,19 @@ officers (right) appearing in the CPD roster database from the years 1940 to 201
 Note that ``race'' and ``gender'' are per the CPD's coarse categorizations.} \label{tab:stats}
 \begin{tabular}{l|c|c|c|c|c|c|c|c|c|}
 \cline{2-3} \cline{5-10}
-                                               & \multicolumn{2}{c|}{\textbf{Gender}} & \multicolumn{1}{l|}{} & \multicolumn{6}{c|}{\textbf{Race}}                                                                                                                                                   \\ \cline{2-3} \cline{5-10} 
+                                               & \multicolumn{2}{c|}{\textbf{Gender}} & \multicolumn{1}{l|}{} & \multicolumn{6}{c|}{\textbf{CPD Race Category}}                                                                                                                                                   \\ \cline{2-3} \cline{5-10} 
                                                & {\textbf{M}}   & {\textbf{F}}   &                       & {\textbf{White}} & {\textbf{Black}} & \multicolumn{1}{l|}{{\textbf{Hisp.}}} & {\textbf{Asian}} & \multicolumn{1}{l|}{{\textbf{Am. Ind.}}} & {\textbf{Bl. Hisp.}} \\ \cline{1-3} \cline{5-10} 
 \multicolumn{1}{|c|}{\textbf{All}}    & 28316                 & 7122                  &                       & 21047                   & 8599                    & 4811                                         & 582                     & 67                                              & 9                           \\ \cline{1-3} \cline{5-10} 
 \multicolumn{1}{|c|}{\textbf{Active}} & 11118                 & 4452                  &                       & 7241                    & 3895                    & 3596                                         & 467                     & 40                                              & 9                           \\ \cline{1-3} \cline{5-10} 
-\end{tabular}
+\end{tabular} 
 \end{table}
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/history_by} 
 	\caption{Historical data from the CPD. Birthyears for officers in the CPD dataset: blue dots count all officers, while red count only officers who are ``active'' as of January 1st, 2019.} \label{fig:history_by}
 \end{figure}
+
+We use the file \texttt{roster.csv} to obtain basic statistics about officers in the CPD dataset. The data contains informations about officers whose appointment dates back to 1936, all the way to 2018 (see \Cref{fig:history}). An important remark to be made is that the data becomes sparser, and less reliable in earlier years. For example, we report in the right subplot of \Cref{fig:history} the number of active officers (vertical axis) as a function of time (horizontal axis): we notice that this number increases sharply between 1940 and 1980. This should be interpreted as a consequence of the lack of data availability for those early years. We also report summary statistics on gender and the CPD race category in \Cref{tab:stats}, and information about officers' birthyears in \Cref{fig:history_by}.
 
 \paragraph{Complaints.} 
 Todo
