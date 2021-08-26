@@ -63,27 +63,6 @@ We report summary statistics about the number of units an officer is assigned to
 \end{subfigure}
 	\caption{Complaints filed by year (left) and complaints per officer by race and gender (right).} \label{fig:complaints}
 \end{figure}
-
-We report in \Cref{fig:complaints} temporal information about complaints filed against the CPD. Interestingly, fewer complaints get filed during the weekends (although, the number of TRRs is higher then --- see \Cref{fig:trrs_times}). Moreover, complaints tend to be higher in the warmer months. Last, we notice that the number of complaints filed kept reducing over the years --- potentially as a consequence of the perception of ineffectiveness of such complaints.
-
-\paragraph{Tactical Response Reports.}
-
-\begin{table}[]
-\begin{tabular}{c|c|c|c|}
-\cline{2-4}
-                                                    & \textit{Member} & \textit{Offender} & \textit{Other} \\ \hline
-\multicolumn{1}{|c|}{\textit{\textbf{Fired first}}} & 4593            & 171               & 158            \\ \hline
-\end{tabular}
-\end{table}
-
-\begin{figure}[t!] 
-	\includegraphics[width=\textwidth]{figs/trr_stats} 
-	\caption{Additional statistics for TRRs.} \label{fig:trrs_stats1}
-\end{figure}
-
-We also report temporal information about the TRRs in \Cref{fig:trrs_times}. TRRs tend to be filed more frequently at night, in the weekends, and during warmer months. Moreover, 2010, 2011 and 2012 are the years in which the highest number of TRRs have been filed. We also report in \Cref{fig:trrs_stats1} additional information about TRRs: in most cases, neither the officers nor the subjects involved get injured, although civilians get injured at a much higher rate (left subplot), and officers tend to fire first. 
-\paragraph{Salary.} todo
-
 \begin{figure}[t!] 
 \begin{subfigure}{0.43\textwidth}
 \raisebox{.5cm}{
@@ -93,10 +72,29 @@ We also report temporal information about the TRRs in \Cref{fig:trrs_times}. TRR
 \begin{subfigure}{0.53\textwidth}
 \includegraphics[width=\textwidth]{figs/awards} 
 \end{subfigure}
-\caption{Historical data from the CPD. Salary versus experience in each
-position, years x axis, salary (USD) y axis, for a few of the most common
-positions. Lines are means, bars indicate 1 std dev above and below.} \label{fig:salary}
+\caption{Officer salaries as a function of the number of years in a selection of representative positions (left),
+and the number of award requests per officer by race and gender (right).} \label{fig:salary}
 \end{figure}
+
+
+We report in \Cref{fig:complaints} temporal information about complaints filed against the CPD. Interestingly, fewer complaints get filed during the weekends (although, the number of TRRs is higher then --- see \Cref{fig:trrs_times}). Moreover, complaints tend to be higher in the warmer months. Last, we notice that the number of complaints filed kept reducing over the years --- potentially as a consequence of the perception of ineffectiveness of such complaints.
+
+\paragraph{Tactical Response Reports.}
+
+\begin{figure}[t!] 
+	\includegraphics[width=\textwidth]{figs/trr_stats} 
+	\caption{Summary counts of TRRs by race, gender, and injury status.} \label{fig:trrs_stats1}
+\end{figure}
+
+We also report temporal information about the TRRs in \Cref{fig:trrs_times}. TRRs tend to be filed more frequently at night, in the weekends, and during warmer months. Moreover, 2010, 2011 and 2012 are the years in which the highest number of TRRs have been filed. We also report in \Cref{fig:trrs_stats1} additional information about TRRs: in most cases, neither the officers nor the subjects involved get injured, although civilians get injured at a much higher rate (left subplot), and officers tend to fire first. 
+\begin{tabular}{c|c|c|c|}
+\cline{2-4}
+                                                    & \textit{Member} & \textit{Subject} & \textit{Other} \\ \hline
+\multicolumn{1}{|c|}{\textit{\textbf{Fired first}}} & 4593            & 171               & 158            \\ \hline
+\end{tabular}
+
+
+\paragraph{Salary.} todo
 
 \paragraph{Awards.}
 
