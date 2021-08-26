@@ -10,6 +10,7 @@ data processing code.
 
 
 \subsection{The raw data: origin, description, and challenges}
+\label{sec:raw}
 
 \paragraph{Origin.}
 The first raw data files in this repository were obtained by J.~Kalven, an 
@@ -214,14 +215,80 @@ processing pipeline.
 
 \subsection{Linking and Merging Datasets}\label{sec:linking}
 
-As already alluded to, the main challenge at this step is that there is no
-identifier uniquely identifying officers across records. In other words, there
-is no foolproof way to know if two different records correspond to the same
-officer, \emph{even within the same dataset} (for example the same officer
-could appear with slightly different attributes on two different complaint
-records).
+All the data processing described in this section and the next can be performed
+by running \texttt{make} in the root of the repository. This will output the
+final version of our dataset as a collection of CSV files in the
+\texttt{final/} folder.
 
-We thus need to design a matching method striking a balance between
+\paragraph{Overall description.}
+As discussed in \cref{sec:raw}, the main challenge in processing the raw data
+is that officers are not uniquely identified across datasets. In other words,
+there is no foolproof way to know if two different records from two different
+datasets correspond to the same individual. For example, a naive matching
+procedure identifying two officers as being the same individual whenever they
+have the same name is inadequate: given the size of the CPD roster (42\,805
+active or retired officers), it is guaranteed to contain many homonymous
+individuals. Furthermore, even though, the original datasets contain several
+identifying attributes, such as name, year of birth, appointment date, race and
+gender, those can change over item as mentioned in \cref{sec:raw}.
+
+At a high level, our procedure \emph{grows} a population of uniquely identified
+officers by sequentially examining each FOIA release. Each unique officer in
+this population is assigned a UID, which is a random hexadecimal string (e.g.\
+\texttt{9bc51eef-c37b-4eff-a14d-7e69f56b3d1e}), and to each UID is associated
+a list of \emph{officer profiles}. There is one \emph{officer profile} for each
+unique officer and each FOIA release in which this officer appeared, listing
+the identifying attributes of this officer as they appear in this given data
+release (recall that the attributes of a given officer can change over time).
+
+In detail, for each FOIA release:
+\begin{enumerate}
+	\item we build a list of all the \emph{officer profiles} appearing in this
+		release.
+	\item for each officer profile, we attempt to \emph{match} it against the
+		profiles of the population of unique officers constructed so far (from
+		previously examined FOIA release).
+		\begin{itemize}
+			\item if the match is successful, we identified a unique officer in
+				the population whose profiles unambiguously match with the
+				current profile. In this case, we simply attach the current
+				profile to this officer (who was already assigned a UID), and
+				the population does not grow.
+			\item if the match is unsuccessful, we add a new officer (to which
+				we assign a freshly generated UID) to the population of unique
+				officers and attach the current profile to this new officer.
+				The newly added officer will thus be associated with a single
+				profile add the time it enters the population.
+		\end{itemize}
+\end{enumerate}
+
+After all FOIA releases have been processed, the population contains the set of
+all unique officers appearing in the original data. Each officer is represented
+by UID and a collection of profiles, representing the various ways in which
+this unique officer appears across different datasets. These profiles can be
+found in the file \texttt{final/officer\_profiles.csv}.
+
+Furthermore, after processing each FOIA release, since each profile appearing
+in this release has now been assigned a UID, we can safely remove all
+identifying attributes in the final output and replace them by the UIDs
+attached to the corresponding profiles. This is to avoid duplication of
+information since these attributes are redundant with the ones found in
+\texttt{final/officer\_profiles.csv}.
+
+Thus, at the end of this procedure, the \texttt{final/} folder contains:  (1)
+one file for each type of record (complaints, tactical response reports, etc.)
+in which officers are identified solely by UID, and (2) the file
+\texttt{officer\_profiles.csv} containing the list of profiles associated with
+each UID, to which the other files can be linked.
+
+\paragraph{Iterative pairwise matching.}
+It remains to describe the \emph{match} operation which was left unspecified in
+step 2.\ of the procedure described in the previous paragraph.
+
+
+Our matching
+procedure to link officers across datasets thus needs to strike a balance
+between:
 \begin{itemize}
 	\item being loose enough to avoid type II error (false negatives). If the
 		same officer appears with slightly different attributes across two
@@ -230,15 +297,6 @@ We thus need to design a matching method striking a balance between
 	\item being strict enough to avoid type I error (false positives). We do
 		not want to merge two different officers into a single identity.
 \end{itemize}
-
-The difficulty in achieving this balance is that perhaps surprisingly
-\emph{none of the attributes of a given police officer are guaranteed to be
-stable over time}. Most notably, officers' names change over time, for example
-to fix data entry errors or in case of legal name changes. However, we observed
-two attributes, present in almost all original datasets and which seem
-remarkably stable over the time: \emph{appointment date} and \emph{birthyear}.
-These two attributes thus proved very valuable to disambiguate officers with
-identical names.
 
 In order to match officers across two datasets, we developed an \emph{iterative
 pairwise matching procedure} that makes iterative passes over the datasets.
