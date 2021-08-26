@@ -44,8 +44,18 @@ Note that ``race'' and ``gender'' are per the CPD's coarse categorizations.} \la
 
 We use the file \texttt{roster.csv} to obtain basic statistics about officers in the CPD dataset. The data contains informations about officers whose appointment dates back to 1936, all the way to 2018 (see \Cref{fig:history}). An important remark to be made is that the data becomes sparser, and less reliable in earlier years. For example, we report in the right subplot of \Cref{fig:history} the number of active officers (vertical axis) as a function of time (horizontal axis): we notice that this number increases sharply between 1940 and 1980. This should be interpreted as a consequence of the lack of data availability for those early years. We also report summary statistics on gender and the CPD race category in \Cref{tab:stats}, and information about officers' birthyears in \Cref{fig:history_by}.
 
+\paragraph{Units.} 
+\begin{figure}[h] 
+	\includegraphics[width=\textwidth]{figs/units_officers} 
+	\caption{Units assignments. Left: number of units assignments for officers in the CPD over the course of their career. Right: histogram for the number of years spent in each unit for ``completed'' units assignments only --- that is, assignments that had terminated at the time of data-collection.} \label{fig:units}
+\end{figure}
+We report summary statistics about the number of units an officer is assigned to, and the duration of such appointments in \Cref{fig:units}. The modal number of units appointments is 2: officers typically first joins the acadamy (unit 44), for one or two years, before moving on to a different, often terminal, unit. 
+ 
 \paragraph{Complaints.} 
-Todo
+\begin{figure}[h] 
+	\includegraphics[width=\textwidth]{figs/complaints_times} 
+	\caption{Temporal data for complaints.} \label{fig:complaints}
+\end{figure}
 
 \paragraph{Tactical Response Reports.}
 The file \texttt{tactical\_response\_reports.csv} contains information about
@@ -68,12 +78,6 @@ about the officers involved, as well as the civilian subject are available too.
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/trr_stats_race_race} 
 	\caption{Temporal data for TRRs.} \label{fig:trrs_stats2}
-\end{figure}
-
-
-\begin{figure}[h] 
-	\includegraphics[width=\textwidth]{figs/complaints_times} 
-	\caption{Temporal data for complaints.} \label{fig:complaints}
 \end{figure}
 
 
