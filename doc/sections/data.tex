@@ -281,6 +281,16 @@ in which officers are identified solely by UID, and (2) the file
 \texttt{officer\_profiles.csv} containing the list of profiles associated with
 each UID, to which the other files can be linked.
 
+Finally, note that the order in which the FOIA releases are processed matters
+since each release will be matched against the collection of profiles from all
+previously considered releases. We chose to first process the two roster datasets
+(\texttt{P0-58155} and \texttt{P4-41436}) since they are most similar and
+supposed to contain one record for each officer in the CPD. Next, we process
+the two unit assignments datasets (\texttt{16-1105} and \texttt{P0-52262})
+since they are also supposed to cover the entire CPD. Next we process the
+complaints, tactical response reports, awards and salary datasets in this
+order.
+
 \paragraph{Iterative pairwise matching.}
 It remains to describe the \emph{match} operation which was left unspecified in
 step 2.\ of the procedure described in the previous paragraph. This operation
@@ -297,11 +307,13 @@ FOIA releases and associated with UIDs). We need to strike a balance between:
 		if it in fact corresponds to a new officer.
 \end{itemize}
 
-We developed an \emph{iterative pairwise matching procedure} that makes
-iterative passes over the list $L_1$ of profiles to be matched against the list
-$L_2$ of already existing profiles. Recall that in our case, the profiles in
-$L_2$ are associated with officers in the growing population of unique
-officers, and hence they are each associated with a UID. During each pass:
+We developed an \emph{iterative pairwise matching procedure}\footnote{This
+procedure was inspired by a similar one developed by the Invisible Institute.},
+that makes iterative passes over the list $L_1$ of profiles to be matched
+against the list $L_2$ of already existing profiles. Recall that in our case,
+the profiles in $L_2$ are associated with officers in the growing population of
+unique officers, and hence they are each associated with a UID. During each
+pass:
 \begin{enumerate}
 	\item a subset $S$ of the profile attributes is selected as the matching
 		criterion.
@@ -318,67 +330,57 @@ officers, and hence they are each associated with a UID. During each pass:
 		\end{enumerate}
 \end{enumerate}
 Observe that both $L_1$ and $L_2$ decrease in size as matches are found, so
-each pass operates over a smaller set of profiles than the previous one. When
-all the passes are done, the remaining profiles in $L_1$ are considered new
+each pass iterates over a smaller set of profiles than the previous one. When
+all passes are done, the remaining profiles in $L_1$ are considered new
 unique officers and assigned freshly generated UIDs. Furthermore, by
-constructing at each pass a hash table mapping a subset of attributes to the
+building at each pass a hash table mapping a subset of attributes to the
 list of profiles in $L_2$ sharing these attributes, the construction of
-$\ell_p$ in 2.(a) can be performed in constant time. Thus the overall running time of the
+$\ell_p$ in 2.(a) can be performed in constant time. The overall running time of the
   iterative matching procedure is $O\big(P(|L_1|+|L_2|)\big)$ where $P$ is the
   number of passes.
 
-To fully specify the matching procedure we thus need to specify which subset of
-attributes is chosen as the matching criterion at each pass. For this, we go
-from the stricter to the looser criterion: for the first pass, we choose
-a subset \emph{all} the attributes which are present in two datasets, and then
-start removing attributes one by one. For example, one can remove the
-\emph{last name} attribute for the second pass to match a pair of officers
-whose last names are different but match on all the remaining attributes, thus
-identifying an officer whose last name changed between the releases of the two
-datasets. The advantage of going from stricter to looser is two fold:
+Finally, to fully specify the matching procedure we need to describe how to
+choose which subset $S$ of identifying attributes is chosen as the matching
+criterion at step 1.\ during each pass. For this, we go from the stricter to
+the looser criterion: in the first pass, $S$ contains \emph{all} the attributes
+which are present in both $L_1$ and $L_2$, and then attributes are removed from
+$S$ one by one in subsequent passes. For example, one can remove the \emph{last
+name} attribute in the second pass to match a pair of profiles whose last names
+are different but match on all the remaining attributes, thus identifying an
+officer whose last name changed between two FOAI releases. The advantage of
+going from stricter to looser is twofold:
 \begin{itemize}
-	\item starting from the strictest set of attributes identifies the
-		\emph{unambiguously matching pairs}, that is, the ones which are
-		a clear match and which, thankfully, constitute the vast majority of
-		officers (typically around 80-90\% of officers are matched during the
-		first pass \textbf{TODO check}). Since the next passes will only be
-		performed on the remaining unmatched officers, this removes a lot of
-		potential ambiguities which could occur once the set of attributes is
-		reduced.
-	\item since the vast majority of officers is matched during the first pass,
-		it becomes feasible during the subsequent passes to visually inspect all
-		the matched pairs and assess whether the chosen set of attributes was
-		too strict or too lose (\textbf{TODO:} explain how to activate
-		debugging information in the code).
+	\item starting from the strictest set of attributes identifies le
+		\emph{least ambiguous matches}, for which profiles match exactly on
+		a large set of attributes and can confidently be considered to describe
+		the same individual. This constitutes the vast majority of cases as
+		more than 95\% of profiles are usually matched during the first pass.
+		Since the next passes iterate only on the remaining profiles, this
+		removes a lot of potential ambiguities which could arise as the
+		matching criterion is relaxed.
+	\item since the vast majority of profiles is matched in the first pass,
+		it becomes feasible in subsequent passes to visually inspect all
+		the matched profiles and assess whether the chosen set of attributes was
+		too strict or too lose.
 \end{itemize}
 
-We note that there is still some amount of subjective judgment involved,
-following a visual inspection of the second and subsequent passes, to decide
-which sets attributes are ``acceptable'' (that is, for which the probability of
-two persons sharing these attributes in a population of the size of the CPD is
-extremely small). This is also how we decide that sufficiently many passes have
-been performed: when it would seem likely to introduce a type I error by
-matching any of the remaining officers. As a general rule of thumb we erred on
-the side of favoring type II errors over type I errors. That is, we only
-matched officers when it would seem extremely unlikely that they correspond to
-two different individuals).
+We note that there is some amount of subjective judgment involved, following
+a visual inspection in the second and subsequent passes, to decide which sets
+attributes are acceptable (that is, for which the probability of two persons
+sharing these attributes in a population of the size of the CPD is extremely
+small). This is also how we decide that sufficiently many passes have been
+performed and that further relaxing the matching criterion would introduce too
+many type I errors. In general, we erred on the side of favoring
+type II errors over type I errors when uncertain.
 
-\textbf{TODO:} table of officer attributes in each dataset
+%\textbf{TODO:} explain the few subtleties where we don't use equality to match
+%attributes (for example when matching age and birthyear, where the age only
+%lets us identify the birthyear with an accuracy of 1 year). Or with stars,
+%where we test whether a star number is contained in the subset of known stars
+%for this officer.
 
-\textbf{TODO:} explain the few subtleties where we don't use equality to match
-attributes (for example when matching age and birthyear, where the age only
-lets us identify the birthyear with an accuracy of 1 year). Or with stars,
-where we test whether a star number is contained in the subset of known stars
-for this officer.
+%\textbf{TODO:} table of officer attributes in each dataset
 
-With this procedure at hand we can thus link officers across datasets starting
-from the most similar datasets first (for which we expect to have the least
-amount of ambiguity). That is we first link \texttt{P0-58155} to
-\texttt{P4-41436}, then \texttt{P0-52262} to \texttt{16-1105} and then the
-remaining datasets \textbf{expand}
-
-\textbf{TODO} give in appendix table summarizing which subset of attributes are
-used at each linking operation 
 
 \subsection{Final cleaning and output}
 
