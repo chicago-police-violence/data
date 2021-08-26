@@ -49,6 +49,8 @@ We use the file \texttt{roster.csv} to obtain basic statistics about officers in
 	\includegraphics[width=\textwidth]{figs/units_officers} 
 	\caption{Units assignments. Left: number of units assignments for officers in the CPD over the course of their career. Right: histogram for the number of years spent in each unit for ``completed'' units assignments only --- that is, assignments that had terminated at the time of data-collection.} \label{fig:units}
 \end{figure}
+
+
 We report summary statistics about the number of units an officer is assigned to, and the duration of such appointments in \Cref{fig:units}. The modal number of units appointments is 2: officers typically first joins the acadamy (unit 44), for one or two years, before moving on to a different, often terminal, unit. 
  
 \paragraph{Complaints.} 
@@ -56,23 +58,18 @@ We report summary statistics about the number of units an officer is assigned to
 	\includegraphics[width=\textwidth]{figs/complaints_times} 
 	\caption{Temporal data for complaints.} \label{fig:complaints}
 \end{figure}
+We report in \Cref{fig:complaints} temporal information about complaints filed against the CPD. Interestingly, fewer complaints get filed during the weekends (although, the number of TRRs is higher then --- see \Cref{fig:trrs_times}). Moreover, complaints tend to be higher in the warmer months. Last, we notice that the number of complaints filed kept reducing over the years --- potentially as a consequence of the perception of ineffectiveness of such complaints.
 
 \paragraph{Tactical Response Reports.}
-The file \texttt{tactical\_response\_reports.csv} contains information about
-tactical response reports, filed as a consequence of  events involving use of
-force of CPD officers. This dataset contains $9{,}246$ distinct events, as
-identified by the index ``\texttt{event\_no}'', between January 17th 2004 and
-April 12th 2016. For each event, the time and location is recorded. Details
-about the officers involved, as well as the civilian subject are available too. 
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/trrs_times} 
-	\caption{Temporal data for TRRs.} \label{fig:trrs_times}
+	\caption{Temporal data for TRRs. Left: time during the day; mid-left: time during the week; mid-right: month; right: year.} \label{fig:trrs_times}
 \end{figure}
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/trr_stats} 
-	\caption{Temporal data for TRRs.} \label{fig:trrs_stats1}
+	\caption{Additional statistics for TRRs.} \label{fig:trrs_stats1}
 \end{figure}
 
 \begin{figure}[h] 
@@ -80,7 +77,7 @@ about the officers involved, as well as the civilian subject are available too.
 	\caption{Temporal data for TRRs.} \label{fig:trrs_stats2}
 \end{figure}
 
-
+We also report temporal information about the TRRs in \Cref{fig:trrs_times}. TRRs tend to be filed more frequently at night, in the weekends, and during warmer months. Moreover, 2010, 2011 and 2012 are the years in which the highest number of TRRs have been filed. We also report in \Cref{fig:trrs_stats1} additional information about TRRs: in most cases, neither the officers nor the subjects involved get injured, although civilians get injured at a much higher rate (left subplot), and officers tend to fire first. 
 \paragraph{Salary.} todo
 
 \begin{figure}[h] 
