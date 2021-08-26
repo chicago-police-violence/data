@@ -297,21 +297,35 @@ FOIA releases and associated with UIDs). We need to strike a balance between:
 		if it in fact corresponds to a new officer.
 \end{itemize}
 
-
-In order to match officers across two datasets, we developed an \emph{iterative
-pairwise matching procedure} that makes iterative passes over the datasets.
-During each pass, a subset of the officer attributes present in both datasets
-is selected as the matching criterion, and a pair of officers (one from each
-dataset) is identified as a \emph{match} if (i) their attributes from the
-chosen subset match, and (ii) if they are the only two officers matching on
-these attributes. Once a pair is identified as a match, it is put aside, and
-the next pass is performed on the remaining unmatched officers. After all the
-passes are done the leftover officers are declared as different officers. By
-constructing a hash table mapping a subset of attributes to the list of
-officers sharing these attributes, each pass can be performed in linear time,
-so the overall running time of the procedure is $O\big(P(N_1+N_2)\big)$ where
-$P$ is the number of passes and $N_1, N_2$ are the number of officers in each
-dataset.
+We developed an \emph{iterative pairwise matching procedure} that makes
+iterative passes over the list $L_1$ of profiles to be matched against the list
+$L_2$ of already existing profiles. Recall that in our case, the profiles in
+$L_2$ are associated with officers in the growing population of unique
+officers, and hence they are each associated with a UID. During each pass:
+\begin{enumerate}
+	\item a subset $S$ of the profile attributes is selected as the matching
+		criterion.
+	\item for each profile $p$ in $L_1$:
+		\begin{enumerate}
+			\item construct the list $\ell_p$ of profiles in $L_2$ for which
+				the attributes in $S$ match with $p$ exactly.
+			\item if all the profiles in $\ell_p$ are associated with the same
+				UID $u$, this is an unambiguous match and we can safely assign
+				the UID $u$ to the profile $p$. We remove $p$ from $L_1$ and
+				all the profiles associated with $u$ in $L_2$.
+			\item otherwise, the match is ambiguous and we keep $p$ in
+				$L_1$.
+		\end{enumerate}
+\end{enumerate}
+Observe that both $L_1$ and $L_2$ decrease in size as matches are found, so
+each pass operates over a smaller set of profiles than the previous one. When
+all the passes are done, the remaining profiles in $L_1$ are considered new
+unique officers and assigned freshly generated UIDs. Furthermore, by
+constructing at each pass a hash table mapping a subset of attributes to the
+list of profiles in $L_2$ sharing these attributes, the construction of
+$\ell_p$ in 2.(a) can be performed in constant time. Thus the overall running time of the
+  iterative matching procedure is $O\big(P(|L_1|+|L_2|)\big)$ where $P$ is the
+  number of passes.
 
 To fully specify the matching procedure we thus need to specify which subset of
 attributes is chosen as the matching criterion at each pass. For this, we go
