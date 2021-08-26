@@ -203,28 +203,47 @@ f4.key = ["first_name", "middle_initial", "appointment_date"]
 if __name__ == "__main__":
     from sys import argv
 
-    profiles = csv_read(argv[-2])
+    # Note: we will only link for UIDs that exist at this point. Salary data
+    # will not create new UIDs / profiles because the officer demographic info
+    # here is less reliable and will require more careful cleaning/flattening/linking.
+    # In a future version, we will allow salary records to add new UIDs to the pool.
+
+    # get erroneous UIDs identified in earlier stages
+    with open(argv[-2], 'r') as erf:
+        erroneous_uids = [e.strip() for e in erf.readlines()]
+
+    # create profile matcher and link to p061715 (remove erroneous UIDs to avoid matching confusion)
+    profiles = list(csv_read(argv[-3]))
+
+    # realize the iterator and split into good/erroneous
+    original_uids = [prof['uid'] for prof in profiles]
+    good_profiles = [prof for prof in profiles if prof['uid'] not in erroneous_uids]
+    err_profiles = [prof for prof in profiles if prof['uid'] in erroneous_uids]
     
     basename, _ = os.path.splitext(os.path.basename(argv[2]))
     salary_records = multi_csv_read(argv[2:5])
     salary_flat = flatten_salary(salary_records, datasets[basename]["id_fields"])
 
-    m = Matcher(profiles)
+    print('Matching salary')
+    m = Matcher(good_profiles)
     linked, unlinked = m.match(salary_flat, [f1, f2, f3, f4])
 
     profiles = sorted(
-            m.unify(linked, unlinked, matchee_source='salary'),
+            list(m.unify(linked, unlinked, matchee_source='salary')) + err_profiles,
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
         )
     pfields = datasets["P0-58155"]["fields"]
     pfields += [f for f in datasets["P4-41436"]["fields"] if f not in pfields]
     pfields += ["source", "uid"]
 
-    with open(argv[-2], "w") as fp:
+    with open(argv[-3], "w") as fp:
         writer = DictWriter(fp, fieldnames=pfields, extrasaction="ignore")
         writer.writeheader()
         for officer in profiles:
-            writer.writerow(officer)
+            # TODO this line prevents salary records from creating new profile entries
+            # TODO once we allow salary records to generate new UIDs/profile entries, remove this if statement
+            if 'salary_history' not in officer:
+                writer.writerow(officer)
 
     with open(argv[1], "w") as sf:
         fields = ["uid","year","salary","position_description","pay_grade","present_posn_start_date","officer_date", "employee_status"]
@@ -232,7 +251,9 @@ if __name__ == "__main__":
         sw = DictWriter(sf, fieldnames=fields, extrasaction="ignore")
         sw.writeheader()
         for profile in profiles:
-            if 'salary_history' in profile:
+            # TODO the second part of this if statement prevents salary records from storing info about new UIDs (restricted to original UIDs)
+            # TODO once we allow salary records to generate new UIDs/profile entries, remove the second clause in this if statement
+            if 'salary_history' in profile and profile['uid'] in original_uids:
                 sorted_years = sorted([year for year in profile["salary_history"]])
                 for year in sorted_years:
                     for record in profile["salary_history"][year]:

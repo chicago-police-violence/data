@@ -96,7 +96,7 @@ ${LINKED}/erroneous_officers.csv: ${SRC}/find_erroneous.py | ${LINKED}/officer_p
 ${LINKED}/awards.csv: ${PARSED}/P0-61715.csv ${PARSED}/P5-06887.csv ${SRC}/merge_awards.py | ${LINKED}/erroneous_officers.csv ${LINKED}/officer_profiles.csv 
 	${PYTHON} ${SRC}/merge_awards.py $@ $^ $|
 
-${LINKED}/salary.csv: ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py | ${LINKED}/awards.csv ${LINKED}/officer_profiles.csv 
+${LINKED}/salary.csv: ${PARSED}/salary-01.csv ${PARSED}/salary-02.csv ${PARSED}/salary-03.csv ${SRC}/merge_salary.py | ${LINKED}/awards.csv ${LINKED}/officer_profiles.csv  ${LINKED}/erroneous_officers.csv
 	${PYTHON} ${SRC}/merge_salary.py $@ $^ $|
 
 ${LINKED}/roster.csv: ${LINKED}/officer_profiles.csv ${SRC}/generate_roster.py | ${LINKED}/salary.csv

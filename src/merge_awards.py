@@ -158,6 +158,11 @@ def flatten_awards(records, id_attributes):
 if __name__ == "__main__":
     from sys import argv
 
+    # Note: we will only link for UIDs that exist at this point. Awards data
+    # will not create new UIDs / profiles because the officer demographic info
+    # here is less reliable and will require more careful cleaning/flattening/linking.
+    # In a future version, we will allow  awards records to add new UIDs to the pool.
+
     # get flattened versions of both awards files
     p061715 = csv_read(argv[2])
     s1, _ = os.path.splitext(os.path.basename(argv[2]))
@@ -167,10 +172,18 @@ if __name__ == "__main__":
     s2, _ = os.path.splitext(os.path.basename(argv[3]))
     p506887_flat = flatten_awards(p506887, datasets[s2]['id_fields'])
 
+    # get erroneous UIDs identified in earlier stages
+    with open(argv[-3], 'r') as erf:
+        erroneous_uids = [e.strip() for e in erf.readlines()]
+
     print('Matching p061715')
-    # create profile matcher and link to p061715
-    profiles = csv_read(argv[-2])
-    m = Matcher(profiles)
+    # create profile matcher and link to p061715 (remove erroneous UIDs to avoid matching confusion)
+    profiles = list(csv_read(argv[-2]))
+    # realize the iterator and split into good/erroneous
+    original_uids = [prof['uid'] for prof in profiles]
+    good_profiles = [prof for prof in profiles if prof['uid'] not in erroneous_uids]
+    err_profiles = [prof for prof in profiles if prof['uid'] in erroneous_uids]
+    m = Matcher(good_profiles)
     linked, unlinked = m.match(p061715_flat, [f1, f2, f3, f4, f5, f6, f7, f8])
     profiles = sorted(
             m.unify(linked, unlinked, matchee_source=s1),
@@ -183,7 +196,7 @@ if __name__ == "__main__":
     m = Matcher(profiles)
     linked, unlinked = m.match(p506887_flat, [f1, f2, f3, f4, f5, f6, f7, f8])
     profiles = sorted(
-            m.unify(linked, unlinked, matchee_source=s2),
+            list(m.unify(linked, unlinked, matchee_source=s2)) + err_profiles,
             key=lambda l: (l["last_name"], l["first_name"], str(l["uid"])),
         )
 
@@ -195,7 +208,10 @@ if __name__ == "__main__":
         writer = DictWriter(fp, fieldnames=pfields, extrasaction="ignore")
         writer.writeheader()
         for officer in profiles:
-            writer.writerow(officer)
+            # TODO this line prevents awards from creating new profile entries
+            # TODO once we allow awards to generate new UIDs/profile entries, remove this if statement
+            if 'awards' not in officer:
+                writer.writerow(officer)
 
     with open(argv[1], "w") as af:
         fields = ["uid", "star", "position_no", "position_description", "award_request_date",  "award_ref_number", "award_type", "requester_last_name", "requester_first_name", "requester_middle_initial", "tracking_no", "current_status", "incident_start_date", "incident_end_date", "incident_description", "ceremony_date"]
@@ -203,7 +219,9 @@ if __name__ == "__main__":
         aw = DictWriter(af, fieldnames=fields, extrasaction="ignore")
         aw.writeheader()
         for profile in profiles:
-            if 'awards' in profile:
+            # TODO the second part of this if statement prevents awards from storing info about new UIDs (restricted to original UIDs)
+            # TODO once we allow awards to generate new UIDs/profile entries, remove the second clause in this if statement
+            if 'awards' in profile and profile['uid'] in original_uids:
                 awards = sorted(profile['awards'], key = lambda ll : ll['award_request_date'])
                 for award in awards:
                     # since we have two awards files with not identical field names, insert explicit missing entries where necessary
