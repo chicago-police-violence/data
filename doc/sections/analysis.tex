@@ -1,29 +1,37 @@
 % !TEX root = ../main.tex
 
-\section{Examples and data analysis} \label{sec:analysis}
+\section{Exploratory Analysis and Examples} \label{sec:analysis}
 
 In this section, we provide examples and use-cases on the dataset. Code to reproduce our examples is available online, in the \texttt{examples} folder.
 
-\subsection{Summary statistics}
+\subsection{Visualizations}
 
-First, we start by providing some summary statistics. 
-
-\subsubsection{The roster file}
-The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD officers. For each officer --- identified by a Unique Identifier (``uid''), \texttt{roster.csv} provides, among other covariates, the officer's name, gender, race, birthyear, appointment and resignation dates. It is straightforward  to use the data to generate summary statistics, e.g., using appointment and resignation dates to understand the number of appointments, retirements as well as active officers over the years of  (\Cref{fig:history}). We report in \Cref{tab:stats} some 
-\begin{figure}[h] 
-	\includegraphics[width=\textwidth]{figs/history} 
-	\caption{Historical data from the CPD. The left subplot shows the number of officers' appointments, the central subplot the number of officers' resignations, while the right subplot shows the number of active officers in the database (vertical axis) as a function of time (horizontal axis).} \label{fig:history}
+\paragraph{Roster.}
+The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD
+officers. For each officer --- identified by a Unique Identifier (``uid''),
+\texttt{roster.csv} provides, among other covariates, the officer's name,
+gender, race, birthyear, appointment and resignation dates. It is
+straightforward  to use the data to generate summary statistics, e.g., using
+appointment and resignation dates to understand the number of appointments,
+retirements as well as active officers over the years of  (\Cref{fig:history}).
+We report in \Cref{tab:stats} some 
+\begin{figure}[t!] 
+\includegraphics[width=\textwidth]{figs/history} 
+\caption{Appointments (left), resignations (center), and the number of active
+officers (right) appearing in the CPD roster database from the years 1940 to 2019.}
+\label{fig:history}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[t!]
+\caption{Counts of officers (first row) and active officers (resignation date not before 2019-01-01, second row). 
+Note that ``race'' and ``gender'' are per the CPD's coarse categorizations.} \label{tab:stats}
 \begin{tabular}{l|c|c|c|c|c|c|c|c|c|}
 \cline{2-3} \cline{5-10}
-                                               & \multicolumn{2}{c|}{\textit{\textbf{Gender}}} & \multicolumn{1}{l|}{} & \multicolumn{6}{c|}{\textit{\textbf{CPD Race Category}}}                                                                                                                                                   \\ \cline{2-3} \cline{5-10} 
-                                               & \textit{\textbf{M}}   & \textit{\textbf{F}}   &                       & \textit{\textbf{White}} & \textit{\textbf{Black}} & \multicolumn{1}{l|}{\textit{\textbf{Hisp.}}} & \textit{\textbf{Asian}} & \multicolumn{1}{l|}{\textit{\textbf{Am. Ind.}}} & \textit{\textbf{Bl. Hisp.}} \\ \cline{1-3} \cline{5-10} 
-\multicolumn{1}{|c|}{\textit{\textbf{All}}}    & 28316                 & 7122                  &                       & 21047                   & 8599                    & 4811                                         & 582                     & 67                                              & 9                           \\ \cline{1-3} \cline{5-10} 
-\multicolumn{1}{|c|}{\textit{\textbf{Active}}} & 11118                 & 4452                  &                       & 7241                    & 3895                    & 3596                                         & 467                     & 40                                              & 9                           \\ \cline{1-3} \cline{5-10} 
+                                               & \multicolumn{2}{c|}{\textbf{Gender}} & \multicolumn{1}{l|}{} & \multicolumn{6}{c|}{\textbf{Race}}                                                                                                                                                   \\ \cline{2-3} \cline{5-10} 
+                                               & {\textbf{M}}   & {\textbf{F}}   &                       & {\textbf{White}} & {\textbf{Black}} & \multicolumn{1}{l|}{{\textbf{Hisp.}}} & {\textbf{Asian}} & \multicolumn{1}{l|}{{\textbf{Am. Ind.}}} & {\textbf{Bl. Hisp.}} \\ \cline{1-3} \cline{5-10} 
+\multicolumn{1}{|c|}{\textbf{All}}    & 28316                 & 7122                  &                       & 21047                   & 8599                    & 4811                                         & 582                     & 67                                              & 9                           \\ \cline{1-3} \cline{5-10} 
+\multicolumn{1}{|c|}{\textbf{Active}} & 11118                 & 4452                  &                       & 7241                    & 3895                    & 3596                                         & 467                     & 40                                              & 9                           \\ \cline{1-3} \cline{5-10} 
 \end{tabular}
-\caption{Summary statistics (gender, race) for all officer (first row), as well as for active officers --- those whose resignation date is not before Jan 1st 2019.} \label{tab:stats}
 \end{table}
 
 \begin{figure}[h] 
@@ -31,9 +39,15 @@ The file \texttt{roster.csv} contains information about $N=35{,}430$ CPD officer
 	\caption{Historical data from the CPD. Birthyears for officers in the CPD dataset: blue dots count all officers, while red count only officers who are ``active'' as of January 1st, 2019.} \label{fig:history_by}
 \end{figure}
 
-\subsection{Tactical response reports}
+\paragraph{Complaints} todo
 
-The file \texttt{tactical\_response\_reports.csv} contains information about tactical response reports, filed as a consequence of  events involving use of force of CPD officers. This dataset contains $9{,}246$ distinct events, as identified by the index ``\texttt{event\_no}'', between January 17th 2004 and April 12th 2016. For each event, the time and location is recorded. Details about the officers involved, as well as the civilian subject are available too. 
+\paragraph{Tactical Response Reports.}
+The file \texttt{tactical\_response\_reports.csv} contains information about
+tactical response reports, filed as a consequence of  events involving use of
+force of CPD officers. This dataset contains $9{,}246$ distinct events, as
+identified by the index ``\texttt{event\_no}'', between January 17th 2004 and
+April 12th 2016. For each event, the time and location is recorded. Details
+about the officers involved, as well as the civilian subject are available too. 
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/trrs_times} 
@@ -50,13 +64,15 @@ The file \texttt{tactical\_response\_reports.csv} contains information about tac
 	\caption{Temporal data for TRRs.} \label{fig:trrs_stats2}
 \end{figure}
 
-\subsection{Complaints}
+\paragraph{Complaints.} todo
 
 \begin{figure}[h] 
 	\includegraphics[width=\textwidth]{figs/complaints_times} 
 	\caption{Temporal data for complaints.} \label{fig:complaints}
 \end{figure}
-\subsection{Salary}
+
+
+\paragraph{Salary.} todo
 
 \begin{figure}[h] 
 \includegraphics[width=\textwidth]{figs/salary} 
@@ -77,7 +93,7 @@ per race category.} \label{fig:salary}
 per gender category.} \label{fig:salary}
 \end{figure}
 
-\subsection{Awards}
+\paragraph{Awards.}
 
 \begin{figure}[h] 
 \includegraphics[width=\textwidth]{figs/awards} 
