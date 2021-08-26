@@ -3,6 +3,99 @@
 
 \section{Discussion} \label{sec:discussion}
 
+\subsection{Intended Uses}
+
+Uses for this dataset are varied and rich. Researchers could undertake a number
+of machine-learning and predictive analyses to predict the likelihood of
+officer misconduct from data. For example, this data and other linked data
+could be used to assess an officer ‘s likelihood of misconduct on the basis of
+her demographic traits and experience, her assigned unit history, her award and
+promotion history and more. As noted earlier, scholars have already used a
+version of our underlying data for simple regressions designed to investigate
+the correlation between complaints against officers, their likelihood of being
+sued, and their likelihood of leaving the force \cite{Rozema19}. 
+
+With the ability to link many varied sources of data, researchers could use
+supervised learning analysis to refine the ability to predict officer
+misconduct. Scholars have already begun to use machine learning to predict
+police shootings using confidential internal data from an individual police
+department \cite{Helsby18}.
+
+This dataset can also be used by researchers who study social networks and
+policing. Complaint data can be used to reconstruct the police officer social
+and professional networks, by drawing connections between officers who are
+listed together on a complaint. These networks are of interest in and of
+themselves, but can also be used to investigate the dynamic patterns of officer
+wrongdoing along such police networks \cite{Roithmayr16}. Existing research has used the complaint
+data to identify such patterns and to investigate whether pairs of officers
+connected on a network are more likely to have been accused of misconduct \cite{Ouellet19}.
+
+Finally, this dataset could be used to track the effects of new disciplinary
+practices, new training techniques, and new oversight on complaints and use of
+force. A working paper explores, for example, whether civilians filed fewer
+complaints about officers’ force in the wake of the Department of Justice
+investigation of the Chicago Police Department \cite{Travers20}. 
+
+\subsection{Ethical Considerations}
+
+Recent work on algorithmic fairness focuses on the potential for racially
+biased data to produce racially biased results \cite{veale2018fairness,sloane2019ai,d2020fairness}. 
+This research suggests that race shapes data collection in criminal justice, in at least two ways that are
+likely to affect data collection on black officers. First, beginning back in
+the 1960s, black officers are more likely to be assigned to black neighborhoods
+and/or to neighborhoods where police interaction is more pervasive \cite{Kuykendall80}. Given an
+increased frequency of interaction, officers assigned to these neighborhoods
+may be statistically more likely to be the subject of complaints \cite{Kane06}. 
+
+Second, owing to cognitive bias, complainants may be more likely to file a
+complaint against black officers, either alone or in pairs. This racial
+asymmetry in the collection of complaint data may well produce, for example,
+racially biased predictions of police misconduct. Relatedly, because our
+dataset may be used to explore predictive policing of the police, black
+officers may be unfairly and disproportionately identified to be at higher risk
+of misconduct \cite{veale2018fairness,sloane2019ai,d2020fairness,Wood19}. 
+
+\subsection{Limitations and Future Work}
+
+Using civilian and administrator complaint data to study actual police
+misconduct (and not perceived misconduct) inevitably faces significant
+questions about validity. At least one study has found that because of flaws in
+police record keeping and categorization, the practice of using complaints to
+measure police behavior suffers from “serious measurement flaws, and does not
+provide a valid and reliable basis for research purposes…” \cite{Hickman16} Even so, other
+research finds a strong correlation between civilian-filed complaints against
+officers and internal complaints against the same officers filed by other
+officers or supervisors \cite{Lersch00}. Whatever the truth of the matter, the dataset could be
+strengthened by adding more objective measures of misconduct, for example, data
+on individual officer misconduct from oversight agencies.
+
+Use of this dataset for network research faces a particular set of limitations.
+To wit, researchers who use complaint data to generate social networks must
+acknowledge that the co-listing of two officers on a complaint is a very coarse
+and incomplete proxy for a professional network relationship and for the
+exposure to another officer’s misconduct. Data on partner assignment and
+dispatch data would more accurately reflect officer relationships and their
+exposure to misconduct. 
+
+In general, future work should focus on integrating into this dataset as many
+objective sources of data on individual officers as possible. Objective data
+could include information about adverse incident histories, officer discipline
+histories, counseling interventions, domestic violence incidents, weapons
+violations, sustained complaints, lawsuit settlements. Additional information
+about officer activities could include partner assignments, dispatch
+information, arrest and stop information. 
+
+In addition, information about the units to which officers are assigned,
+including the unit’s disciplinary history, leadership turnover, partner
+assignment policies, could be easily integrated to shed even more light on
+policing and police misconduct. At the department level, the 2016 Department of
+Justice report of its investigation of the Chicago Police Department can supply
+additional information on not just the department but its subunits and
+individual officers.
+
+
+\section{OLD DISCUSSION}
+
 \subsection{Intended Use}
 %Benchmark algorithms for:
 %\begin{itemize}
