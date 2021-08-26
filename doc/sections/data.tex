@@ -1,13 +1,12 @@
 \section{The CPD Data} \label{sec:data}
 
-The original raw data released by the CPD as well as the code to generate the
-cleaned data, and the source code for this document are available in a GitHub
+The original raw data released by the CPD, as well as the code to generate both the
+cleaned data and this document, are available in a GitHub
 repository at \url{https://github.com/chicago-police-violence/data}. This
 repository will serve as a long-term home for this data, its current and future
 releases, as well as discussions regarding improvements and extensions of the
-data processing code.
-
-
+data processing code. Refer to \url{README.md} in the repository for
+details regarding system requirements and how to run the data processing code. 
 
 \subsection{The raw data: origin, description, and challenges}
 \label{sec:raw}
@@ -63,7 +62,7 @@ Excel spreadsheets. In addition, when available, the subfolders contain formal c
 regarding the request, which often provides useful contextual information in understanding the data.  
 
 In particular, the raw data files contained in the repository
-provide the following information: {\color{red} todo: year ranges for each?}
+provide the following information:
 \begin{description}
 	\item[Officer roster:] a list of all officers (past and present) employed
 		by the CPD along with attributes such as year of birth, age, race,
@@ -71,7 +70,7 @@ provide the following information: {\color{red} todo: year ranges for each?}
 	\item[Unit assignments:] the CPD is organized into over 200 units.
 		Each officer can be assigned to one or multiple units and these
 		assignments can change over time. The unit assignment datasets contain
-		one record for each officer and each unit they were assigned to, with
+		one record for each officer and each unit they were assigned to, including
 		the start date and end date of this assignment.
 	\item[Complaints:] formal complaints against police officers, filed both by
 		citizens and internally within the department. Complaints are
@@ -88,47 +87,46 @@ provide the following information: {\color{red} todo: year ranges for each?}
 		detailed information about each use is also provided including, for
 		firearms, the number of discharges and the object struck at each
 		discharge.
-	\item[Unit names:] the (human-readable) name of each (past and present)
+	\item[Unit names:] the (human-readable) name of each past and present
 		unit in the CPD. These names provide information about the function of
 		each unit and also appear occasionally where unit numbers are listed in
 		the other data files.
 	\item[Awards:] a list of all awards requested for officers in the CPD,
 		including award tracking number, reference number, award type, request
 		date, requester name, etc.
-	\item[Salary:] a list of officers from 2002--2017 including their salary,
-		position, and pay grade.
+	\item[Salary:] a list of officers including their salary, position, and pay grade.
 \end{description}
 
 \paragraph{Challenges.}
 Despite the richness of the information contained in these FOIA data releases,
 there is a major obstacle to using them for investigating the activities of the
-CPD. Police officers are not uniquely identified across datasets, so there is
+CPD. In particular, police officers are not uniquely identified across datasets; there is
 a priori no reliable way to know whether, for example, an officer listed on
 a Complaint is the same individual as an officer with similar attributes listed
-on a Tactical Response Report. Although the CPD almost certainly assigns
-a unique identifier to each of its officers internally, these identifiers were
-never publicly released in the responses to FOIA requests. Linking officers
-across datasets must thus be performed by using the restricted set of
-attributes present in the dataset, and comes with the following challenges:
+on a Tactical Response Report. Therefore, one is forced to link officers
+across datasets using a restricted set of attributes, 
+which introduces the following challenges:
 \begin{itemize}
 	\item \emph{Time-varying attributes:} many attributes change over the
 		course of an officer's career in the CPD, such as their unit
-		assignments, rank or badge number (star). Perhaps surprisingly some
+		assignments, rank, and badge number (referred to as a ``star'' in the data). 
+                Perhaps surprisingly, some
 		attributes which would usually be considered stable and useful
-		identifiers also change over time. These include surnames (e.g.\ when
-		marrying) or appointment dates (e.g.\ when a database entry is
-		corrected internally).
+		identifiers also change over time. For example, surnames change when
+		officers marry, and appointment dates change when database entries are
+		corrected internally.
 	\item \emph{Multiple internal sources:} the salary data comes from
 		a different database. In particular, the officers' names were entered
 		separately, which makes linking this data to the other datasets
 		particularly challenging.
 	\item \emph{Inconsistent entries:} various choices were made by the CPD to
 		decide which officers to include in each dataset.  There are, for
-		example, officers missing from the roster or unit assignment data, but
+		example, officers missing from the roster or unit assignment data but
 		present in the salary data. Furthermore, the same attribute can appear
 		under different names in different datasets and sometimes have
 		ambiguous meanings: for example, the salary data contains two different
-		attributes for the appointment date.
+		attributes for the appointment date. Fields that are available or missing
+		per record also vary across databases.
 	\item \emph{Duplicate entries:} probably due to internal errors in the CPD
 		data infrastructure, some officers are sometimes duplicated in the
 		roster and unit assignment data: they appear twice in the same dataset,
@@ -148,17 +146,12 @@ attributes present in the dataset, and comes with the following challenges:
 A major contribution of the present work is to address all the above challenges
 by carefully cleaning and linking the original datasets. The output of this
 process is a collection of comma-separated values (CSV) files corresponding to
-the different entities described in the \emph{Description} paragraph above.
+the different entities in the \emph{Description} paragraph above.
 Importantly, each officer is uniquely identified by a hexadecimal string across
-output files.
-
-The data processing code is written in Python, and the documentation is written
-in \LaTeX.  \texttt{Make} is used to coordinate the various processing steps
-and easily reproduce them.  Refer to \url{README.md} in the repository for
-details regarding system requirements and running the data processing code. The
+output files. The
 remainder of this section describes the processing steps in detail.
 
-\subsection{Initial Cleaning}
+\subsection{Cleaning}
 
 The files initially released by the CPD are for
 the most part Excel spreadsheets, with inconsistent formatting and which can
@@ -172,7 +165,7 @@ repeated at the beginning of the second row for each record.
 Consequently, the goal of the cleaning step is to produce uniformly formatted
 CSV files, with the minimum requirement that each record be presented on
 a single line after this step. The code is contained in the files
-\texttt{datasets.py}, \texttt{parse.py} and \texttt{parse\_p046957.py} in the
+\texttt{datasets.py}, \texttt{parse.py}, \texttt{parse\_p046957.py}, and \texttt{parse\_p061715.py} in the
 \texttt{src/} folder.  The step can be applied by running \texttt{make prepare}
 in the root of the repository, which creates the folder \texttt{tidy/}
 containing the cleaned CSV files.
@@ -187,10 +180,10 @@ judgment. They consist of:
 		\texttt{appointment\_date}).
 	\item unifying attribute values across datasets. For example, the gender of
 		an officer is indicated as a single letter \texttt{M}/\texttt{F} in
-		some datasets or as \texttt{Male}/\texttt{Female}. A similar issue
+		some datasets, and as \texttt{Male}/\texttt{Female} in others. A similar issue
 		arises with the race of officers, sometimes given as a three-letter
 		code, and sometimes described in full. In such cases we map all
-		possible forms of a given attribute value to a canonical one.
+		possible forms of an attribute value to a canonical one.
 	\item parsing values into the correct data type or format. For example,
 		dates and times are formatted differently depending on the dataset, and
 		we map everything to the ISO\,8601 format. Integers are also parsed so
@@ -198,7 +191,8 @@ judgment. They consist of:
 	\item concatenating all the files containing a given type of record in each
 		data release. Indeed, the CPD's responses to some FOIA requests split
 		the records chronologically over multiple Excel spreadsheets (see for
-		example \texttt{raw/P0-46957}). Having a single file for each record
+		example \texttt{raw/P0-46957}) or multiple tables within spreadsheets
+                (see for example \texttt{raw/salary}). Having a single file for each record
 		type instead simplifies later processing steps.
 \end{itemize}
 
@@ -206,7 +200,7 @@ Although this initial cleaning is only the first step in the process producing
 our final dataset, we structured our processing code in such a way that it is
 easy to stop the process at this step and keep the intermediate output in the
 \texttt{tidy/} folder. This is because the next steps required making more
-subjective judgment calls, to decide how to clean erroneous records and resolve
+subjective judgment calls, e.g., to decide how to clean erroneous records and resolve
 ambiguities arising from the merging and linking of datasets. Consequently, it
 is possible that some applications will require performing these next steps
 differently. In such cases, the files contained in the \texttt{tidy/} folder
@@ -225,41 +219,36 @@ final version of our dataset as a collection of CSV files in the
 As discussed in \cref{sec:raw}, the main challenge in processing the raw data
 is that officers are not uniquely identified across datasets. In other words,
 there is no foolproof way to know if two different records from two different
-datasets correspond to the same individual. For example, a naive matching
+datasets correspond to the same individual. For example, a na\"ive matching
 procedure identifying two officers as being the same individual whenever they
-have the same name is inadequate: given the size of the CPD roster (42\,805
+have the same name is inadequate: given the size of the CPD roster (over 35\,000
 active or retired officers), it is guaranteed to contain many homonymous
-individuals. Furthermore, even though, the original datasets contain several
-identifying attributes, such as name, year of birth, appointment date, race and
-gender, those can change over item as mentioned in \cref{sec:raw}.
+individuals. Furthermore, even though the original datasets contain several
+identifying attributes (name, birth year, appointment date, race, gender),
+ those can change over item as mentioned in \cref{sec:raw}.
 
 At a high level, our procedure \emph{grows} a population of uniquely identified
 officers by sequentially examining each FOIA release. Each unique officer in
-this population is assigned a UID, which is a random hexadecimal string (e.g.\
+this population is assigned a unique identification (UID), which is a random hexadecimal string (e.g.\
 \texttt{9bc51eef-c37b-4eff-a14d-7e69f56b3d1e}), and to each UID is associated
 a list of \emph{officer profiles}. There is one \emph{officer profile} for each
 unique officer and each FOIA release in which this officer appeared, listing
 the identifying attributes of this officer as they appear in this given data
-release (recall that the attributes of a given officer can change over time).
-
-In detail, for each FOIA release:
+release. In detail, for each FOIA release:
 \begin{enumerate}
 	\item we build a list of all the \emph{officer profiles} appearing in this
 		release.
 	\item for each officer profile, we attempt to \emph{match} it against the
-		profiles of the population of unique officers constructed so far (from
-		previously examined FOIA release).
+		profiles of the population of unique officers constructed so far from
+		previously examined FOIA releases.
 		\begin{itemize}
-			\item if the match is successful, we identified a unique officer in
+			\item if the match is successful, we have identified a unique officer in
 				the population whose profiles unambiguously match with the
 				current profile. In this case, we simply attach the current
-				profile to this officer (who was already assigned a UID), and
+				profile to this officer and UID, and
 				the population does not grow.
-			\item if the match is unsuccessful, we add a new officer (to which
-				we assign a freshly generated UID) to the population of unique
+			\item if the match is unsuccessful, we add a new officer with a new UID to the population of unique
 				officers and attach the current profile to this new officer.
-				Hence, the newly added officer is associated with a single
-				profile add the time it enters the population.
 		\end{itemize}
 \end{enumerate}
 
@@ -268,43 +257,37 @@ all unique officers appearing in the original data. Each officer is represented
 by UID and a collection of profiles, representing the various ways in which
 this unique officer appears across different datasets. These profiles can be
 found in the file \texttt{final/officer\_profiles.csv}.
-
-Furthermore, after processing each FOIA release, since each profile appearing
-in this release has now been assigned a UID, we can safely remove all
-identifying attributes in the final output and replace them by the UIDs
-attached to the corresponding profiles. This is to avoid duplication of
-information since these attributes are redundant with the ones found in
+At this point the \texttt{final/} folder also contains
+one file for each type of record (complaints, tactical response reports, etc).
+Within these files, officers are identified solely by their UID and other attributes
+are removed; this avoids duplication of
+information since these attributes are redundant with those found in
 \texttt{final/officer\_profiles.csv}.
 
-At the end of this procedure, the \texttt{final/} folder contains:  (1)
-one file for each type of record (complaints, tactical response reports, etc.)
-in which officers are identified solely by UID, and (2) the file
-\texttt{officer\_profiles.csv} containing the list of profiles associated with
-each UID, to which the other files can be linked.
 
-Finally, note that the order in which the FOIA releases are processed matters
-since each release will be matched against the collection of profiles from all
+
+Note that this procedure depends on the order in which the FOIA releases are processed,
+since each release will be matched against the profiles from all
 previously considered releases. We chose to first process the two roster datasets
 (\texttt{P0-58155} and \texttt{P4-41436}) since they are most similar and
 supposed to contain one record for each officer in the CPD. Next, we process
 the two unit assignments datasets (\texttt{16-1105} and \texttt{P0-52262})
-since they are also supposed to cover the entire CPD. Next we process the
-complaints, tactical response reports, awards and salary datasets in this
+since they are also supposed to cover the entire CPD. Finally, we process the
+complaints, tactical response reports, awards, and salary data, in this
 order.
 
 \paragraph{Iterative pairwise matching.}
 It remains to describe the \emph{match} operation which was left unspecified in
-step 2.\ of the procedure described in the previous paragraph. This operation
+step 2.\ of the procedure above. This operation
 matches a list of profiles found in the FOIA release being currently processed
-against an already existing list of profiles (collected from already processed
-FOIA releases and associated with UIDs). We need to strike a balance between:
+against an already existing list of profiles and associated UIDs. We need to strike a balance between:
 \begin{itemize}
 	\item being loose enough to avoid type II error (false negatives). If the
 		same officer appears with slightly different attributes in two
 		different profiles, we do not want the matching method to believe these
 		profiles are attached to different officers.
 	\item being strict enough to avoid type I error (false positives). We do
-		not want to attach a profile to an officer currently in the population,
+		not want to attach a profile to an officer currently in the population
 		if it in fact corresponds to a new officer.
 \end{itemize}
 
@@ -348,28 +331,27 @@ which are present in both $L_1$ and $L_2$, and then attributes are removed from
 $S$ one by one in subsequent passes. For example, one can remove the \emph{last
 name} attribute in the second pass to match a pair of profiles whose last names
 are different but match on all the remaining attributes, thus identifying an
-officer whose last name changed between two FOAI releases. The advantage of
+officer whose last name changed between two FOIA releases. The advantage of
 going from stricter to looser is twofold:
 \begin{itemize}
 	\item starting from the strictest set of attributes identifies the
 		\emph{least ambiguous matches}, for which profiles match exactly on
 		a large set of attributes and can confidently be considered to describe
-		the same individual. This constitutes the vast majority of cases as
+		the same individual. This constitutes the vast majority of cases;
 		more than 95\% of profiles are usually matched during the first pass.
 		Since the next passes iterate only on the remaining profiles, this
-		removes a lot of potential ambiguities which could arise as the
+		removes the majority of ambiguities that could arise as the
 		matching criterion is relaxed.
-	\item since the vast majority of profiles is matched in the first pass,
+	\item since the vast majority of profiles are matched in the first pass,
 		it becomes feasible in subsequent passes to visually inspect all
 		the matched profiles and assess whether the chosen set of attributes was
 		too strict or too lose.
 \end{itemize}
 
-We note that there is some amount of subjective judgment involved, following
-a visual inspection in the second and subsequent passes, to decide which sets
-attributes are acceptable (that is, for which the probability of two persons
-sharing these attributes in a population of the size of the CPD is extremely
-small). This is also how we decide that sufficiently many passes have been
+We note that there is some amount of subjective judgement involved;
+ visual inspection is employed in the second and subsequent passes to decide which sets
+attributes are stringent enough as to avoid accidentally matching two different persons. 
+This is also how we decide that sufficiently many passes have been
 performed and that further relaxing the matching criterion would introduce too
 many type I errors. In general, we erred on the side of favoring
 type II errors over type I errors when uncertain.
