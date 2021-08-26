@@ -169,13 +169,13 @@ available in the folder \texttt{raw/P0-46957/}. As can be seen, each record in
 this file is spread over two rows of the spreadsheet, with the field names
 repeated at the beginning of the second row for each record.
 
-The goal of the cleaning step is thus to produce uniformly formatted CSV files,
-with the minimum requirement that each record be presented on a single line
-after this step. The code is contained in the files \texttt{datasets.py},
-\texttt{parse.py} and \texttt{parse\_p046957.py} in the \texttt{src/} folder.
-The step can be applied by running \texttt{make prepare} in the root of the
-repository, which creates the folder \texttt{tidy/} containing the cleaned CSV
-files.
+Consequently, the goal of the cleaning step is to produce uniformly formatted
+CSV files, with the minimum requirement that each record be presented on
+a single line after this step. The code is contained in the files
+\texttt{datasets.py}, \texttt{parse.py} and \texttt{parse\_p046957.py} in the
+\texttt{src/} folder.  The step can be applied by running \texttt{make prepare}
+in the root of the repository, which creates the folder \texttt{tidy/}
+containing the cleaned CSV files.
 
 The decisions made at this stage are straightforward and involve no subjective
 judgment. They consist of:
@@ -257,7 +257,7 @@ In detail, for each FOIA release:
 			\item if the match is unsuccessful, we add a new officer (to which
 				we assign a freshly generated UID) to the population of unique
 				officers and attach the current profile to this new officer.
-				The newly added officer will thus be associated with a single
+				Hence, the newly added officer is associated with a single
 				profile add the time it enters the population.
 		\end{itemize}
 \end{enumerate}
@@ -275,7 +275,7 @@ attached to the corresponding profiles. This is to avoid duplication of
 information since these attributes are redundant with the ones found in
 \texttt{final/officer\_profiles.csv}.
 
-Thus, at the end of this procedure, the \texttt{final/} folder contains:  (1)
+At the end of this procedure, the \texttt{final/} folder contains:  (1)
 one file for each type of record (complaints, tactical response reports, etc.)
 in which officers are identified solely by UID, and (2) the file
 \texttt{officer\_profiles.csv} containing the list of profiles associated with
@@ -283,20 +283,20 @@ each UID, to which the other files can be linked.
 
 \paragraph{Iterative pairwise matching.}
 It remains to describe the \emph{match} operation which was left unspecified in
-step 2.\ of the procedure described in the previous paragraph.
-
-
-Our matching
-procedure to link officers across datasets thus needs to strike a balance
-between:
+step 2.\ of the procedure described in the previous paragraph. This operation
+matches a list of profiles found in the FOIA release being currently processed
+against an already existing list of profiles (collected from already processed
+FOIA releases and associated with UIDs). We need to strike a balance between:
 \begin{itemize}
 	\item being loose enough to avoid type II error (false negatives). If the
-		same officer appears with slightly different attributes across two
-		records, we do not want our matching method to believe it is two
-		different officers.
+		same officer appears with slightly different attributes in two
+		different profiles, we do not want the matching method to believe these
+		profiles are attached to different officers.
 	\item being strict enough to avoid type I error (false positives). We do
-		not want to merge two different officers into a single identity.
+		not want to attach a profile to an officer currently in the population,
+		if it in fact corresponds to a new officer.
 \end{itemize}
+
 
 In order to match officers across two datasets, we developed an \emph{iterative
 pairwise matching procedure} that makes iterative passes over the datasets.
