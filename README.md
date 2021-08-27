@@ -94,27 +94,24 @@ the cleaned and linked data. In particular, the following files will have been g
 ### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
 
 In `officer_profiles.csv`:
-- `last_name`: 
-- `first_name`: 
-- `middle_initial`: 
-- `gender`: 
-- `race`: 
-- `birthyear`: 
-- `age`: 
-- `status`: 
-- `appointment_date`: 
-- `position_no`: 
-- `position_description`: 
-- `unit_no`: 
-- `unit_description`: 
-- `resignation_date`: 
-- `star1,star2,star3,star4,star5,star6,star7,star8,star9,star10,star11`: 
-- `sworn`: 
-- `unit_id`: 
-- `unit_detail`: 
-- `star`: 
-- `source`: 
-- `uid`: 
+- `last_name`, `first_name`, `middle_initial`: fields containing the officer's name
+- `gender`: officer gender (CPD's categorization is binary: `M` or `F`)
+- `race`: officer race (CPD's categorization: `WHITE`, `BLACK`, `WHITE HISPANIC`, `BLACK HISPANIC`, `ASIAN/PACIFIC ISLANDER`, `AMER IND/ALASKAN NATIVE`, `UNKNOWN`)
+- `birthyear`: officer birthyear
+- `age`: officer age (as of when?)
+- `status`: ?
+- `appointment_date`: date in the format `YYYY-MM-DD` (of what?)
+- `position_no`: an internal numerical code representing position. E.g. `9161` is `POLICE OFFICER`, `9111` is `CROSSING GUARD`
+- `position_description`: a human-readable position name
+- `unit_no`: the officer's assigned unit (as of when?)
+- `unit_description`: a human-readable unit description
+- `resignation_date`: the date of the officer's resignation in the format `YYYY-MM-DD`, or empty if they have not resigned
+- `star,star1,star2,star3,star4,star5,star6,star7,star8,star9,star10,star11`: fields for officer badge numbers
+- `sworn`: whether this is a sworn officer (`Y` or `N`)
+- `unit_id`: an internal unit identification number (should this be here?)
+- `unit_detail`: ??
+- `source`: the FOIA release in which this profile was found (`salary` is the only release for which the FOIA number is unknown, so this is just labeled `salary`)
+- `uid`: the unique ID for the officer to which this profile pertains
 
 `roster.csv` is just a "flattening" of `officer_profiles.csv` to have exactly one row per UID. For each collection of profiles having one UID, `roster.csv` fills each field using the most recent non-missing entry among the profiles. In other words, each row in `roster.csv` corresponds to a single individual, and each column is the most recent available information for that individual and field. 
 
