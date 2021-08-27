@@ -2,13 +2,12 @@
 \usepackage[nonatbib]{neurips_data_2021}
 \usepackage[sort&compress,numbers]{natbib}
 \usepackage[utf8]{inputenc}
-\usepackage{booktabs}
-\usepackage{hyperref}
+\usepackage[urlcolor=blue,citecolor=blue,breaklinks,colorlinks]{hyperref}
+\usepackage{url}
 \usepackage[capitalize]{cleveref}
 \usepackage{graphicx}
-\usepackage{xcolor}
 \usepackage{subcaption}
-\usepackage{microtype}
+\usepackage{microtype,xcolor,booktabs}
 \newcommand{\tbo}[1]{\textcolor{teal}{/* TBo: #1 */}}
 \title{The CPD Data Set: Personnel, Use of Force, and Complaints in the Chicago Police Department}
 
@@ -68,7 +67,7 @@ the problem of police violence.
 \textbf{Repository: \url{https://github.com/chicago-police-violence/data}}\\
 \textbf{Instructions:} run \texttt{make} in the repository's root directory.
 See \texttt{README.md} for detailed instructions.\\
-\textbf{Data Set:} may be found in the \texttt{final/} directory after running \texttt{make} and is available for download as ZIP file at \url{https://github.com/chicago-police-violence/data/releases/download/v0.1-pre/cpd-dataset-v0.1-pre.zip}.
+\textbf{Data Set:} may be found in the \texttt{final/} directory after running \texttt{make} and is downloadable as a ZIP file at \url{https://github.com/chicago-police-violence/data/releases/download/v0.1-pre/cpd-dataset-v0.1-pre.zip}.
 
 \input{sections/intro}
 \input{sections/related}
