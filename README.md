@@ -88,6 +88,7 @@ the cleaned and linked data. In particular, the following files will have been g
 - `final/complaints.csv`: Formal complaints filed against officers
 - `final/complaints_officers.csv`: The officers involved in the complaints, with allegations, findings, and sanctions
 - `final/tactical_response_reports.csv`: Forms that officers are required to file when their response involves use of force
+- `final/tactical_response_reports_discharges.csv`: ??
 - `final/awards.csv`: A list of awards requested for officers, request date, and result
 - `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
@@ -133,12 +134,110 @@ In `unit_descriptions.csv`:
 
 ### `complaints.csv` and `complaints_officers.csv`
 
-### `tactical_response_reports.csv`
+In `complaints.csv`:
+- complaint_no
+- beat
+- location_code
+- street_no
+- street_name
+- apt_no
+- city
+- incident_datetime
+- complaint_date
+- closed_date
+
+In `complaints_officers.csv`:
+- complaint_no
+- complaint_category
+- finding
+- discipline
+- final_finding
+- final_discipline
+- uid
+
+### `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
+
+In `tactical_response_reports.csv`:
+- trr_id
+- rd_no
+- cr_no_obtained
+- subject_cb_no
+- event_no
+- beat
+- block
+- street_direction
+- street_name
+- location
+- date
+- time
+- indoor_or_outdoor
+- lighting_condition
+- weather_condition
+- notify_oemc
+- notify_dist_sergeant
+- notify_op_command
+- notify_det_div
+- number_of_weapons_discharged
+- party_fired_first
+- duty_status
+- injured
+- member_in_uniform
+- subject_gender
+- subject_race
+- subject_age
+- subject_birthyear
+- subject_armed
+- subject_injured
+- subject_alleged_injury
+- uid
+
+In `tactical_response_reports_discharges.csv`:
+- trr_id
+- weapon_type
+- weapon_type_descr
+- firearm_make
+- firearm_model
+- firearm_barrel_length
+- firearm_caliber
+- total_number_of_shots
+- firearm_reloaded
+- number_of_catdridge_reloaded
+- handgun_worn_type
+- handgun_drawn_type
+- method_used_to_reload
+- sight_used
+- protective_cover_used
+- discharge_distance
+- object_struck_of_discharge
+- discharge_position
 
 ### `awards.csv`
+- `uid`:
+- `star`:
+- `position_no`:
+- `position_description`:
+- `award_request_date`:
+- `award_ref_number`:
+- `award_type`:
+- `requester_last_name`:
+- `requester_first_name`:
+- `requester_middle_initial`:
+- `tracking_no`:
+- `current_status`:
+- `incident_start_date`:
+- `incident_end_date`:
+- `incident_description`:
+- `ceremony_date`:
 
 ### `salary.csv`
-
+- `uid`:
+- `year`:
+- `salary`:
+- `position_description`:
+- `pay_grade`:
+- `present_posn_start_date`:
+- `officer_date`:
+- `employee_status`:
 
 # License
 
