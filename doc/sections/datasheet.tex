@@ -81,7 +81,10 @@ to construct a network, e.g., by linking officers co-listed on complaints.
 No.
 
 \paragraph{Are there any errors, sources of noise, or redundancies in the dataset?}
-{\color{red} TODO yes; fill in after paper section on challenges/errors}
+There are redundancies in the raw data, but these are removed by our cleaning and linking procedure.
+Errors, inconsistencies, and missing data are also present in the raw data; our cleaning and linking
+resolves much of these issues. However, per \cref{sec:analysis}, the officer database is
+likely to be incomplete prior to roughly 1980 (as officers were added to the database only gradually over time).
 
 \paragraph{Is the dataset self-contained, or does it rely on external resources?}
 The dataset is self-contained: the raw data itself is stored in the \url{raw/} folder of the repository 
@@ -175,19 +178,22 @@ Yes; the source for cleaning and linking is provided in the \url{src/} folder in
 \subsection{Uses}
 
 \paragraph{Has the dataset been used for any tasks already?}
-{\color{red} todo: citizens police data project, other papers daria found. complete once intro is done with relwork.}
+Not the newly cleaned and linked version.
+The raw data itself has been used previously; see \cref{sec:discussion} for details.
 
 \paragraph{Is there a repository that links to any or all papers that use the dataset?}
 Not that the authors of this work are aware of.
 
 \paragraph{What (other) tasks could the dataset be used for?}
-{\color{red} todo, fill in using the discussion section of the paper}
+This data set has a rich variety of possible uses; for example,
+network analysis (and in particular, analysis of dynamic events occurring on networks)
+and predictive regression/classification. See \cref{sec:discussion} for more details.
 
 \paragraph{Is there anything about the composition of the dataset or the way it was collected and cleaned that might impact future uses?}
-{\color{red} todo, fill in using limitations from the paper}
+Yes; the data are less reliable in earlier years (e.g., pre-1980). See \cref{sec:analysis} for more details.
 
 \paragraph{Are there tasks for which the dataset should not be used?}
-{\color{red} todo}
+This data should not be used to single out, study, or identify individual officers.
 
 \subsection{Distribution}
 
