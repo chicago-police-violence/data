@@ -19,26 +19,22 @@ police shootings using confidential internal data from an individual police
 department \cite{Helsby18}.
 
 This dataset can also be used by researchers who study social networks and
-policing. Complaint data can be used to reconstruct the police officer social
-and professional networks, by drawing connections between officers who are
-listed together on a complaint. These networks are of interest in and of
-themselves, but can also be used to investigate the dynamic patterns of officer
-wrongdoing along such police networks \cite{Roithmayr16}. Existing research has used the complaint
-data to identify such patterns and to investigate whether pairs of officers
-connected on a network are more likely to have been accused of misconduct \cite{Ouellet19}.
-
-Among several tasks, we can use the CPD dataset to perform network analysis.
-\textcolor{red}{Should cite policing papers who do network analysis?}. For
-example, we can use the \texttt{complaints\_officers.csv} data to construct an
+policing. 
+For example, we can use the \texttt{complaints\_officers.csv} data to construct an
 undirected graph $\mathcal{G} = \{\mathcal{V}, \mathcal{E}\}$, in which
-$\mathcal{V}$ is the set of nodes --- officers appearing in at least one
-complaint, and $\mathcal{E}$ the set of edges --- where an edge is present
+$\mathcal{V}$ is the set of nodes---officers appearing in at least one
+complaint, and $\mathcal{E}$ the set of edges---where an edge is present
 whenever two officers appeared on the same complaint. Moreover, we can link the
 complaints to the \texttt{tactical\_response\_reports.csv} file, to consider
 also the subgraph of officers who were also listed in a TRR. We report summary
 for the corresponding graphs in \Cref{tab:stats_graphs}. Here, we consider any
 complaint available to form an edge, but we only consider TRRs filed after
 January 1st 2004, and before December 1st 2015.
+These networks are of interest in and of
+themselves, but can also be used to investigate the dynamic patterns of officer
+wrongdoing along such police networks \cite{Roithmayr16}. Existing research has used the complaint
+data to identify such patterns and to investigate whether pairs of officers
+connected on a network are more likely to have been accused of misconduct \cite{Ouellet19}.
 
 \begin{table}[t!]
 \caption{Summary statistics for the complaints network graph, and the subgraph
