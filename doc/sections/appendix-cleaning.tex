@@ -1,1 +1,282 @@
 \section{Data Cleaning and Linking: Additional Details}\label{sec:app-cleaning}
+
+\subsection{Initial Cleaning}
+
+The files initially released by the CPD are for
+the most part Excel spreadsheets, with inconsistent formatting and which can
+thus be difficult to process programmatically. As an example, the reader is
+invited to open the file
+\texttt{p046957\_-\_report\_1.1\_-\_all\_complaints\_in\_time\_frame.xls}
+available in the folder \texttt{raw/P0-46957/}. As can be seen, each record in
+this file is spread over two rows of the spreadsheet, with the field names
+repeated at the beginning of the second row for each record.
+
+Consequently, the goal of the cleaning step is to produce uniformly formatted
+CSV files, with the minimum requirement that each record be presented on
+a single line after this step. The code is contained in the files
+\texttt{datasets.py}, \texttt{parse.py}, \texttt{parse\_p046957.py}, and \texttt{parse\_p061715.py} in the
+\texttt{src/} folder.  The step can be applied by running \texttt{make prepare}
+in the root of the repository, which creates the folder \texttt{tidy/}
+containing the cleaned CSV files.
+
+The decisions made at this stage are straightforward and involve no subjective
+judgment. They consist of:
+\begin{itemize}
+	\item Unifying attribute names across datasets, so that the same type of
+		data is always identified in the same way (for example,
+		\texttt{Appointment Date}, \texttt{Appt Date},
+		\texttt{appointment\_date} are all mapped to
+		\texttt{appointment\_date}).
+	\item Unifying attribute values across datasets. For example, the gender of
+		an officer is indicated as a single letter \texttt{M}/\texttt{F} in
+		some datasets, and as \texttt{Male}/\texttt{Female} in others. A similar issue
+		arises with the race of officers, sometimes given as a three-letter
+		code, and sometimes described in full. In such cases we map all
+		possible forms of an attribute value to a canonical one. \footnote{Probably for space, can merge these two bullet points as ``Unifying attribute names and values across datasets''.}
+	\item Parsing values into the correct data type or format. For example,
+		dates and times are formatted differently depending on the dataset, and
+		we map everything to the ISO\,8601 format. Integers are also parsed so
+		as to remove the various paddings present in the original data.
+	\item Concatenating all the files containing a given type of record in each
+		data release. Indeed, the CPD's responses to some FOIA requests split
+		the records chronologically over multiple Excel spreadsheets (see for
+		example \texttt{raw/P0-46957}) or multiple tables within spreadsheets
+                (see for example \texttt{raw/salary}). Having a single file for each record
+		type instead simplifies later processing steps.
+\end{itemize}
+
+Although this initial cleaning is only the first step in the process producing
+our final dataset, we structured our processing code in such a way that it is
+easy to stop the process at this step and keep the intermediate output in the
+\texttt{tidy/} folder. This is because the next steps required making more
+subjective judgment calls, e.g., to decide how to clean erroneous records and resolve
+ambiguities arising from the merging and linking of datasets. Consequently, it
+is possible that some applications will require performing these next steps
+differently. In such cases, the files contained in the \texttt{tidy/} folder
+should provide a safe intermediate point at which to branch off from our
+processing pipeline.
+
+\subsection{Linking and Merging Datasets}\label{sec:linking}
+\label{sec:linking}
+
+\paragraph{Overall description.}
+
+As discussed in \cref{sec:raw}, the main challenge in processing the raw data
+is that officers are not uniquely identified across datasets. In other words,
+there is no foolproof way to know if two different records from two different
+datasets correspond to the same individual. For example, a na\"ive matching
+procedure identifying two officers as being the same individual whenever they
+have the same name is inadequate: given the size of the CPD roster (over 35\,000
+active or retired officers), it is guaranteed to contain many homonymous
+individuals. Furthermore, even though the original datasets contain several
+identifying attributes (name, birth year, appointment date, race, gender),
+those can change over item as mentioned in \cref{sec:raw}.
+
+At a high level, our procedure \emph{grows} a population of uniquely identified
+officers by sequentially examining each FOIA release. Each unique officer in
+this population is assigned a unique identification (UID), which is a random
+hexadecimal string (e.g.\ \texttt{9bc51eef-c37b-4eff-a14d-7e69f56b3d1e}), and
+to each UID is associated a list of \emph{officer profiles}. There is one
+\emph{officer profile} for each unique officer and each FOIA release in which
+this officer appeared, listing the identifying attributes of this officer as
+they appear in this given data release. In detail, for each FOIA release:
+\begin{enumerate}
+	\item We build a list of all the \emph{officer profiles} appearing in this
+		release.
+	\item For each officer profile, we attempt to \emph{match} it against the
+		profiles of the population of unique officers constructed so far from
+		previously examined FOIA releases.
+		\begin{itemize}
+			\item If the match is successful, we have identified a unique officer in
+				the population whose profiles unambiguously match with the
+				current profile. In this case, we simply attach the current
+				profile to this officer and UID, and
+				the population does not grow.
+			\item If the match is unsuccessful, we add a new officer with a new UID to the population of unique
+				officers and attach the current profile to this new officer.
+		\end{itemize}
+\end{enumerate}
+
+After all FOIA releases have been processed, the population contains the set of
+all unique officers appearing in the original data. Each officer is represented
+by UID and a collection of profiles, representing the various ways in which
+this unique officer appears across different datasets. These profiles can be
+found in the file \texttt{final/officer\_profiles.csv}.
+At this point the \texttt{final/} folder also contains
+one file for each type of record (complaints, tactical response reports, etc).
+Within these files, officers are identified solely by their UID and other attributes
+are removed; this avoids duplication of
+information since these attributes are redundant with those found in
+\texttt{final/officer\_profiles.csv}.
+
+Note that this procedure depends on the order in which the FOIA releases are processed,
+since each release will be matched against the profiles from all
+previously considered releases. We chose to first process the two roster datasets
+(\texttt{P0-58155} and \texttt{P4-41436}) since they are most similar and
+supposed to contain one record for each officer in the CPD. Next, we process
+the two unit assignments datasets (\texttt{16-1105} and \texttt{P0-52262})
+since they are also supposed to cover the entire CPD. Finally, we process the
+complaints, tactical response reports, awards, and salary data, in this
+order.
+
+\paragraph{Iterative pairwise matching.}
+It remains to describe the \emph{match} operation which was left unspecified in
+step 2.\ of the procedure above. This operation
+matches a list of profiles found in the FOIA release being currently processed
+against an already existing list of profiles and associated UIDs. We need to strike a balance between:
+\begin{itemize}
+	\item Being loose enough to avoid type II error (false negatives). If the
+		same officer appears with slightly different attributes in two
+		different profiles, we do not want the matching method to believe these
+		profiles are attached to different officers.
+	\item Being strict enough to avoid type I error (false positives). We do
+		not want to attach a profile to an officer currently in the population
+		if it in fact corresponds to a new officer.
+\end{itemize}
+
+We developed an \emph{iterative pairwise matching procedure}\footnote{This
+procedure was inspired by a similar one developed by the Invisible Institute.},
+that makes iterative passes over the list $L_1$ of profiles to be matched
+against the list $L_2$ of already existing profiles. Recall that in our case,
+the profiles in $L_2$ are associated with officers in the growing population of
+unique officers, and hence they are each associated with a UID. During each
+pass:
+\begin{enumerate}
+	\item A subset $S$ of the profile attributes is selected as the matching
+		criterion.
+	\item For each profile $p$ in $L_1$:
+		\begin{enumerate}
+			\item Construct the list $\ell_p$ of profiles in $L_2$ for which
+				the attributes in $S$ match with $p$ exactly.
+			\item If all the profiles in $\ell_p$ are associated with the same
+				UID $u$, this is an unambiguous match and we can safely assign
+				the UID $u$ to the profile $p$. We remove $p$ from $L_1$ and
+				all the profiles associated with $u$ in $L_2$.
+			\item Otherwise, the match is ambiguous and we keep $p$ in
+				$L_1$.
+		\end{enumerate}
+\end{enumerate}
+Observe that both $L_1$ and $L_2$ decrease in size as matches are found, so
+each pass iterates over a smaller set of profiles than the previous one. When
+all passes are done, the remaining profiles in $L_1$ are considered new
+unique officers and assigned freshly generated UIDs. Furthermore, by
+building at each pass a hash table mapping a subset of attributes to the
+list of profiles in $L_2$ sharing these attributes, the construction of
+$\ell_p$ in 2.(a) can be performed in constant time. The overall running time of the
+  iterative matching procedure is $O\big(P(|L_1|+|L_2|)\big)$ where $P$ is the
+  number of passes.\footnote{\textcolor{red}{If we are talking about running time, I think we could also mention that - in practice - this procedure runs in less than a minute (or actually, check how long it takes) on a standard machine?}}
+
+Finally, to fully specify the matching procedure we need to describe how to
+choose which subset $S$ of identifying attributes is chosen as the matching
+criterion at step 1.\ during each pass. For this, we go from the stricter to
+the looser criterion: in the first pass, $S$ contains \emph{all} the attributes
+which are present in both $L_1$ and $L_2$, and then attributes are removed from
+$S$ one by one in subsequent passes. For example, one can remove the \emph{last
+name} attribute in the second pass to match a pair of profiles whose last names
+are different but match on all the remaining attributes, thus identifying an
+officer whose last name changed between two FOIA releases. The advantage of
+going from stricter to looser is twofold:
+\begin{itemize}
+	\item Starting from the strictest set of attributes identifies the
+		\emph{least ambiguous matches}, for which profiles match exactly on
+		a large set of attributes and can confidently be considered to describe
+		the same individual. This constitutes the vast majority of cases;
+		more than 95\% of profiles are usually matched during the first pass.
+		Since the next passes iterate only on the remaining profiles, this
+		removes the majority of ambiguities that could arise as the
+		matching criterion is relaxed.
+	\item Since the vast majority of profiles are matched in the first pass,
+		it becomes feasible in subsequent passes to visually inspect all
+		the matched profiles and assess whether the chosen set of attributes was
+		too strict or too lose.
+\end{itemize}
+
+We note that there is some amount of subjective judgement involved;
+ visual inspection is employed in the second and subsequent passes to decide which sets
+attributes are stringent enough as to avoid accidentally matching two different persons. 
+This is also how we decide that sufficiently many passes have been
+performed and that further relaxing the matching criterion would introduce too
+many type I errors. In general, we erred on the side of favoring
+type II errors over type I errors when uncertain.
+
+%\textbf{TODO:} explain the few subtleties where we don't use equality to match
+%attributes (for example when matching age and birthyear, where the age only
+%lets us identify the birthyear with an accuracy of 1 year). Or with stars,
+%where we test whether a star number is contained in the subset of known stars
+%for this officer.
+
+%\textbf{TODO:} table of officer attributes in each dataset
+
+
+\subsection{Final cleaning and output}
+
+\paragraph{Roster consolidation.}
+The procedure described in \cref{sec:linking} produces, for each unique officer
+in our dataset, a collection of profiles presenting the list of identifying
+attributes of this officer as they appear in each dataset provided by the CPD.
+Since these attributes can change over time for legitimate reasons, we believe
+that the collection of profiles as a whole is the most faithful and complete
+representation of each officer. Working with such collections of profiles can
+however be counter-intuitive and inconvenient, since some applications might
+for example require to display the name of an officer, without having to choose
+from possibly two or more names in cases this officer changed name over the
+course of their career in the CPD. For such use cases, we consolidated the
+different profiles of each officer into a single, canonical profile as follows.
+For each officer's identifying attribute, we choose the \emph{most recent
+nonempty} value it takes among all profiles of this officer, where \emph{most
+recent} is defined using the release date of each dataset by the CPD. In this way,
+if an attribute is empty in some profiles but present in others, a nonempty value
+will be selected. Choosing the most recent value is justified since (1) it is
+more likely to still be current (2) it is more likely to contain the latest
+corrections made by the CPD to their database.\footnote{This assumes that it
+is, on average, less likely for errors to be introduced in the CPD database,
+than for records to be fixed. This assumption is highly debatable and the
+authors' posterior belief after working on the CPD data for more than a year
+assigns probability at most $0.6$ to its veracity.} The consolidated profiles
+for each unique officer can be found in the file \texttt{data/roster.csv}.
+
+\paragraph{Cleaning unit assignments.}
+As already alluded to in \cref{sec:raw}, the unit assignment data revealed that
+around 6\% of the records have an end date which chronologically precedes the
+start date. A closer inspection of these faulty records revealed a systematic
+pattern: whenever such a record appears, it is possible to find among the other
+assignments of the same officer another record whose start date is exactly one
+day after the end date of the faulty record. For example, displaying each
+record as a triplet (\texttt{unit\_number}, \texttt{start\_date},
+\texttt{end\_date}), we might find for a given officer:
+\begin{quote}
+\begin{verbatim}
+  1 1967-12-18 1972-05-06
+ 22 1967-12-18 1967-12-17
+\end{verbatim}
+\end{quote}
+where the end date for the faulty assignment to unit $22$ is one day before the
+start date of the assignment to unit $1$. This led us to formulate the
+following hypothesis: \emph{the faulty end dates where not manually entered but
+were instead automatically generated by the data infrastructure of the CPD}.
+More specifically, we believe the end dates were added by a computer code which
+processed all unit assignments in order, and set as the end date of each
+assignment, the day immediately preceding the start date of the following
+assignment. The faulty records then arose from the fact that they were wrongly
+positioned in the order considered by the computer code. The reason for the
+wrong positioning of these records is that they are for the most part,
+erroneous, inactive records which, we believe, should have been removed from
+the dataset.
+
+A strong supporting piece of evidence is that for 92\% of these faulty records,
+we can find another record for the same officer with the same start date and
+different unit number, as in the example above. An attempt at reconstructing the
+true story behind this example is as follows. On 1967-12-18, someone
+wrongly entered an assignment to unit $22$ for this officer, the mistake was
+immediately noticed and a new, correct assignment to unit $1$ was added to the
+database on the same day. When end dates were later added by the above
+mentioned piece of computer code, the assignment to unit $1$ was processed
+last, hence adding 1967-12-17 (the day preceding the assignment to unit $1$) as
+the end date of the assignment to unit $22$. The correct solution in this case
+is to simply remove the assignment to unit 22 from the dataset.
+
+A detailed description of how the remaining 8\% of the faulty records (486
+records out of the 116\,027 records in the original data) are processed can be
+found in the script \texttt{src/clean\_assignments.py}.
+
+\paragraph{Final output.}
