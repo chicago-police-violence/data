@@ -1,5 +1,7 @@
 \section{Data Cleaning and Linking: Additional Details}\label{sec:app-cleaning}
 
+This appendix contains an expanded version of \cref{sec:cleaning}.
+
 \subsection{Initial Cleaning}
 
 The files initially released by the CPD are for
@@ -57,7 +59,6 @@ should provide a safe intermediate point at which to branch off from our
 processing pipeline.
 
 \subsection{Linking and Merging Datasets}\label{sec:linking}
-\label{sec:linking}
 
 \paragraph{Overall description.}
 
@@ -208,7 +209,7 @@ type II errors over type I errors when uncertain.
 %\textbf{TODO:} table of officer attributes in each dataset
 
 
-\subsection{Final cleaning and output}
+\subsection{Final cleaning and output}\label{sec:final-cleaning}
 
 \paragraph{Roster consolidation.}
 The procedure described in \cref{sec:linking} produces, for each unique officer
@@ -228,11 +229,7 @@ recent} is defined using the release date of each dataset by the CPD. In this wa
 if an attribute is empty in some profiles but present in others, a nonempty value
 will be selected. Choosing the most recent value is justified since (1) it is
 more likely to still be current (2) it is more likely to contain the latest
-corrections made by the CPD to their database.\footnote{This assumes that it
-is, on average, less likely for errors to be introduced in the CPD database,
-than for records to be fixed. This assumption is highly debatable and the
-authors' posterior belief after working on the CPD data for more than a year
-assigns probability at most $0.6$ to its veracity.} The consolidated profiles
+corrections made by the CPD to their database. The consolidated profiles
 for each unique officer can be found in the file \texttt{data/roster.csv}.
 
 \paragraph{Cleaning unit assignments.}
@@ -278,5 +275,3 @@ is to simply remove the assignment to unit 22 from the dataset.
 A detailed description of how the remaining 8\% of the faulty records (486
 records out of the 116\,027 records in the original data) are processed can be
 found in the script \texttt{src/clean\_assignments.py}.
-
-\paragraph{Final output.}

@@ -1,12 +1,12 @@
 \section{The CPD Data} \label{sec:data}
 
-The original raw data released by the CPD, as well as the code to generate both the
-cleaned data and this document, are available in a GitHub
-repository at \url{https://github.com/chicago-police-violence/data}. This
-repository will serve as a long-term home for this data, its current and future
-releases, as well as discussions regarding improvements and extensions of the
-data processing code. Refer to \url{README.md} in the repository for
-details regarding system requirements and how to run the data processing code. 
+The original raw data released by the CPD, as well as the code to generate both
+the cleaned data and this document, are available in a GitHub repository at
+\url{https://github.com/chicago-police-violence/data}. This repository will
+serve as a long-term home for this data, its current and future releases, as
+well as discussions regarding improvements and extensions of the data
+processing code. Refer to \texttt{README.md} in the repository for details
+regarding system requirements and how to run the data processing code. 
 
 \subsection{The raw data: origin, description, and challenges}
 \label{sec:raw}
@@ -29,6 +29,7 @@ These data form the basis of the cleaned and linked data set provided by the pre
 \begin{table}[h]
 	\begin{center}
 \caption{Summary of the FOIA requests contained in our repository (blanks are missing entries).}
+\vspace{0.5em}
 \label{table:summary}
 \begin{tabular}{@{}llllr@{}}
 	\toprule
@@ -51,15 +52,15 @@ These data form the basis of the cleaned and linked data set provided by the pre
 \end{table}
 
 \paragraph{Description.}
-The raw data files are contained in the \url{raw/} folder of the
-repository. Each subfolder corresponds to a FOIA request, which is
-generally identified by a request number. \cref{table:summary} gives
-an overview of all the requests that we include in
-our repository; this meta-information is also included in the \url{raw/datasets.csv}
-file in the repository. The subfolders contain the data provided by the city
-in response to their corresponding FOIA requests, which typically comprises multiple
-Excel spreadsheets. In addition, when available, the subfolders contain formal correspondence 
-regarding the request, which often provides useful contextual information in understanding the data.  
+The raw data files are contained in the \texttt{raw/} folder of the repository.
+Each subfolder corresponds to a FOIA request, which is generally identified by
+a request number. \cref{table:summary} gives an overview of all the requests
+that we include in our repository; this meta-information is also included in
+the \texttt{raw/datasets.csv} file in the repository. The subfolders contain
+the data provided by the city in response to their corresponding FOIA requests,
+which typically comprises multiple Excel spreadsheets. In addition, when
+available, the subfolders contain formal correspondence regarding the request,
+which often provides useful contextual information in understanding the data.  
 
 In particular, the raw data files contained in the repository
 provide the following information:
@@ -144,15 +145,18 @@ which introduces the following challenges:
 \end{itemize}
 
 
-\subsection{Data Cleaning and Linking}
+\subsection{Data Cleaning and Linking}\label{sec:cleaning}
 
 A major contribution of the present work is to address all the above challenges
 by carefully cleaning and linking the original datasets. The output of this
 process is a collection of comma-separated values (CSV) files corresponding to
 the different entities in the \emph{Description} paragraph above.  Importantly,
 each officer is uniquely identified by a hexadecimal string across output
-files. We now give an overview of each processing steps, more details can be
-found in \cref{sec:app-cleaning}.
+files. To produce the final, cleaned dataset, run \texttt{make} in the root of
+the repository. The output files will be found in the \texttt{final/} folder;
+please refer to \texttt{description.md} for a description of the content of
+each these files. We now give an overview of each processing steps, more
+details can be found in \cref{sec:app-cleaning}.
 
 \paragraph{Initial Cleaning.} In the first step, we produce uniformly formatted
 CSV files from the raw Excel spreadsheets. The decisions made at this stage are
@@ -208,7 +212,7 @@ are removed; this avoids duplication of
 information since these attributes are redundant with those found in
 \texttt{final/officer\_profiles.csv}.
 
-\paragraph{Final steps.} For such use cases, we consolidate the
+\paragraph{Final steps.} For convenience, we consolidated the
 different profiles of each officer into a single, canonical profile as follows.
 For each officer's identifying attribute, we choose the \emph{most recent
 nonempty} value it takes among all profiles of this officer, where \emph{most
@@ -219,6 +223,18 @@ more likely to still be current (2) it is more likely to contain the latest
 corrections made by the CPD to their database. The consolidated profiles
 for each unique officer can be found in the file \texttt{data/roster.csv}.
 
-
-
+As already alluded to in \cref{sec:raw}, the unit assignment data revealed that
+around 6\% of the records display an end date chronologically preceding the
+start date of the assignment. A closer inspection of these faulty records
+revealed a systematic pattern: whenever such a record appears, it is possible
+to find among the other assignments of the same officer another record whose
+start date is exactly one day after the end date of the faulty record. This led
+us to formulate the following hypothesis: \emph{the faulty end dates where not
+manually entered, but were instead automatically generated by the data
+infrastructure of the CPD}.  More specifically, we believe the end dates were
+added by a piece of computer code which processed all unit assignments in
+order, and set as the end date of each assignment, the day immediately
+preceding the start date of the following assignment. The faulty records then
+arose from the fact that they were wrongly positioned in the order considered
+by the computer code. We used this hypothesis as the basis for the cleaning of the unit assignment data, whose details are given in \cref{sec:final-cleaning}.
 
