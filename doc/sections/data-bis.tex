@@ -2,7 +2,7 @@
 The procedure described in \cref{sec:linking} produces, for each unique officer
 in our dataset, a collection of profiles presenting the list of identifying
 attributes of this officer as they appear in each dataset provided by the CPD.
-Since, these attributes can change over time for legitimate reasons, we believe
+Since these attributes can change over time for legitimate reasons, we believe
 that the collection of profiles as a whole is the most faithful and complete
 representation of each officer. Working with such collections of profiles can
 however be counter-intuitive and inconvenient, since some applications might
@@ -12,8 +12,8 @@ course of their career in the CPD. For such use cases, we consolidated the
 different profiles of each officer into a single, canonical profile as follows.
 For each officer's identifying attribute, we choose the \emph{most recent
 nonempty} value it takes among all profiles of this officer, where \emph{most
-recent} is defined using the release date of each dataset by the CPD. This way,
-if an attribute is empty in some profiles but not in others, a nonempty value
+recent} is defined using the release date of each dataset by the CPD. In this way,
+if an attribute is empty in some profiles but present in others, a nonempty value
 will be selected. Choosing the most recent value is justified since (1) it is
 more likely to still be current (2) it is more likely to contain the latest
 corrections made by the CPD to their database.\footnote{This assumes that it
