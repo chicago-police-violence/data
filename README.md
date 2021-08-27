@@ -94,6 +94,11 @@ the cleaned and linked data. In particular, the following files will have been g
 
 A detailed description of the fields present in all of these files may be found in [description.md](description.md).
 
+# Examples
+You will find Jupyter notebooks in the `examples/` folder that reproduce the visualizations in the documentation.
+In Jupyter lab/notebook, run `Kernel -> Restart & Run All` to run the notebooks. Note: currently the notebooks
+are coded such that they must be run in linear, top-to-bottom order (hence `Kernel -> Restart & Run All`). 
+
 # License
 
 The code that cleans and links the data, as well as the code that produces the
