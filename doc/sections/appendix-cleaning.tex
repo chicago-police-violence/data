@@ -34,7 +34,7 @@ judgment. They consist of:
 		some datasets, and as \texttt{Male}/\texttt{Female} in others. A similar issue
 		arises with the race of officers, sometimes given as a three-letter
 		code, and sometimes described in full. In such cases we map all
-		possible forms of an attribute value to a canonical one. \footnote{Probably for space, can merge these two bullet points as ``Unifying attribute names and values across datasets''.}
+		possible forms of an attribute value to a canonical one.
 	\item Parsing values into the correct data type or format. For example,
 		dates and times are formatted differently depending on the dataset, and
 		we map everything to the ISO\,8601 format. Integers are also parsed so
@@ -165,7 +165,8 @@ building at each pass a hash table mapping a subset of attributes to the
 list of profiles in $L_2$ sharing these attributes, the construction of
 $\ell_p$ in 2.(a) can be performed in constant time. The overall running time of the
   iterative matching procedure is $O\big(P(|L_1|+|L_2|)\big)$ where $P$ is the
-  number of passes.\footnote{\textcolor{red}{If we are talking about running time, I think we could also mention that - in practice - this procedure runs in less than a minute (or actually, check how long it takes) on a standard machine?}}
+  number of passes.\footnote{Running the iterative matching procedure on our
+  largest dataset takes approximately 2 minutes on a standard personal laptop.}
 
 Finally, to fully specify the matching procedure we need to describe how to
 choose which subset $S$ of identifying attributes is chosen as the matching
