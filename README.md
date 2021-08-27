@@ -98,39 +98,25 @@ In `unit_descriptions.csv`:
 
 # How the data are processed
 
-In more detail, the `make` command will result in two primary data processing steps.
-First, in the **parsing** step, the raw Excel files are converted to `.csv` files and field
-names are uniformized across files. Then in the **linking** step, records of officers
-appearing in the different data files are linked by cleaning and matching their attributes,
-removing erroneous entries, etc. The linking step produces the final clean data files
-listed above.
-
-## Parsing
-
-In the first stage, the raw Excel files are parsed and converted to `.csv`
-files for easier later processing. This stage can be run individually by running
-
+See the documentation `main.pdf` for an in-depth discussion of the data cleaning and linking.
+In brief, the `make` command will result in two primary data processing steps.
+First, in the **cleaning** step, the raw Excel files are converted to `.csv` files and field
+names are uniformized across files. To perform *just* the cleaning step, run the following command
+in the repository root folder:
 ```console
 make prepare
 ```
+This will create a `tidy/` folder containing cleaned versions of the original raw data.
 
-in the repository root folder. This will create and populate the `parsed` folder.
-
-*todo: discuss the code and its structure here*
-
-Virtually no decision is made at this stage regarding cleaning or interpreting
-the data beyond uniformizing field names across datasets. Hence, even if you
-are not willing to use or trust the output of the later processing stages,
-there is probably no reason not to use the output of this stage as opposed to
-working directly with the original data.
-
-## Linking
-
+Second, in the **linking** step, records of officers
+appearing in the different data files are linked by cleaning and matching their attributes,
+removing erroneous entries, etc. The linking step produces the final clean data files
+listed above. To perform *just* the linking step (after you have already run the cleaning
+step), the following command in the repository root folder:
 ```console
 make finalize
 ```
-
-*todo: discuss the code and its structure here*
+This will create a `final/` folder containing the final cleaned and linked version of the data.
 
 # License
 
