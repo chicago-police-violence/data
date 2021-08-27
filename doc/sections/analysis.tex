@@ -2,14 +2,13 @@
 
 \section{Exploratory Analysis} \label{sec:analysis}
 
-In this section, we present an exploratory analysis of the
-different entities present in the cleaned and linked data, with the purpose
-of providing some insight into the data as well as potential pitfalls 
-in its use. Code for these analyses is
-available in the \url{examples/} folder of the repository. 
-Note that throughout this section, officer race and gender are binned per the CPD's coarse categories.
-And unless otherwise specified, an officer is considered ``active'' 
-if their resignation date is after 2019-01-01. 
+In this section, we present an exploratory analysis of the different entities
+present in the cleaned and linked data, with the purpose of providing some
+insight into the data as well as potential pitfalls in its use. Code for these
+analyses is available in the \texttt{examples/} folder of the repository.  Note
+that throughout this section, officer race and gender are binned per the CPD's
+coarse categories.  Unless otherwise specified, an officer is considered
+``active'' if their resignation date is after 2019-01-01. 
 
 \paragraph{Roster and Units.} \cref{fig:history,fig:units,tab:stats} 
 provide summaries of demographics, age, and unit assignments
@@ -17,10 +16,10 @@ of the roughly 35\,000 officers present in the data,
 whose appointment dates range from 1936 to 2018.
 \cref{fig:history} in particular highlights an important limitation of the data:
 although there appears to be a steep increase in the number of active officers
-until the 1980s, it is much more likely that there is a significant fraction of
-officers missing from the database during those early years.
-It is not clear by what process officers were added to these records over time,
-and so the roster data should be considered to be only a subset of officers prior to 
+until the 1980s, it is much more likely that a significant fraction of
+officers is missing from the database during those early years.
+Since the process through which officers were added to these records is unclear,
+the roster data should be assumed to contain only a subset of officers prior to 
 the 1980s. Another point of interest---demonstrated in \cref{fig:units}---is that officers
 most commonly join precisely 2 units in their career: Unit 44 (the training academy),
 and their sole assignment.
@@ -87,40 +86,46 @@ and the number of award requests per officer by race and gender (right).} \label
 
 
 \paragraph{Complaints.} 
-We report in \cref{fig:complaints} patterns of complaints as functions of both time
-and officer demographic. This figure highlights another important feature of the data: 
-the number of complaints filed gradually reduces over the years, potentially as a 
-consequence of the perception of ineffectiveness of such complaints \cite{xx}.
-It is also clear in this figure that male officers of color receive proportionally more complaints
-than both female officers and white officers, indicating potential racial bias in complaint filings.
-Supplemental figures in \cref{sec:additional_figs} demonstrate as well that fewer complaints are 
-filed during the weekends and colder months.
+We report patterns of complaints as functions of both time and officer
+demographics in \cref{fig:complaints}. This figure highlights another important
+feature of the data: the number of complaints filed gradually reduces over the
+years, potentially as a consequence of the perception of ineffectiveness of
+such complaints \cite{xx}.  It is also clear in this figure that male officers
+of color receive proportionally more complaints than both female officers and
+white officers, indicating potential racial bias in complaint filings.
+Supplemental figures in \cref{sec:additional_figs} further demonstrates that
+fewer complaints are filed during the weekends and colder months.
 
-\paragraph{Salary and Awards.} \cref{fig:salary_awards} shows officer salary for a small number of representative
-positions versus years of experience, as well as the number of award requests filed for officers by demographic.
-Unsurprisingly, generally salary increases with experience and with increasing rank. 
-And \cref{fig:salary_gender_race} in the appendix shows that salary does not appear to depend strongly on either race or gender,
-likely because officers are unionized with strict rules about salary progression.
-However, \cref{fig:salary_awards} and \cref{fig:position} both hint that there may be implicit forms of gender
-bias present in the data. In particular, awards appear to be requested for male officers at a higher rate than for female officers,
-and there is a trend of males disproportionally occupying higher ranks as compared to females.
-\cref{fig:position} also indicates that there may be a trend of white officers being promoted more readily 
-through the earlier ranks (officer, detective, sergeant) than officers of color.
-This trend may not appear at the higher ranks (lieutenant and above), although strong conclusions are difficult without 
-rigorous statistical analysis as there are many fewer officers at these ranks.
+\paragraph{Salary and Awards.}
+\looseness=-1
+\cref{fig:salary_awards} shows the officer salary for a selection of
+representative positions versus years of experience, as well as the number of
+award requests filed for officers by demographic group.  Unsurprisingly, salary
+generally increases with experience and rank, and \cref{fig:salary_gender_race}
+in the appendix shows that salary has only a marginal dependency on race and
+gender, likely because officers are unionized with strict rules about salary
+progression. However, \cref{fig:salary_awards} and \cref{fig:position} both
+hint at implicit forms of gender bias present in the data. In particular,
+awards appear to be requested at a higher rate for male officers than for
+female officers, and similarly male officers disproportionally occupy higher
+ranks than their female counterparts. \cref{fig:position} also suggests that
+white officers are more readily promoted through the lower ranks (officer,
+detective, sergeant) than officers of color.  This trend seem to disappear for
+higher ranks (lieutenant and above), although drawing firm conclusions would
+require a rigorous statistical analysis given the much smaller number of
+officers occupying these ranks.
 
 \paragraph{Tactical Response Reports.}
-\cref{fig:trrs_stats1} presents summaries of the tactical response reports in the data.
- In most cases, neither the officers nor the
-subjects involved are injured, although civilians get injured at a much higher
-rate (left subplot), and officers tend to fire first (4593 instances versus 329).
-Analysis involving these data should account for possible racial bias in officer use of force: 
-black civilians are the subject of a TRR over 4 times more often than the next 
-most frequent subject race. 
-\Cref{fig:trrs_times} in the appendix also provides some 
-insight into the temporal nature of TRRs: they are filed more frequently 
-at night, on the weekends, and during warmer months. 
-There is an unusual spike in TRRs betweem 2010-12 that warrants further investigation.
+\cref{fig:trrs_stats1} presents summaries of the tactical response reports in
+the data.  In most cases, neither the officers nor the subjects involved are
+injured, although civilians get injured at a much higher rate (left subplot),
+and officers tend to fire first (4593 instances versus 329).  Analysis
+involving these data should account for racial bias in officers' use of force:
+black civilians are the subject of a TRR over 4 times more often than any other
+race. \Cref{fig:trrs_times} in the appendix also provides some insight into the
+temporal nature of TRRs: they are filed more frequently at night, on the
+weekends, and during warmer months. There is an unusual spike in TRRs between
+2010 and 2012 that warrants further investigation.
 
 
 %\begin{tabular}{c|c|c|c|}
