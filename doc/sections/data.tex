@@ -13,7 +13,7 @@ details regarding system requirements and how to run the data processing code.
 
 \paragraph{Origin.}
 The first raw data files in this repository were obtained by J.~Kalven, an 
-independent journalist, who filed Illinois Freedom of Information Act requests with 
+independent journalist, who filed Illinois Freedom of Information Act (FOIA) requests with 
 the Chicago Police Department regarding complaints filed against officers. 
 In Kalven v.~City of Chicago \cite{kalven2014}, an Illinois appellate court issued
 a general ruling that documents bearing on allegations of
@@ -32,7 +32,7 @@ These data form the basis of the cleaned and linked data set provided by the pre
 \label{table:summary}
 \begin{tabular}{@{}llllr@{}}
 	\toprule
-	request \#&received&requested&description& \# records\\
+	Request \#&Received&Requested&Description& \# Records\\
 \midrule
 	\texttt{P0-58155}&2017-04-17& &Officer roster& 32\,446\\
 	\texttt{P4-41436}&2018-03-21& &Officer roster& 14\,634\\
@@ -118,10 +118,10 @@ which introduces the following challenges:
 	\item \emph{Multiple internal sources:} the salary data comes from
 		a different database. In particular, the officers' names were entered
 		separately, which makes linking this data to the other datasets
-		particularly challenging.
+		particularly challenging.\footnote{Is this the only case in which data from different DB? If so, we could move this bullet point lower down as the other challenges seem ``worse''}
 	\item \emph{Inconsistent entries:} various choices were made by the CPD to
 		decide which officers to include in each dataset.  There are, for
-		example, officers missing from the roster or unit assignment data but
+		example, officers missing from the roster or unit assignment data, but
 		present in the salary data. Furthermore, the same attribute can appear
 		under different names in different datasets and sometimes have
 		ambiguous meanings: for example, the salary data contains two different
@@ -173,22 +173,22 @@ containing the cleaned CSV files.
 The decisions made at this stage are straightforward and involve no subjective
 judgment. They consist of:
 \begin{itemize}
-	\item unifying attribute names across datasets, so that the same type of
+	\item Unifying attribute names across datasets, so that the same type of
 		data is always identified in the same way (for example,
 		\texttt{Appointment Date}, \texttt{Appt Date},
 		\texttt{appointment\_date} are all mapped to
 		\texttt{appointment\_date}).
-	\item unifying attribute values across datasets. For example, the gender of
+	\item Unifying attribute values across datasets. For example, the gender of
 		an officer is indicated as a single letter \texttt{M}/\texttt{F} in
 		some datasets, and as \texttt{Male}/\texttt{Female} in others. A similar issue
 		arises with the race of officers, sometimes given as a three-letter
 		code, and sometimes described in full. In such cases we map all
-		possible forms of an attribute value to a canonical one.
-	\item parsing values into the correct data type or format. For example,
+		possible forms of an attribute value to a canonical one. \footnote{Probably for space, can merge these two bullet points as ``Unifying attribute names and values across datasets''.}
+	\item Parsing values into the correct data type or format. For example,
 		dates and times are formatted differently depending on the dataset, and
 		we map everything to the ISO\,8601 format. Integers are also parsed so
 		as to remove the various paddings present in the original data.
-	\item concatenating all the files containing a given type of record in each
+	\item Concatenating all the files containing a given type of record in each
 		data release. Indeed, the CPD's responses to some FOIA requests split
 		the records chronologically over multiple Excel spreadsheets (see for
 		example \texttt{raw/P0-46957}) or multiple tables within spreadsheets
@@ -236,18 +236,18 @@ unique officer and each FOIA release in which this officer appeared, listing
 the identifying attributes of this officer as they appear in this given data
 release. In detail, for each FOIA release:
 \begin{enumerate}
-	\item we build a list of all the \emph{officer profiles} appearing in this
+	\item We build a list of all the \emph{officer profiles} appearing in this
 		release.
-	\item for each officer profile, we attempt to \emph{match} it against the
+	\item For each officer profile, we attempt to \emph{match} it against the
 		profiles of the population of unique officers constructed so far from
 		previously examined FOIA releases.
 		\begin{itemize}
-			\item if the match is successful, we have identified a unique officer in
+			\item If the match is successful, we have identified a unique officer in
 				the population whose profiles unambiguously match with the
 				current profile. In this case, we simply attach the current
 				profile to this officer and UID, and
 				the population does not grow.
-			\item if the match is unsuccessful, we add a new officer with a new UID to the population of unique
+			\item If the match is unsuccessful, we add a new officer with a new UID to the population of unique
 				officers and attach the current profile to this new officer.
 		\end{itemize}
 \end{enumerate}
@@ -282,11 +282,11 @@ step 2.\ of the procedure above. This operation
 matches a list of profiles found in the FOIA release being currently processed
 against an already existing list of profiles and associated UIDs. We need to strike a balance between:
 \begin{itemize}
-	\item being loose enough to avoid type II error (false negatives). If the
+	\item Being loose enough to avoid type II error (false negatives). If the
 		same officer appears with slightly different attributes in two
 		different profiles, we do not want the matching method to believe these
 		profiles are attached to different officers.
-	\item being strict enough to avoid type I error (false positives). We do
+	\item Being strict enough to avoid type I error (false positives). We do
 		not want to attach a profile to an officer currently in the population
 		if it in fact corresponds to a new officer.
 \end{itemize}
@@ -299,17 +299,17 @@ the profiles in $L_2$ are associated with officers in the growing population of
 unique officers, and hence they are each associated with a UID. During each
 pass:
 \begin{enumerate}
-	\item a subset $S$ of the profile attributes is selected as the matching
+	\item A subset $S$ of the profile attributes is selected as the matching
 		criterion.
-	\item for each profile $p$ in $L_1$:
+	\item For each profile $p$ in $L_1$:
 		\begin{enumerate}
-			\item construct the list $\ell_p$ of profiles in $L_2$ for which
+			\item Construct the list $\ell_p$ of profiles in $L_2$ for which
 				the attributes in $S$ match with $p$ exactly.
-			\item if all the profiles in $\ell_p$ are associated with the same
+			\item If all the profiles in $\ell_p$ are associated with the same
 				UID $u$, this is an unambiguous match and we can safely assign
 				the UID $u$ to the profile $p$. We remove $p$ from $L_1$ and
 				all the profiles associated with $u$ in $L_2$.
-			\item otherwise, the match is ambiguous and we keep $p$ in
+			\item Otherwise, the match is ambiguous and we keep $p$ in
 				$L_1$.
 		\end{enumerate}
 \end{enumerate}
@@ -321,7 +321,7 @@ building at each pass a hash table mapping a subset of attributes to the
 list of profiles in $L_2$ sharing these attributes, the construction of
 $\ell_p$ in 2.(a) can be performed in constant time. The overall running time of the
   iterative matching procedure is $O\big(P(|L_1|+|L_2|)\big)$ where $P$ is the
-  number of passes.
+  number of passes.\footnote{\textcolor{red}{If we are talking about running time, I think we could also mention that - in practice - this procedure runs in less than a minute (or actually, check how long it takes) on a standard machine?}}
 
 Finally, to fully specify the matching procedure we need to describe how to
 choose which subset $S$ of identifying attributes is chosen as the matching
@@ -334,7 +334,7 @@ are different but match on all the remaining attributes, thus identifying an
 officer whose last name changed between two FOIA releases. The advantage of
 going from stricter to looser is twofold:
 \begin{itemize}
-	\item starting from the strictest set of attributes identifies the
+	\item Starting from the strictest set of attributes identifies the
 		\emph{least ambiguous matches}, for which profiles match exactly on
 		a large set of attributes and can confidently be considered to describe
 		the same individual. This constitutes the vast majority of cases;
@@ -342,7 +342,7 @@ going from stricter to looser is twofold:
 		Since the next passes iterate only on the remaining profiles, this
 		removes the majority of ambiguities that could arise as the
 		matching criterion is relaxed.
-	\item since the vast majority of profiles are matched in the first pass,
+	\item Since the vast majority of profiles are matched in the first pass,
 		it becomes feasible in subsequent passes to visually inspect all
 		the matched profiles and assess whether the chosen set of attributes was
 		too strict or too lose.
