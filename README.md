@@ -101,6 +101,8 @@ are coded such that they must be run in linear, top-to-bottom order (hence `Kern
 
 # License
 
+Copyright 2021 Thibaut Horel, Trevor Campbell, Lorenzo Masoero, Raj Agrawal, Daria Roithmayr
+
 The code that cleans and links the data, as well as the code that produces the
 documentation for this project, is licensed under the [MIT License](https://opensource.org/licenses/MIT);
 see `MIT-LICENSE.txt` for the license text.
