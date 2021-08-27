@@ -92,7 +92,7 @@ the cleaned and linked data. In particular, the following files will have been g
 - `final/awards.csv`: A list of awards requested for officers, request date, and result
 - `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
-A detailed description of the fields present in all of these files may be found in [FIELDS.md](FIELDS.md).
+A detailed description of the fields present in all of these files may be found in [description.md](description.md).
 
 # License
 
