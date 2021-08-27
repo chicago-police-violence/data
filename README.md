@@ -91,16 +91,40 @@ the cleaned and linked data. In particular, the following files will have been g
 - `final/awards.csv`: A list of awards requested for officers, request date, and result
 - `final/salary.csv`: A list of officer salaries, positions, and paygrades
 
-**TODO: fill in details for each of these: field names, their meanings, and any additional useful info to know about them**
-
-
 ### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
+
+In `officer_profiles.csv`:
+- `last_name`: 
+- `first_name`: 
+- `middle_initial`: 
+- `gender`: 
+- `race`: 
+- `birthyear`: 
+- `age`: 
+- `status`: 
+- `appointment_date`: 
+- `position_no`: 
+- `position_description`: 
+- `unit_no`: 
+- `unit_description`: 
+- `resignation_date`: 
+- `star1,star2,star3,star4,star5,star6,star7,star8,star9,star10,star11`: 
+- `sworn`: 
+- `unit_id`: 
+- `unit_detail`: 
+- `star`: 
+- `source`: 
+- `uid`: 
+
+`roster.csv` is just a "flattening" of `officer_profiles.csv` to have exactly one row per UID. For each collection of profiles having one UID, `roster.csv` fills each field using the most recent non-missing entry among the profiles. In other words, each row in `roster.csv` corresponds to a single individual, and each column is the most recent available information for that individual and field. 
+
+`erroneous_officers.csv` is just a plain list of UIDs that are likely to correspond to erroneous database entries.
 
 ### `unit_assignments.csv` and `unit_descriptions.csv`
 
 In `unit_assignments.csv`:
-- `uid` is the unique ID for the officer to which the record pertains
-- `unit_no` is the CPD unit number (names are available in `unit_descriptions.csv`)
+- `uid`: the unique ID for the officer to which the record pertains
+- `unit_no`: the CPD unit number (names are available in `unit_descriptions.csv`)
 - `start_date` and `end_date`: the start and end date for the assignment
 
 In `unit_descriptions.csv`:
