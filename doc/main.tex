@@ -17,31 +17,34 @@
 \maketitle
 
 \begin{abstract}
-The lack of accessibility to data on policing has severely limited researchers’
-ability to conduct thorough quantitative analyses on police activity and
-behavior, particularly with regard to predicting and explaining police
-violence. In the present work, we provide a new dataset that contains
-information on the personnel, activities, use of force, and complaints in the
-Chicago Police Department (CPD). The raw data, obtained from the CPD via a
-series of requests under the Freedom of Information Act (FOIA), consists of 35
-unlinked, inconsistent, and undocumented spreadsheets. Our paper provides a
-cleaned, linked, and documented version of this data that can be reproducibly
-generated via open source code. We provide a detailed description of the
-dataset contents, the procedures for cleaning the data, and summary statistics.
-The data have a rich variety of uses, such as prediction (e.g., predicting
-misconduct from officer traits, experience, and assigned units), network
-analysis (e.g., detecting communities within the social network of officers
-co-listed on complaints), spatiotemporal data analysis (e.g., investigating
-patterns of officer shooting events), causal inference (e.g., tracking the
-effects of new disciplinary practices, new training techniques, and new
-oversight on complaints and use of force), and much more. Access to this
-dataset will enable the machine learning community to meaningfully engage with
-the problem of police violence.
+For decades, researchers who study policing have been hampered by a lack of
+access to reliable data, and in particular data on police misconduct. Law
+enforcement agencies do not release such data to the public or release only
+limited information. In the present work, we provide an integrated dataset that
+contains information on individual police officers together with their career
+history, their use of force history, and complaints filed against them. The
+underlying data, which was obtained from the Chicago Police Department under
+the Freedom of Information Act (FOIA), comprised multiple unlinked and
+inconsistent spreadsheets. Our paper cuts through the chaos to provide
+a cleaned, carefully linked, and well-documented version of this data that
+researchers can easily reproduce via open-source code. We describe the dataset
+contents in detail, and set forth a detailed set of procedures for cleaning and
+linking the data on individual officers across multiple sources. We also review
+the rich variety of uses for the data, such as prediction (e.g., predicting
+misconduct from officer traits, experience, and assigned units), spatiotemporal
+network analysis (e.g., investigating patterns of officer shooting events on
+professional networks), causal inference (e.g., tracking the effects of new
+disciplinary and training techniques on police use of force), and much more.
+Access to this usable dataset will enable the machine learning community to
+meaningfully engage with the problem of police violence.
 \end{abstract}
 
 \textbf{Repository: \url{https://github.com/chicago-police-violence/data}}\\
 \textbf{Instructions:} run \url{make} in the repository root directory. See \url{README.md} for detailed instructions.\\
 \textbf{Data Set:} may be found in the \url{final/} directory after running \url{make}.
+\tbo{should create a \texttt{.tar.gz} of the final dataset and also attach it
+to the release in Github to be able to link to the data directly. If we claim
+to to be releasing a new dataset, there should be a direct link to the data.}
 
 \input{sections/intro}
 
