@@ -50,7 +50,7 @@ In order to build the cleaned and linked data, run
 make
 ```
 in the repository root folder. This will result in the creation of a single cleaned and linked
-set of data where all records (officers, complaints, and tactical response reports) are associated
+set of data in the `final/` folder, where all records (officers, complaints, and tactical response reports) are associated
 with unique IDs that enable linkage among the records. 
 
 
