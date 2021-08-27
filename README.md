@@ -53,6 +53,28 @@ in the repository root folder. This will result in the creation of a single clea
 set of data in the `final/` folder, where all records (officers, complaints, and tactical response reports) are associated
 with unique IDs that enable linkage among the records. 
 
+### How the data are processed
+
+See the documentation `main.pdf` for an in-depth discussion of the data cleaning and linking.
+In brief, the `make` command will result in two primary data processing steps.
+First, in the **cleaning** step, the raw Excel files are converted to `.csv` files and field
+names are uniformized across files. To perform *just* the cleaning step, run the following command
+in the repository root folder:
+```console
+make prepare
+```
+This will create a `tidy/` folder containing cleaned versions of the original raw data.
+
+Second, in the **linking** step, records of officers
+appearing in the different data files are linked by cleaning and matching their attributes,
+removing erroneous entries, etc. The linking step produces the final clean data files
+listed above. To perform *just* the linking step (after you have already run the cleaning
+step), the following command in the repository root folder:
+```console
+make finalize
+```
+This will create a `final/` folder containing the final cleaned and linked version of the data.
+
 
 # Data description
 
@@ -96,27 +118,6 @@ In `unit_descriptions.csv`:
 
 ### `salary.csv`
 
-# How the data are processed
-
-See the documentation `main.pdf` for an in-depth discussion of the data cleaning and linking.
-In brief, the `make` command will result in two primary data processing steps.
-First, in the **cleaning** step, the raw Excel files are converted to `.csv` files and field
-names are uniformized across files. To perform *just* the cleaning step, run the following command
-in the repository root folder:
-```console
-make prepare
-```
-This will create a `tidy/` folder containing cleaned versions of the original raw data.
-
-Second, in the **linking** step, records of officers
-appearing in the different data files are linked by cleaning and matching their attributes,
-removing erroneous entries, etc. The linking step produces the final clean data files
-listed above. To perform *just* the linking step (after you have already run the cleaning
-step), the following command in the repository root folder:
-```console
-make finalize
-```
-This will create a `final/` folder containing the final cleaned and linked version of the data.
 
 # License
 
