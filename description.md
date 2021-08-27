@@ -1,4 +1,4 @@
-# `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
+### `roster.csv`, `officer_profiles.csv`, and `erroneous_officers.csv`
 
 In `officer_profiles.csv`:
 - `last_name`, `first_name`, `middle_initial`: fields containing the officer's name
@@ -24,7 +24,7 @@ In `officer_profiles.csv`:
 
 `erroneous_officers.csv` is just a plain list of UIDs that are likely to correspond to erroneous database entries.
 
-# `unit_assignments.csv` and `unit_descriptions.csv`
+### `unit_assignments.csv` and `unit_descriptions.csv`
 
 In `unit_assignments.csv`:
 - `uid`: the unique ID for the officer to which the record pertains
@@ -38,7 +38,7 @@ In `unit_descriptions.csv`:
 - `status_date`: the date for the `active_status`
 
 
-# `complaints.csv` and `complaints_officers.csv`
+### `complaints.csv` and `complaints_officers.csv`
 
 In `complaints.csv`:
 - complaint_no
@@ -61,7 +61,7 @@ In `complaints_officers.csv`:
 - final_discipline
 - uid
 
-# `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
+### `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
 
 In `tactical_response_reports.csv`:
 - trr_id
@@ -117,7 +117,7 @@ In `tactical_response_reports_discharges.csv`:
 - object_struck_of_discharge
 - discharge_position
 
-# `awards.csv`
+### `awards.csv`
 - `uid`:
 - `star`:
 - `position_no`:
@@ -135,7 +135,7 @@ In `tactical_response_reports_discharges.csv`:
 - `incident_description`:
 - `ceremony_date`:
 
-# `salary.csv`
+### `salary.csv`
 - `uid`:
 - `year`:
 - `salary`:
