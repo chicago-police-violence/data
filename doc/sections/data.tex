@@ -65,22 +65,22 @@ which often provides useful contextual information in understanding the data.
 In particular, the raw data files contained in the repository
 provide the following information:
 \begin{description}
-	\item[Officer roster:] a list of all officers (past and present) employed
+	\item[Officer roster:] A list of all officers (past and present) employed
 		by the CPD along with attributes such as year of birth, age, race,
 		gender, appointment date, resignation date, etc.
-	\item[Unit assignments:] the CPD is organized into over 200 units.
+	\item[Unit assignments:] The CPD is organized into over 200 units.
 		Each officer can be assigned to one or multiple units and these
 		assignments can change over time. The unit assignment datasets contain
 		one record for each officer and each unit they were assigned to, including
 		the start date and end date of this assignment.
-	\item[Complaints:] formal complaints against police officers, filed both by
+	\item[Complaints:] Formal complaints against police officers, filed both by
 		citizens and internally within the department. Complaints are
 		identified by a complaint number. There is one record for each
 		complaint and each officer listed on the complaint, indicating the
 		allegation made against them, result of the investigation of the
 		allegation (with possible sanction), etc.
 		\looseness=-1
-	\item[Tactical Response Reports (TRRs):] these are forms that officers are
+	\item[Tactical Response Reports (TRRs):] These are forms that officers are
 		required to file after each incident for which the officer's response
 		involved use of force. There is one record for each incident and each
 		officer involved in the incident. Each record contains details about
@@ -89,20 +89,20 @@ provide the following information:
 		detailed information about each use is also provided including, for
 		firearms, the number of discharges and the object struck at each
 		discharge.
-	\item[Unit names:] the (human-readable) name of each past and present
+	\item[Unit names:] The (human-readable) name of each past and present
 		unit in the CPD. These names provide information about the function of
 		each unit and also appear occasionally where unit numbers are listed in
 		the other data files.
-	\item[Awards:] a list of all awards requested for officers in the CPD,
+	\item[Awards:] A list of all awards requested for officers in the CPD,
 		including award tracking number, reference number, award type, request
 		date, requester name, etc.
-	\item[Salary:] a list of officers including their salary, position, and pay grade.
+	\item[Salary:] A list of officers including their salary, position, and pay grade.
 \end{description}
 
 \paragraph{Challenges.}
 Despite the richness of the information contained in these FOIA data releases,
-there is a major obstacle to using them for investigating the activities of the
-CPD. In particular, police officers are not uniquely identified across datasets; there is
+using these releases to investigate  the activities of the CPD is not straightforward. 
+In particular, police officers are not uniquely identified across datasets; there is
 a priori no reliable way to know whether, for example, an officer listed on
 a Complaint is the same individual as an officer with similar attributes listed
 on a Tactical Response Report. Therefore, one is forced to link officers
@@ -117,10 +117,6 @@ which introduces the following challenges:
 		identifiers also change over time. For example, surnames change when
 		officers marry, and appointment dates change when database entries are
 		corrected internally.
-	\item \emph{Multiple internal sources:} the salary data comes from
-		a different database. In particular, the officers' names were entered
-		separately, which makes linking this data to the other datasets
-		particularly challenging.\footnote{Is this the only case in which data from different DB? If so, we could move this bullet point lower down as the other challenges seem ``worse''}
 	\item \emph{Inconsistent entries:} various choices were made by the CPD to
 		decide which officers to include in each dataset.  There are, for
 		example, officers missing from the roster or unit assignment data, but
@@ -143,6 +139,10 @@ which introduces the following challenges:
 		code which produced the data. A close inspection of the pattern of
 		errors revealed that the faulty records cannot be fixed by simply
 		swapping the start date with the end date.
+	\item \emph{Multiple internal sources:} the salary data comes from
+		a different database. In particular, the officers' names were entered
+		separately, which makes linking this data to the other datasets
+		particularly challenging.
 \end{itemize}
 
 
@@ -161,16 +161,21 @@ details can be found in \cref{sec:app-cleaning}.
 
 \paragraph{Initial Cleaning.} In the first step, we produce uniformly formatted
 CSV files from the raw Excel spreadsheets. The decisions made at this stage are
-sraightforward and involve no subjective judgement since they consist of (1)
-unifying attribute names and values across datasets, (2) parsing integers and
-dates into a standard format, and (3) concatenating records of the same type
+sraightforward and involve no subjective judgement since they consist of (i)
+unifying attribute names and values across datasets, (ii) parsing integers and
+dates into a standard format, and (iii) concatenating records of the same type
 when they were split over multple spreadsheets.
 
-Since it can be useful in some applications to work directly from these
-files—for example, when the linking step described next requires to be
-adapted—it is possible to perform only this initial cleaning step by running
-\texttt{make prepare} in the root of the repository. The files output at this
-step will be found in the \texttt{tidy/} folder.
+%\textcolor{red}{Since it can be useful in some applications to work directly with these
+%files—for example, when the linking step described next requires to be
+%adapted—it is possible to perform only this initial cleaning step by running
+%\texttt{make prepare} in the root of the repository. The files output at this
+%step will be found in the \texttt{tidy/} folder.}
+
+\textcolor{blue}{Running the command \texttt{make prepare} in the root of the repository performs steps (i)--(iii) above. The files output at this step will be found in the \texttt{tidy/} folder. We allow users to access the data only 
+after this initial cleaning step, because we envision that in certain applications these
+files might be more useful than the output of the linking and merging described next—for example, when the linking step we adopted requires to be adapted.}
+
 
 \paragraph{Linking and merging datasets.}
 Next, we address the challenge of uniquely identifying officers across datasets.
@@ -203,7 +208,7 @@ The \emph{match} operation in step 2.\ is achieved by an iterative pairwise
 procedure that we developed and whose details are given  in \cref{sec:linking}.
 After all FOIA releases have been processed, the population contains the set of
 all unique officers appearing in the original data. Each officer is represented
-by UID and a collection of profiles, representing the various ways in which
+by a UID and a collection of profiles, representing the various ways in which
 this unique officer appears across different datasets. These profiles can be
 found in the file \texttt{final/officer\_profiles.csv}.
 At this point the \texttt{final/} folder also contains
@@ -219,10 +224,10 @@ For each officer's identifying attribute, we choose the \emph{most recent
 nonempty} value it takes among all profiles of this officer, where \emph{most
 recent} is defined using the release date of each dataset by the CPD. In this way,
 if an attribute is empty in some profiles but present in others, a nonempty value
-will be selected. Choosing the most recent value is justified since (1) it is
-more likely to still be current (2) it is more likely to contain the latest
+will be selected. Choosing the most recent value is justified since (i) it is
+more likely to still be current (ii) it is more likely to contain the latest
 corrections made by the CPD to their database. The consolidated profiles
-for each unique officer can be found in the file \texttt{data/roster.csv}.
+for each unique officer can be found in the file \texttt{final/roster.csv}.
 
 As already alluded to in \cref{sec:raw}, the unit assignment data revealed that
 around 6\% of the records display an end date chronologically preceding the
