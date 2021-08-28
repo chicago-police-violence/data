@@ -135,8 +135,8 @@ which introduces the following challenges:
 	\item \emph{Systematic errors:} an unusual difficulty arose from the unit
 		assignment data, in which a significant fraction of the assignments
 		have an end date chronologically preceding the start date. This appears
-		to be a systematic error, either in the data entry process or in the
-		code which produced the data. A close inspection of the pattern of
+		to be a systematic error made during either data entry or the process 
+                of releasing the data per FOIA requests. A close inspection of the pattern of
 		errors revealed that the faulty records cannot be fixed by simply
 		swapping the start date with the end date.
 	\item \emph{Multiple internal sources:} the salary data comes from
@@ -161,23 +161,14 @@ details can be found in \cref{sec:app-cleaning}.
 
 \paragraph{Initial Cleaning.} In the first step, we produce uniformly formatted
 CSV files from the raw Excel spreadsheets. The decisions made at this stage are
-straightforward and involve no subjective judgement since they consist of (i)
+straightforward and involve no subjective judgement; they consist of (i)
 unifying attribute names and values across datasets, (ii) parsing integers and
 dates into a standard format, and (iii) concatenating records of the same type
 when they were split over multiple spreadsheets.
-
-%\textcolor{red}{Since it can be useful in some applications to work directly with these
-%files—for example, when the linking step described next requires to be
-%adapted—it is possible to perform only this initial cleaning step by running
-%\texttt{make prepare} in the root of the repository. The files output at this
-%step will be found in the \texttt{tidy/} folder.}
-
-\looseness=-1
-\textcolor{blue}{Running \texttt{make prepare} in the root of the repository
-performs steps (i)--(iii) above, whose outputs will be found in the
-\texttt{tidy/} folder. Allowing the user to access the data produced at this
-stage might prove useful in applications requiring adapting the choices made in
-the linking stage described next.}
+Running \texttt{make prepare} in the root of the repository
+performs these steps, with output that may be found in the
+\texttt{tidy/} folder. This cleaned---but not linked---version of the data might be useful
+in applications that require different choices to be made during linking.
 
 \paragraph{Linking and merging datasets.}
 Next, we address the challenge of uniquely identifying officers across datasets.
@@ -186,8 +177,8 @@ officers by sequentially examining each FOIA release. Each unique officer in
 this population is assigned a unique identification (UID), which is a random hexadecimal string (e.g.\
 \texttt{9bc51eef-c37b-4eff-a14d-7e69f56b3d1e}), and to each UID is associated
 a list of \emph{officer profiles}. There is one \emph{officer profile} for each
-unique officer and each FOIA release in which this officer appeared, listing
-the identifying attributes of this officer as they appear in this given data
+unique officer and each FOIA release in which the officer appears.  Each profile lists
+the identifying attributes of the officer as they appear in the given data
 release. In detail, for each FOIA release:
 \begin{enumerate}
 	\item We build a list of all the \emph{officer profiles} appearing in this
@@ -222,14 +213,15 @@ information since these attributes are redundant with those found in
 
 \paragraph{Final steps.} For convenience, we consolidate the
 different profiles of each officer into a single, canonical profile as follows.
-For each officer's identifying attribute, we choose the \emph{most recent
+For each officer and each identifying attribute, we choose the \emph{most recent
 nonempty} value it takes among all profiles of this officer, where \emph{most
 recent} is defined using the release date of each dataset by the CPD. In this way,
 if an attribute is empty in some profiles but present in others, a nonempty value
 will be selected. Choosing the most recent value is justified since (i) it is
 more likely to still be current (ii) it is more likely to contain the latest
 corrections made by the CPD to their database. The consolidated profiles
-for each unique officer can be found in the file \texttt{final/roster.csv}.
+for each officer can be found in the file \texttt{final/roster.csv};
+each row of this file corresponds to a unique officer in the population. 
 
 As already alluded to in \cref{sec:raw}, the unit assignment data revealed that
 around 6\% of the records display an end date chronologically preceding the
