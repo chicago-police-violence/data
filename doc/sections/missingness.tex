@@ -1,8 +1,9 @@
 \section{Breakdown of Missingness for Each Dataset}\label{sec:missingness}
 
-\begin{table}[t!]
+\begin{table}
+	\begin{minipage}[t]{0.48\textwidth}
+\centering
 \caption{Missingness for the Roster data file}
-\centering 
 \begin{tabular}{lr}
 \toprule
            Attribute &  \% Missing \\
@@ -39,49 +40,9 @@ position\_description &       13.0 \\
                  uid &        0.0 \\
 \bottomrule
 \end{tabular}
-\end{table}
-
-\begin{table}[t!]
-\caption{Missingness for the Unit Assignments data file}
-\centering 
-% Missing:
-\begin{tabular}{lr}
-\toprule
- Attribute &  \% Missing \\
-\midrule
-       uid &        0.0 \\
-   unit\_no &        0.0 \\
-start\_date &        0.0 \\
-  end\_date &       27.6 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-
-\begin{table}[t!]
-\caption{Missingness for the Complaints data file}
-\centering 
-% Missing:
-\begin{tabular}{lr}
-\toprule
-        Attribute &  \% Missing \\
-\midrule
-     complaint\_no &        0.0 \\
-             beat &        0.8 \\
-    location\_code &        0.0 \\
-        street\_no &       23.7 \\
-      street\_name &       22.4 \\
-           apt\_no &       99.0 \\
-             city &       20.2 \\
-incident\_datetime &        0.0 \\
-   complaint\_date &        0.0 \\
-      closed\_date &        1.8 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[t!]
-\caption{Missingness for the Tactical Response Reports data file}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\caption{Missingness for the TRRs data file}
 \centering 
 \begin{tabular}{lr}
 \toprule
@@ -121,11 +82,28 @@ number\_of\_weapons\_discharged &        0.0 \\
                          uid &        0.0 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{table}
 
-
-\begin{table}[t!]
-\caption{Missingness for the Unit Names data file}
+\begin{table}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\caption{Missingness for Unit Assignments}
+% Missing:
+\begin{tabular}{lr}
+\toprule
+ Attribute &  \% Missing \\
+\midrule
+       uid &        0.0 \\
+   unit\_no &        0.0 \\
+start\_date &        0.0 \\
+  end\_date &       27.6 \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\caption{Missingness for the Unit Names}
 \centering 
 \begin{tabular}{lr}
 \toprule
@@ -137,10 +115,49 @@ unit\_description &       10.6 \\
      status\_date &       12.3 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{table}
 
-
-\begin{table}[t!]
+\begin{table}
+\begin{minipage}[t]{0.48\textwidth}
+\centering 
+\caption{Missingness for the Complaints data file}
+% Missing:
+\begin{tabular}{lr}
+\toprule
+        Attribute &  \% Missing \\
+\midrule
+     complaint\_no &        0.0 \\
+             beat &        0.8 \\
+    location\_code &        0.0 \\
+        street\_no &       23.7 \\
+      street\_name &       22.4 \\
+           apt\_no &       99.0 \\
+             city &       20.2 \\
+incident\_datetime &        0.0 \\
+   complaint\_date &        0.0 \\
+      closed\_date &        1.8 \\
+\bottomrule
+\end{tabular}
+\vspace{\baselineskip}
+\caption{Missingness for the Salary data file}
+\centering 
+\begin{tabular}{lr}
+\toprule
+              Attribute &  \% Missing \\
+\midrule
+                    uid &        0.0 \\
+                   year &        0.0 \\
+                 salary &        0.0 \\
+   position\_description &        0.0 \\
+              pay\_grade &        0.0 \\
+present\_posn\_start\_date &       20.7 \\
+           officer\_date &        0.6 \\
+        employee\_status &        0.0 \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\hfill\begin{minipage}[t]{0.48\textwidth}
 \caption{Missingness for the Awards data file}
 \centering 
 \begin{tabular}{lr}
@@ -165,23 +182,6 @@ requester\_middle\_initial &       93.0 \\
            ceremony\_date &       86.9 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{minipage}
 
-\begin{table}[t!]
-\caption{Missingness for the Salary data file}
-\centering 
-\begin{tabular}{lr}
-\toprule
-              Attribute &  \% Missing \\
-\midrule
-                    uid &        0.0 \\
-                   year &        0.0 \\
-                 salary &        0.0 \\
-   position\_description &        0.0 \\
-              pay\_grade &        0.0 \\
-present\_posn\_start\_date &       20.7 \\
-           officer\_date &        0.6 \\
-        employee\_status &        0.0 \\
-\bottomrule
-\end{tabular}
 \end{table}
