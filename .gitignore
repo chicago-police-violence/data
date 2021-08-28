@@ -10,3 +10,4 @@ final/
 *.swp
 *.swo
 *ipynb_checkpoints
+cpd-dataset*.zip
