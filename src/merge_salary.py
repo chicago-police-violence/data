@@ -1,4 +1,5 @@
-from utils import csv_read, multi_csv_read
+from utils import csv_read
+from itertools import chain
 from uuid import uuid4
 from matcher import Matcher
 from csv import DictWriter
@@ -221,7 +222,7 @@ if __name__ == "__main__":
     err_profiles = [prof for prof in profiles if prof['uid'] in erroneous_uids]
     
     basename, _ = os.path.splitext(os.path.basename(argv[2]))
-    salary_records = multi_csv_read(argv[2:5])
+    salary_records = chain(*map(csv_read,argv[2:5]))
     salary_flat = flatten_salary(salary_records, datasets[basename]["id_fields"])
 
     print('Matching salary')
