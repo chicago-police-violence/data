@@ -41,25 +41,25 @@ In `unit_descriptions.csv`:
 ### `complaints.csv` and `complaints_officers.csv`
 
 In `complaints.csv`:
-- complaint_no
-- beat
-- location_code
-- street_no
-- street_name
-- apt_no
-- city
-- incident_datetime
-- complaint_date
-- closed_date
+- `complaint_no`
+- `beat`
+- `location_code`
+- `street_no`
+- `street_name`
+- `apt_no`
+- `city`
+- `incident_datetime`
+- `complaint_date`
+- `closed_date`
 
 In `complaints_officers.csv`:
-- complaint_no
-- complaint_category
-- finding
-- discipline
-- final_finding
-- final_discipline
-- uid
+- `complaint_no
+- `complaint_category`
+- `finding`
+- `discipline`
+- `final_finding`
+- `final_discipline`
+- `uid`
 
 ### `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
 
