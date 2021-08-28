@@ -124,5 +124,5 @@ documentation:
 
 .PHONY: release
 release: documentation finalize
-	zip -r cpd-dataset-`git describe --tags --abbrev=0`.zip final/ doc/main.pdf CC-BY-NC-SA-LICENSE.txt description.md examples/
+	zip -r cpd-dataset-`git describe --tags --abbrev=0`.zip final/ doc/main.pdf CC-BY-NC-SA-LICENSE.txt MIT-LICENSE.txt description.md examples/ -x ".\*"
 
