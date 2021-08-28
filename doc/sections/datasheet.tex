@@ -65,10 +65,11 @@ an integer ``number of complaints'' for each officer in the data,
 and use that as the response variable in a prediction task.
 
 \paragraph{Is any information missing from individual instances?}
-In the original raw data files, missing data (of all fields) is quite common.
-In the cleaned and linked data files, we are able to aggregate multiple profiles
-of a single officer appearing throughout the data to ``fill in the gaps,'' although
-this process is not perfect and there are still missing entries.
+In the original raw data files, missing data (of all fields) is quite common
+(see \cref{sec:missingness}).  In the cleaned and linked data files, we are
+able to aggregate multiple profiles of a single officer appearing throughout
+the data to ``fill in the gaps,'' although this process is not perfect and
+there are still missing entries.
 
 \paragraph{Are relationships between individual instances made explicit?}
 In the raw data, no. In the cleaned data, we provide a unique officer
@@ -87,7 +88,7 @@ resolves much of these issues. However, per \cref{sec:analysis}, the officer dat
 likely to be incomplete prior to roughly 1980 (as officers were added to the database only gradually over time).
 
 \paragraph{Is the dataset self-contained, or does it rely on external resources?}
-The dataset is self-contained: the raw data itself is stored in the \url{raw/} folder of the repository 
+The dataset is self-contained: the raw data itself is stored in the \texttt{raw/} folder of the repository 
 (with links to the external source files for reference), 
 and the cleaned/linked data is produced by the source code in the repository.
 
@@ -170,10 +171,10 @@ Yes; the main section of this documentation provides details the cleaning and li
 data resulting from FOIA requests made to the City of Chicago.
 
 \paragraph{Was the ``raw'' data saved in addition to the cleaned data?}
-Yes; the raw data is available in the \url{raw/} folder in the repository.
+Yes; the raw data is available in the \texttt{raw/} folder in the repository.
 
 \paragraph{Is the software used to clean the data available?}
-Yes; the source for cleaning and linking is provided in the \url{src/} folder in the repository.
+Yes; the source for cleaning and linking is provided in the \texttt{src/} folder in the repository.
 
 \subsection{Uses}
 
