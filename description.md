@@ -5,18 +5,18 @@ In `officer_profiles.csv`:
 - `gender`: officer gender (CPD's categorization is binary: `M` or `F`)
 - `race`: officer race (CPD's categorization: `WHITE`, `BLACK`, `WHITE HISPANIC`, `BLACK HISPANIC`, `ASIAN/PACIFIC ISLANDER`, `AMER IND/ALASKAN NATIVE`, `UNKNOWN`)
 - `birthyear`: officer birthyear
-- `age`: officer age (as of when?)
-- `status`: ?
-- `appointment_date`: date in the format `YYYY-MM-DD` (of what?)
-- `position_no`: an internal numerical code representing position. E.g. `9161` is `POLICE OFFICER`, `9111` is `CROSSING GUARD`
+- `age`: officer age at the time the CPD answered the FOIA request identified by source
+- `status`:
+- `appointment_date`: date of appointment of the officer (`YYYY-MM-DD`)
+- `position_no`: an internal numerical code representing position (e.g. `9161` for `POLICE OFFICER`, `9111` for `CROSSING GUARD`)
 - `position_description`: a human-readable position name
-- `unit_no`: the officer's assigned unit (as of when?)
-- `unit_description`: a human-readable unit description
+- `unit_no`: the officer's assigned unit at the time the CPD answered the FOIA request identified by `source`
+- `unit_description`: a human-readable description of the unit identified by `unit_no`
 - `resignation_date`: the date of the officer's resignation in the format `YYYY-MM-DD`, or empty if they have not resigned
 - `star,star1,star2,star3,star4,star5,star6,star7,star8,star9,star10,star11`: fields for officer badge numbers
 - `sworn`: whether this is a sworn officer (`Y` or `N`)
-- `unit_id`: an internal unit identification number (should this be here?)
-- `unit_detail`: ??
+- `unit_id`: an internal unit identification number
+- `unit_detail`:
 - `source`: the FOIA release in which this profile was found (`salary` is the only release for which the FOIA number is unknown, so this is just labeled `salary`)
 - `uid`: the unique ID for the officer to which this profile pertains
 
@@ -41,13 +41,13 @@ In `unit_descriptions.csv`:
 ### `complaints.csv` and `complaints_officers.csv`
 
 In `complaints.csv`:
-- `complaint_no`
-- `beat`
+- `complaint_no`: number identifying the complaint
+- `beat`: beat number
 - `location_code`
 - `street_no`
 - `street_name`
 - `apt_no`
-- `city`
+- `city`:
 - `incident_datetime`
 - `complaint_date`
 - `closed_date`
@@ -65,37 +65,37 @@ In `complaints_officers.csv`:
 
 In `tactical_response_reports.csv`:
 - `trr_id`: number identifying an (event, officer, subject) triplet
-- `rd_no`: internal number used by the CPD to identifies streets
+- `rd_no`:
 - `cr_no_obtained`: 
 - `subject_cb_no`
 - `event_no`: number identifying the event
 - `beat`: beat number
 - `block`: partial number identifying a block (e.g. `39XX`)
-- `street_direction`: `West`, `North`, `South`, `East`
-- `street_name`:
+- `street_direction`: cardinal direction of the street (`West`, `North`, `South` or `East`)
+- `street_name`: name of the street
 - `location`: type of location of the event (e.g. `SIDEWALK`, `APPARTMENT`)
-- `date`: date of the event
-- `time`: time of the event
+- `date`: date of the event (`YYYY-MM-DD`)
+- `time`: time of the event (`HH:MM:SS`)
 - `indoor_or_outdoor`: whether the event occurred `Indoor` or `Outdoor`
 - `lighting_condition`: lighting condition during the event (`DAYLIGHT`, `NIGHT`, `DAWN`, `DUSK`, `GOOD ARTIFICIAL` or `POOR ARTIFICIAL`)
 - `weather_condition`: (e.g. `CLEAR`, `RAIN`)
-- `notify_oemc`
-- `notify_dist_sergeant`
-- `notify_op_command`
-- `notify_det_div`
-- `number_of_weapons_discharged`
-- `party_fired_first`
-- `duty_status`
-- `injured`
-- `member_in_uniform`
-- `subject_gender`
-- `subject_race`
-- `subject_age`
-- `subject_birthyear`
-- `subject_armed`
-- `subject_injured`
-- `subject_alleged_injury`
-- `uid`
+- `notify_oemc`:
+- `notify_dist_sergeant`:
+- `notify_op_command`:
+- `notify_det_div`:
+- `number_of_weapons_discharged`: number of weapons discharged by the officer during the event
+- `party_fired_first`: party who fired first (`MEMBER`, `OFFENDER` or `OTHER`)
+- `duty_status`: whether or not the officer was on duty during the event (`Yes` or `No`)
+- `injured`: whether or not the officer was injured (`Yes` or `No`)
+- `member_in_uniform`: whether or not the officer was in uniform during the event
+- `subject_gender`: gender of the subject (CPD's categorization `MALE` or `FEMALE`)
+- `subject_race`: race of the subject (CPD's categorization as in `officer_profiles.csv`)
+- `subject_age`:
+- `subject_birthyear`: birth year of the subject
+- `subject_armed`: whether or not the subject was armed (`Yes` or `No`)
+- `subject_injured`: whether or not the subject was injured (`Yes` or `No`)
+- `subject_alleged_injury`: whether or not the subject alleged to be injured (`Yes` or `No`)
+- `uid`: unique ID of the officer who submitted the report
 
 In `tactical_response_reports_discharges.csv`:
 - `trr_id`:
