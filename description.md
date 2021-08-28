@@ -64,58 +64,58 @@ In `complaints_officers.csv`:
 ### `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
 
 In `tactical_response_reports.csv`:
-- trr_id
-- rd_no
-- cr_no_obtained
-- subject_cb_no
-- event_no
-- beat
-- block
-- street_direction
-- street_name
-- location
-- date
-- time
-- indoor_or_outdoor
-- lighting_condition
-- weather_condition
-- notify_oemc
-- notify_dist_sergeant
-- notify_op_command
-- notify_det_div
-- number_of_weapons_discharged
-- party_fired_first
-- duty_status
-- injured
-- member_in_uniform
-- subject_gender
-- subject_race
-- subject_age
-- subject_birthyear
-- subject_armed
-- subject_injured
-- subject_alleged_injury
-- uid
+- `trr_id`: number identifying an (event, officer, subject) triplet
+- `rd_no`: internal number used by the CPD to identifies streets
+- `cr_no_obtained`: 
+- `subject_cb_no`
+- `event_no`: number identifying the event
+- `beat`: beat number
+- `block`: partial number identifying a block (e.g. 39XX)
+- `street_direction`: `West`, `North`, `South`, `East`
+- `street_name`:
+- `location`: type of location of the event (e.g. `SIDEWALK`, `APPARTMENT`)
+- `date`: date of the event
+- `time`: time of the event
+- `indoor_or_outdoor`: whether the event occurred `Indoor` or `Outdoor`
+- `lighting_condition`: lighting condition during the event (`DAYLIGHT`, `NIGHT`, `DAWN`, `DUSK`, `GOOD ARTIFICIAL` or `POOR ARTIFICIAL`)
+- `weather_condition`: (e.g. `CLEAR`, `RAIN`)
+- `notify_oemc`
+- `notify_dist_sergeant`
+- `notify_op_command`
+- `notify_det_div`
+- `number_of_weapons_discharged`
+- `party_fired_first`
+- `duty_status`
+- `injured`
+- `member_in_uniform`
+- `subject_gender`
+- `subject_race`
+- `subject_age`
+- `subject_birthyear`
+- `subject_armed`
+- `subject_injured`
+- `subject_alleged_injury`
+- `uid`
 
 In `tactical_response_reports_discharges.csv`:
-- trr_id
-- weapon_type
-- weapon_type_descr
-- firearm_make
-- firearm_model
-- firearm_barrel_length
-- firearm_caliber
-- total_number_of_shots
-- firearm_reloaded
-- number_of_catdridge_reloaded
-- handgun_worn_type
-- handgun_drawn_type
-- method_used_to_reload
-- sight_used
-- protective_cover_used
-- discharge_distance
-- object_struck_of_discharge
-- discharge_position
+- `trr_id`:
+- `weapon_type`
+- `weapon_type_descr`
+- `firearm_make`
+- `firearm_model`
+- `firearm_barrel_length`
+- `firearm_caliber`
+- `total_number_of_shots`
+- `firearm_reloaded`
+- `number_of_catdridge_reloaded`
+- `handgun_worn_type`
+- `handgun_drawn_type`
+- `method_used_to_reload`
+- `sight_used`
+- `protective_cover_used`
+- `discharge_distance`
+- `object_struck_of_discharge`
+- `discharge_position`:
 
 ### `awards.csv`
 - `uid`:
