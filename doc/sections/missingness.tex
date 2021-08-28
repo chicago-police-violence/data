@@ -1,6 +1,7 @@
+\newpage
 \section{Breakdown of Missingness for Each Dataset}\label{sec:missingness}
 
-\begin{table}
+\begin{table}[h]
 	\begin{minipage}[t]{0.48\textwidth}
 \centering
 \caption{Missingness for the Roster data file}
@@ -40,8 +41,27 @@ position\_description &       13.0 \\
                  uid &        0.0 \\
 \bottomrule
 \end{tabular}
+\vspace{2\baselineskip}
+\caption{Missingness for the Complaints data file}
+% Missing:
+\begin{tabular}{lr}
+\toprule
+        Attribute &  \% Missing \\
+\midrule
+     complaint\_no &        0.0 \\
+             beat &        0.8 \\
+    location\_code &        0.0 \\
+        street\_no &       23.7 \\
+      street\_name &       22.4 \\
+           apt\_no &       99.0 \\
+             city &       20.2 \\
+incident\_datetime &        0.0 \\
+   complaint\_date &        0.0 \\
+      closed\_date &        1.8 \\
+\bottomrule
+\end{tabular}
 \end{minipage}\hfill
-\begin{minipage}[t]{0.48\textwidth}
+\begin{minipage}[t]{0.5\textwidth}
 \caption{Missingness for the TRRs data file}
 \centering 
 \begin{tabular}{lr}
@@ -82,64 +102,7 @@ number\_of\_weapons\_discharged &        0.0 \\
                          uid &        0.0 \\
 \bottomrule
 \end{tabular}
-\end{minipage}
-\end{table}
-
-\begin{table}
-	\begin{minipage}[t]{0.48\textwidth}
-		\centering
-		\caption{Missingness for Unit Assignments}
-% Missing:
-\begin{tabular}{lr}
-\toprule
- Attribute &  \% Missing \\
-\midrule
-       uid &        0.0 \\
-   unit\_no &        0.0 \\
-start\_date &        0.0 \\
-  end\_date &       27.6 \\
-\bottomrule
-\end{tabular}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.48\textwidth}
-		\centering
-		\caption{Missingness for the Unit Names}
-\centering 
-\begin{tabular}{lr}
-\toprule
-       Attribute &  \% Missing \\
-\midrule
-         unit\_no &        0.0 \\
-unit\_description &       10.6 \\
-   active\_status &       12.3 \\
-     status\_date &       12.3 \\
-\bottomrule
-\end{tabular}
-\end{minipage}
-\end{table}
-
-\begin{table}
-\begin{minipage}[t]{0.48\textwidth}
-\centering 
-\caption{Missingness for the Complaints data file}
-% Missing:
-\begin{tabular}{lr}
-\toprule
-        Attribute &  \% Missing \\
-\midrule
-     complaint\_no &        0.0 \\
-             beat &        0.8 \\
-    location\_code &        0.0 \\
-        street\_no &       23.7 \\
-      street\_name &       22.4 \\
-           apt\_no &       99.0 \\
-             city &       20.2 \\
-incident\_datetime &        0.0 \\
-   complaint\_date &        0.0 \\
-      closed\_date &        1.8 \\
-\bottomrule
-\end{tabular}
-\vspace{\baselineskip}
+\vspace{2\baselineskip}
 \caption{Missingness for the Salary data file}
 \centering 
 \begin{tabular}{lr}
@@ -157,6 +120,19 @@ present\_posn\_start\_date &       20.7 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
+\end{table}
+
+\begin{table}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+		\centering
+\centering 
+\end{minipage}
+\end{table}
+
+\begin{table}
 \hfill\begin{minipage}[t]{0.48\textwidth}
 \caption{Missingness for the Awards data file}
 \centering 
@@ -183,5 +159,31 @@ requester\_middle\_initial &       93.0 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
-
+\begin{minipage}[t]{0.48\textwidth}
+\centering 
+		\caption{Missingness for Unit Assignments}
+% Missing:
+\begin{tabular}{lr}
+\toprule
+ Attribute &  \% Missing \\
+\midrule
+       uid &        0.0 \\
+   unit\_no &        0.0 \\
+start\_date &        0.0 \\
+  end\_date &       27.6 \\
+\bottomrule
+\end{tabular}
+\vspace{2\baselineskip}
+		\caption{Missingness for the Unit Names}
+\begin{tabular}{lr}
+\toprule
+       Attribute &  \% Missing \\
+\midrule
+         unit\_no &        0.0 \\
+unit\_description &       10.6 \\
+   active\_status &       12.3 \\
+     status\_date &       12.3 \\
+\bottomrule
+\end{tabular}
+\end{minipage}
 \end{table}
