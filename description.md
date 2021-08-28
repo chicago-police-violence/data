@@ -53,7 +53,7 @@ In `complaints.csv`:
 - `closed_date`
 
 In `complaints_officers.csv`:
-- `complaint_no
+- `complaint_no`
 - `complaint_category`
 - `finding`
 - `discipline`
@@ -70,7 +70,7 @@ In `tactical_response_reports.csv`:
 - `subject_cb_no`
 - `event_no`: number identifying the event
 - `beat`: beat number
-- `block`: partial number identifying a block (e.g. 39XX)
+- `block`: partial number identifying a block (e.g. `39XX`)
 - `street_direction`: `West`, `North`, `South`, `East`
 - `street_name`:
 - `location`: type of location of the event (e.g. `SIDEWALK`, `APPARTMENT`)
