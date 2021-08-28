@@ -43,23 +43,21 @@ In `unit_descriptions.csv`:
 In `complaints.csv`:
 - `complaint_no`: number identifying the complaint
 - `beat`: beat number
-- `location_code`
-- `street_no`
-- `street_name`
-- `apt_no`
-- `city`:
-- `incident_datetime`
-- `complaint_date`
-- `closed_date`
+- `location_code`: see https://github.com/invinst/chicago-police-data/blob/master/data/context_data/Location%20Codes.png
+- `street_no`, `street_name`, `apt_no`: house number, street name and apartment number where the incident occurred
+- `city`: `CHICAGO IL` occasionally followed by the zipcode where the incident occurred
+- `incident_datetime`: date and time when the incident occurred (`YYYY-MM-DD HH:MM:SS`)
+- `complaint_date`: date when the complaint was filed (`YYYY-MM-DD`)
+- `closed_date`: date when the complaint was closed (`YYYY-MM-DD`)
 
 In `complaints_officers.csv`:
-- `complaint_no`
-- `complaint_category`
-- `finding`
-- `discipline`
+- `complaint_no`: number identifying the complaints
+- `complaint_category`: category describing the reason for the complaint (e.g. `03D-ILLEGAL ARREST`), see http://directives.chicagopolice.org/forms/CPD-44.248.pdf
+- `finding`:
+- `discipline`: see https://raw.githubusercontent.com/invinst/chicago-police-data/master/data/context_data/sustained_penalty_codes/sustained_penalty_codes.pdf
 - `final_finding`
 - `final_discipline`
-- `uid`
+- `uid`: unique ID of the officer to which the record pertains
 
 ### `tactical_response_reports.csv` and `tactical_response_reports_discharges.csv`
 
