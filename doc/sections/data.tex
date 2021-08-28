@@ -161,10 +161,10 @@ details can be found in \cref{sec:app-cleaning}.
 
 \paragraph{Initial Cleaning.} In the first step, we produce uniformly formatted
 CSV files from the raw Excel spreadsheets. The decisions made at this stage are
-sraightforward and involve no subjective judgement since they consist of (i)
+straightforward and involve no subjective judgement since they consist of (i)
 unifying attribute names and values across datasets, (ii) parsing integers and
 dates into a standard format, and (iii) concatenating records of the same type
-when they were split over multple spreadsheets.
+when they were split over multiple spreadsheets.
 
 %\textcolor{red}{Since it can be useful in some applications to work directly with these
 %files—for example, when the linking step described next requires to be
@@ -172,10 +172,12 @@ when they were split over multple spreadsheets.
 %\texttt{make prepare} in the root of the repository. The files output at this
 %step will be found in the \texttt{tidy/} folder.}
 
-\textcolor{blue}{Running the command \texttt{make prepare} in the root of the repository performs steps (i)--(iii) above. The files output at this step will be found in the \texttt{tidy/} folder. We allow users to access the data only 
-after this initial cleaning step, because we envision that in certain applications these
-files might be more useful than the output of the linking and merging described next—for example, when the linking step we adopted requires to be adapted.}
-
+\looseness=-1
+\textcolor{blue}{Running \texttt{make prepare} in the root of the repository
+performs steps (i)--(iii) above, whose outputs will be found in the
+\texttt{tidy/} folder. Allowing the user to access the data produced at this
+stage might prove useful in applications requiring adapting the choices made in
+the linking stage described next.}
 
 \paragraph{Linking and merging datasets.}
 Next, we address the challenge of uniquely identifying officers across datasets.

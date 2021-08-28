@@ -2,47 +2,46 @@
 \section{Discussion} \label{sec:discussion}
 
 \subsection{Intended Uses}
-Uses for this dataset are varied and rich. For example, researchers could
-use the data in a wide variety of predictive tasks, such as
-predicting officer misconduct, resignation, and shooting as a function
-of their underlying demographic data or complaints filed against them. Past work has engaged
-in this type of analysis on both the raw data underlying the present
-work, as well as confidential internal police department data \cite{Helsby18,Rozema19}.
-This dataset can also be used to study social networks (both in the context of policing and more generally). 
-In particular, we can use data in \texttt{complaints\_officers.csv} to construct an
-undirected graph $\mathcal{G} = \{\mathcal{V}, \mathcal{E}\}$ in which
-$\mathcal{V}$ is the set of nodes---officers appearing in at least one
-complaint, and $\mathcal{E}$ the set of edges---where an edge is present
-whenever two officers appear on the same complaint. Moreover, we can link the
-complaints to the \texttt{tactical\_response\_reports.csv} file to consider
-also the subgraph of officers who filed a TRR. We report summary statistics
-for the corresponding graphs in \Cref{tab:stats_graphs}, with additional related visualizations
-in \cref{sec:additional_figs}.
-These networks are of interest in and of
+Uses for this dataset are varied and rich. For example, researchers could use
+the data in a wide range of predictive tasks, such as predicting officer
+misconduct, resignation, and shooting as a function of their underlying
+demographic data or complaints filed against them. Past work has engaged in
+this type of analysis on both the raw data underlying the present work, as well
+as confidential internal police department data \cite{Helsby18,Rozema19}.  Our
+dataset can also be used to study social networks (both in the context of
+policing and more generally). In particular, we can use the complaint data in
+\texttt{complaints\_officers.csv} to construct an undirected graph on the set
+of police officers with an edge between each pair of officers listed together
+on the same complaint. Moreover, the complaints can be linked to the
+\texttt{tactical\_response\_reports.csv} file to focus on the subgraph of
+officers who filed a TRR. We report summary statistics for the corresponding
+graphs in \Cref{tab:stats_graphs}, with additional related visualizations in
+\cref{sec:additional_figs}.  These networks are of interest in and of
 themselves, but can also be used to investigate the dynamic patterns of officer
-wrongdoing along such police networks \cite{Roithmayr16}. Existing research has used the complaint
-data to identify such patterns and to investigate whether pairs of officers
-connected on a network are more likely to have been accused of misconduct \cite{Ouellet19}.
-Finally, this dataset could be used to track the effects of new disciplinary
-practices, new training techniques, and new oversight on complaints and use of
-force. A working paper explores, for example, whether civilians filed fewer
-complaints about officers' force in the wake of the Department of Justice
-investigation of the Chicago Police Department \cite{Travers20}. 
+wrongdoing along such police networks \cite{Roithmayr16}. Existing research has
+used the complaint data to identify such patterns and to investigate whether
+pairs of officers connected on a network are more likely to have been accused
+of misconduct \cite{Ouellet19}.  Finally, this dataset could be used to track
+the effects of new disciplinary practices, new training techniques, and new
+oversight on complaints and use of force. A working paper explores, for
+example, whether civilians filed fewer complaints about officers' force in the
+wake of the Department of Justice investigation of the Chicago Police
+Department \cite{Travers20}. 
 
 
 \begin{table}[t!]
+	\begin{center}
 \caption{Summary statistics for the complaints network graph, and the subgraph
-of officers in TRRs. All complaints and TRRs filed between 
-2004-01-01 and 2015-12-01 are considered in the network construction.
-Here LCC is the largest connected component, and Is.~nodes is 
-the number of isolated nodes. 
-}\label{tab:network}
+of officers in TRRs. The network is constructed from all complaints and TRRs filed between 
+2004-01-01 and 2015-12-01. $N$ and $E$ denote the number of nodes and edges respectively. $N_\ell$ and $N_i$ denote respectively the number of nodes in the largest connected component and the number of isolated nodes.}\label{tab:network}
+\vspace{0.5em}
 \begin{tabular}{c|c|c|c|c|c|c|c|}
 \cline{2-8}
-                                                & $|\mathcal{G}|$ & $|\mathcal{E}|$ & \textit{Avg. degree} & \textit{Triangles} & \textit{Max clique} & \textit{LCC} & \textit{\# Is. nodes} \\ \hline
+                                                & $N$ & $E$ & \textit{Avg. degree} & \textit{Triangles} & \textit{Max clique} & $N_\ell$ & $N_i$ \\ \hline
 \multicolumn{1}{|c|}{\textit{\textbf{All}}}     & $14{,}372$      & $106{,}701$     & $14.85$              & $361{,}878$        & $64$                & $13{,}950$   & $0$                   \\ \hline
 \multicolumn{1}{|c|}{\textit{\textbf{In TRRs}}} & $4{,}105$       & $22{,}064$      & $10.75$              & $44{,}786$         & $28$                & $3{,}822$    & $225$                 \\ \hline
 \end{tabular} \label{tab:stats_graphs}
+	\end{center}
 \end{table}
 
 \subsection{Ethical Considerations}
@@ -65,6 +64,8 @@ officers may be unfairly and disproportionately identified to be at higher risk
 of misconduct \cite{veale2018fairness,sloane2019ai,d2020fairness,Wood19}. 
 
 \subsection{Limitations and Future Work}
+
+\looseness=-1
 Using civilian and administrator complaint data to study actual (not merely
 perceived) police misconduct inevitably faces significant questions about
 validity. At least one study has found that because of flaws in police record
