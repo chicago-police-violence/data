@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Chicago_%282551781706%29.jpg" width="600" class="center"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Chicago_%282551781706%29.jpg/640px-Chicago_%282551781706%29.jpg" width="600" class="center"/>
 <h1 align="center">The CPD Data Set</h1>
 </p>
 
