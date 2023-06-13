@@ -99,6 +99,27 @@ You will find Jupyter notebooks in the `examples/` folder that reproduce the vis
 In Jupyter lab/notebook, run `Kernel -> Restart & Run All` to run the notebooks. Note: currently the notebooks
 are coded such that they must be run in linear, top-to-bottom order (hence `Kernel -> Restart & Run All`). 
 
+# Citation
+
+If you use this dataset in your own project, please cite our paper published in the [NeurIPS 2021 Track on Datasets and Benchmarks](https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/hash/7f6ffaa6bb0b408017b62254211691b5-Abstract-round2.html):
+
+Thibaut Horel, Lorenzo Masoero, Raj Agrawal, Daria Roithmayr, and Trevor Campbell. *The CPD Data Set: Personnel, Use of Force, and Complaints in the Chicago Police Department.*
+Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks, 2021.
+
+```
+@inproceedings{Horel_NeurIPS21,
+ author = {Horel, Thibaut and Masoero, Lorenzo and Agrawal, Raj and Roithmayr, Daria and Campbell, Trevor},
+ booktitle = {Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks},
+ editor = {J. Vanschoren and S. Yeung},
+ pages = {},
+ publisher = {Curran},
+ title = {The CPD Data Set: Personnel, Use of Force, and Complaints in the Chicago Police Department},
+ url = {https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/file/7f6ffaa6bb0b408017b62254211691b5-Paper-round2.pdf},
+ volume = {1},
+ year = {2021}
+}
+```
+
 # License
 
 Copyright 2021 Thibaut Horel, Trevor Campbell, Lorenzo Masoero, Raj Agrawal, Daria Roithmayr
